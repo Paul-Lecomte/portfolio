@@ -34,3 +34,37 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+## structure
+```
+/portfolio
+ ├── /public                # Static assets (icons, wallpapers, etc.)
+ ├── /src
+ │   ├── /app               # App Router structure
+ │   │   ├── /icons         # App icons (optional)
+ │   │   ├── /wallpapers    # Backgrounds and wallpapers
+ │   │   ├── /about         # About page
+ │   │   │   ├── page.tsx
+ │   │   ├── /projects      # Projects page
+ │   │   │   ├── page.tsx
+ │   │   ├── /settings      # Settings page
+ │   │   │   ├── page.tsx
+ │   │   ├── /layout.tsx    # Root layout
+ │   │   ├── /page.tsx      # Main desktop UI
+ │   ├── /components        # Reusable UI components
+ │   │   ├── Taskbar.tsx
+ │   │   ├── Window.tsx
+ │   │   ├── FileExplorer.tsx
+ │   ├── /store             # Zustand state management
+ │   │   ├── useWindows.ts
+ │   ├── /styles            # Tailwind CSS and global styles
+ │   │   ├── globals.css
+ │   ├── /utils             # Helper functions
+ │   │   ├── fileSystem.ts  # Mock file system
+ ├── next.config.js         # Next.js configuration
+ ├── tailwind.config.js     # Tailwind customization
+ ├── package.json           # Dependencies
+ ├── tsconfig.json          # TypeScript configuration
+ ├── README.md              # Documentation
+```
