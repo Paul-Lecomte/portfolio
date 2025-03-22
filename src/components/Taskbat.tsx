@@ -5,7 +5,7 @@ import Window from "./Window";
 import { useAppStore } from "../store/appStore";
 
 export default function Taskbar() {
-    const { windows, openApp } = useAppStore();
+    const { windows, openApp, minimizeApp, restoreApp } = useAppStore();
     const [startMenuOpen, setStartMenuOpen] = useState(false);
 
     return (
@@ -42,13 +42,17 @@ export default function Taskbar() {
             {/* Opened Apps */}
             <div className="flex space-x-2 ml-4">
                 {windows.map((window) => (
-                    <div key={window.id} className="w-8 h-8 bg-gray-500 rounded-md"></div>
+                    <button
+                        key={window.id}
+                        className="w-8 h-8 bg-gray-500 rounded-md"
+                        onClick={() => restoreApp(window.id)}
+                    ></button>
                 ))}
             </div>
 
             {/* Render Windows */}
             {windows.map((window) => (
-                <Window key={window.id} title={window.title} id={window.id} />
+                window.visible && <Window key={window.id} title={window.title} id={window.id} />
             ))}
         </div>
     );
