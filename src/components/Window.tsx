@@ -3,8 +3,8 @@
 
 import { useAppStore } from "../store/appStore";
 import Draggable from "react-draggable";
-import FileExplorer from "./apps/FileExplorer";
-import Terminal from "./apps/Terminal";
+import FileExplorer from "./FileExplorer";
+import Terminal from "./Terminal";
 
 export default function Window({ id, title }: { id: number; title: string }) {
     const { closeApp, minimizeApp, bringToFront } = useAppStore();
