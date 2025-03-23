@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Draggable from 'react-draggable';
 
 const icons = [
@@ -11,6 +11,8 @@ const icons = [
 
 export default function Desktop() {
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({ x: 0, y: 0, visible: false });
+
+    const nodeRef = useRef(null);
 
     const handleContextMenu = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -30,8 +32,8 @@ export default function Desktop() {
 
             {/* Desktop Icons */}
             {icons.map((icon) => (
-                <Draggable key={icon.id}>
-                    <div className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer top-20 left-20">
+                <Draggable key={icon.id} nodeRef={nodeRef}>
+                    <div ref={nodeRef} className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer top-20 left-20">
                         <div className="w-12 h-12 bg-gray-700 rounded-md"></div>
                         <span className="text-sm mt-1">{icon.title}</span>
                     </div>
