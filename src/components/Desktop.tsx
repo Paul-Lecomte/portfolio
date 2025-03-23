@@ -20,16 +20,7 @@ export default function Desktop() {
     };
 
     return (
-        <div className="w-full h-screen bg-gray-950 relative" onContextMenu={handleContextMenu}>
-            {/* Taskbar */}
-            <div className="absolute bottom-0 w-full bg-[#23272a] p-2 flex justify-center items-center rounded-t-2xl">
-                <div className="text-white">Start Menu</div>
-                <div className="flex space-x-4">
-                    <div className="bg-[#3e4042] text-white p-2 rounded-md">Task 1</div>
-                    <div className="bg-[#3e4042] text-white p-2 rounded-md">Task 2</div>
-                </div>
-            </div>
-
+        <div className="" onContextMenu={handleContextMenu}>
             {/* Desktop Icons */}
             {icons.map((icon) => (
                 <Draggable key={icon.id} nodeRef={nodeRef}>
