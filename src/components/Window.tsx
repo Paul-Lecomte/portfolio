@@ -1,46 +1,52 @@
 "use client";
 
-import Draggable from "react-draggable";
-import { ResizableBox } from "react-resizable";
-import { useState } from "react";
 import { useAppStore } from "../store/appStore";
+import { useState } from "react";
+import Draggable from "react-draggable";
 
-export default function Window({ title, id }: { title: string, id: number }) {
-    const [width, setWidth] = useState(400);
-    const [height, setHeight] = useState(300);
-    const [isMaximized, setIsMaximized] = useState(false);
-    const { closeApp, minimizeApp, bringToFront } = useAppStore();
+const icons = [
+    { id: 1, title: "File Explorer" },
+    { id: 2, title: "Terminal" },
+];
+
+export default function Desktop() {
+    const { openApp } = useAppStore();
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({ x: 0, y: 0, visible: false });
+
+    const handleContextMenu = (e: React.MouseEvent, iconTitle: string) => {
+        e.preventDefault();
+        setContextMenu({ x: e.clientX, y: e.clientY, visible: true });
+    };
 
     return (
-        <Draggable onStart={() => bringToFront(id)}>
-            <div className="absolute top-20 left-20 bg-gray-900 border border-gray-700 rounded-md shadow-lg">
-                <div className="flex justify-between items-center bg-gray-800 text-white p-2 cursor-move">
-                    <span>{title}</span>
-                    <div>
-                        <button className="text-yellow-500 mx-2" onClick={() => minimizeApp(id)}>–</button>
-                        <button
-                            className="text-green-500 mx-2"
-                            onClick={() => setIsMaximized(!isMaximized)}
-                        >
-                            {isMaximized ? "❐" : "□"}
-                        </button>
-                        <button className="text-red-500" onClick={() => closeApp(id)}>×</button>
+        <div
+            className="w-full h-screen bg-gray-950 relative"
+            onClick={() => setContextMenu({ ...contextMenu, visible: false })}
+        >
+            {icons.map((icon) => (
+                <Draggable key={icon.id}>
+                    <div
+                        className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer"
+                        onDoubleClick={() => openApp(icon.title)}
+                        onContextMenu={(e) => handleContextMenu(e, icon.title)}
+                    >
+                        <div className="w-12 h-12 bg-gray-700 rounded-md"></div>
+                        <span className="text-sm mt-1">{icon.title}</span>
                     </div>
-                </div>
-                <ResizableBox
-                    width={isMaximized ? window.innerWidth : width}
-                    height={isMaximized ? window.innerHeight : height}
-                    minConstraints={[200, 150]}
-                    maxConstraints={[800, 600]}
-                    onResizeStop={(e, data) => {
-                        setWidth(data.size.width);
-                        setHeight(data.size.height);
-                    }}
+                </Draggable>
+            ))}
+
+            {contextMenu.visible && (
+                <div
+                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
+                    style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
-                    <div className="p-4 text-white">Content goes here...</div>
-                </ResizableBox>
-            </div>
-        </Draggable>
+                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
+                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Rename</button>
+                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500">Delete</button>
+                </div>
+            )}
+        </div>
     );
 }
 
