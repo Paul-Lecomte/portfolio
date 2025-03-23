@@ -36,3 +36,8 @@ body {
   transform: scale(1.05);
   transition: transform 0.3s ease-in-out;
 }
+
+button:hover {
+  background-color: #333940;
+  transition: background-color 0.3s ease;
+}
