@@ -6,8 +6,8 @@ import Window from "@/components/Window";
 import Terminal from "@/components/Terminal";
 import FileExplorer from "@/components/FileExplorer";
 
-// Sample icons for the desktop
-const icons = [
+// Default icons on the desktop
+const defaultIcons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
 ];
@@ -33,11 +33,11 @@ const DesktopIcon = ({ icon, position, openWindow }: any) => {
 };
 
 export default function Desktop() {
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean, iconTitle: string | null }>({
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; iconTitle: string | null }>({
         x: 0,
         y: 0,
         visible: false,
-        iconTitle: null
+        iconTitle: null,
     });
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const [time, setTime] = useState<string>("");
@@ -72,13 +72,24 @@ export default function Desktop() {
     };
 
     const closeWindow = (windowTitle: string) => {
-        setOpenWindows((prev) => prev.filter(title => title !== windowTitle));
+        setOpenWindows((prev) => prev.filter((title) => title !== windowTitle));
     };
 
     const deleteFile = (title: string) => {
         // Only delete files created by the user
-        setUserFiles(prevFiles => prevFiles.filter(file => file.title !== title));
+        setUserFiles((prevFiles) => prevFiles.filter((file) => file.title !== title));
         setContextMenu({ ...contextMenu, visible: false }); // Close context menu after delete
+    };
+
+    const createFileOrFolder = (type: string) => {
+        const newFileOrFolder = {
+            id: userFiles.length + 1 + defaultIcons.length, // Unique ID
+            title: type === "file" ? "New File" : "New Folder",
+            type: type, // "file" or "folder"
+            icon: type === "file" ? "📄" : "📁",
+        };
+        setUserFiles((prevFiles) => [...prevFiles, newFileOrFolder]);
+        setContextMenu({ ...contextMenu, visible: false }); // Close context menu after creation
     };
 
     useEffect(() => {
@@ -115,7 +126,7 @@ export default function Desktop() {
 
                 {/* Task Icons */}
                 <div className="flex space-x-4">
-                    {icons.map(icon => (
+                    {defaultIcons.map((icon) => (
                         <div
                             key={icon.id}
                             className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
@@ -135,8 +146,8 @@ export default function Desktop() {
                 </div>
             </div>
 
-            {/* Desktop Icons - Properly Positioned in a Grid Layout */}
-            {icons.map((icon, index) => {
+            {/* Desktop Icons - Merging default and user files */}
+            {[...defaultIcons, ...userFiles].map((icon, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
                 const spacing = 100; // Distance between icons
@@ -164,6 +175,18 @@ export default function Desktop() {
                         onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle)}
                     >
                         Delete
+                    </button>
+                    <button
+                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-green-500"
+                        onClick={() => createFileOrFolder("file")}
+                    >
+                        Create File
+                    </button>
+                    <button
+                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-blue-500"
+                        onClick={() => createFileOrFolder("folder")}
+                    >
+                        Create Folder
                     </button>
                 </div>
             )}
