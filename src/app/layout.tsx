@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: "Windows 11 Portfolio",
-    description: "A portfolio designed like an operatin system",
+    description: "A portfolio designed like an operating system",
 };
 
 export default function RootLayout({
