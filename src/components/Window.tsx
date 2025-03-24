@@ -63,7 +63,7 @@ export default function Window({
     if (!isOpen) return null;
 
     return (
-        <Draggable nodeRef={nodeRef} handle=".window-header">
+        <Draggable nodeRef={nodeRef} handle=".window-header" defaultClassName="z-40">
             <div
                 ref={nodeRef} // Attach the ref to the window container
                 className={`absolute bg-gray-800 text-white border border-gray-600 rounded-lg shadow-lg overflow-hidden ${
