@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
@@ -35,7 +35,12 @@ const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
 };
 
 export default function Desktop() {
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; iconTitle: string | null }>({
+    const [contextMenu, setContextMenu] = useState<{
+        x: number;
+        y: number;
+        visible: boolean;
+        iconTitle: string | null;
+    }>({
         x: 0,
         y: 0,
         visible: false,
@@ -47,6 +52,9 @@ export default function Desktop() {
     const [userFiles, setUserFiles] = useState<any[]>([]); // Track files created by the user
     const [newFileName, setNewFileName] = useState<string>(""); // Track the new file/folder name
     const [creatingFile, setCreatingFile] = useState<"file" | "folder" | null>(null); // Track creation type
+
+    const contextMenuRef = useRef(contextMenu);
+    const menuRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const updateTime = () => {
@@ -61,13 +69,22 @@ export default function Desktop() {
 
     const handleContextMenu = (e: React.MouseEvent, iconTitle: string) => {
         e.preventDefault();
-        setContextMenu({ x: e.clientX, y: e.clientY, visible: true, iconTitle });
+        console.log(`Context menu triggered for: ${iconTitle}`);
+
+        setContextMenu({
+            x: e.clientX,
+            y: e.clientY,
+            visible: true,
+            iconTitle,
+        });
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-        const contextMenuElement = document.querySelector(".context-menu");
-        if (contextMenuElement && !contextMenuElement.contains(e.target as Node)) {
-            setContextMenu({ ...contextMenu, visible: false });
+        if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+            setContextMenu((prevState) => ({
+                ...prevState,
+                visible: false,
+            }));
         }
     };
 
@@ -80,8 +97,9 @@ export default function Desktop() {
     };
 
     const deleteFile = (title: string) => {
+        console.log(`Deleting file with title: ${title}`);
         setUserFiles((prevFiles) => prevFiles.filter((file) => file.title.trim() !== title.trim()));
-        setContextMenu({ ...contextMenu, visible: false }); // Close context menu after delete
+        // Only close the context menu after deleting
     };
 
     const renameFile = (title: string) => {
@@ -92,10 +110,10 @@ export default function Desktop() {
                     file.title === title ? { ...file, title: newName.trim() } : file
                 )
             );
-            setContextMenu({ ...contextMenu, visible: false }); // Close context menu after rename
         } else if (newName === title) {
             alert("The name is the same. Please choose a new one.");
         }
+        // Close context menu only after rename is done
     };
 
     const createFileOrFolder = (type: string) => {
@@ -128,7 +146,6 @@ export default function Desktop() {
 
         setUserFiles((prevFiles) => [...prevFiles, newFileOrFolder]);
         setCreatingFile(null); // Reset creation type after creation
-        setContextMenu({ ...contextMenu, visible: false }); // Close context menu after creation
     };
 
     useEffect(() => {
@@ -222,6 +239,7 @@ export default function Desktop() {
             {/* Context Menu */}
             {contextMenu.visible && (
                 <div
+                    ref={menuRef}
                     className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg context-menu"
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
@@ -234,7 +252,10 @@ export default function Desktop() {
                     </button>
                     <button
                         className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
-                        onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle)}
+                        onClick={() => {
+                            console.log(`Delete button clicked for: ${contextMenu.iconTitle}`);
+                            contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!);
+                        }}
                     >
                         Delete
                     </button>
