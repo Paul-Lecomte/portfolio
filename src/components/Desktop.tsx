@@ -5,6 +5,7 @@ import Draggable from "react-draggable";
 import Window from "@/components/Window";
 import Terminal from "@/components/Terminal";
 import FileExplorer from "@/components/FileExplorer";
+import FileEditor from "@/components/FileEditor";
 
 // Default icons on the desktop
 const defaultIcons = [
