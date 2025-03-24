@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import Window from "@/components/Window";
-import FileExplorer from "@/components/FileExplorer"; // Import FileExplorer
+import Terminal from "@/components/Terminal"; // Terminal component
+import FileExplorer from "@/components/FileExplorer"; // Import the FileExplorer component
 
 const icons = [
     { id: 1, title: "File Explorer", icon: "📁" },
@@ -18,7 +19,7 @@ export default function Desktop() {
     });
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const [time, setTime] = useState<string>("");
-    const [openWindows, setOpenWindows] = useState<string[]>([]); // Track open windows
+    const [openWindows, setOpenWindows] = useState<string[]>([]);
 
     useEffect(() => {
         const updateTime = () => {
@@ -36,7 +37,6 @@ export default function Desktop() {
         setContextMenu({ x: e.clientX, y: e.clientY, visible: true });
     };
 
-    // Function to open a window
     const openWindow = (windowTitle: string) => {
         if (!openWindows.includes(windowTitle)) {
             setOpenWindows([...openWindows, windowTitle]);
@@ -48,10 +48,14 @@ export default function Desktop() {
             {/* Windows */}
             {openWindows.includes("File Explorer") && (
                 <Window title="File Explorer">
-                    <FileExplorer />
+                    <FileExplorer /> {/* Pass FileExplorer Component here */}
                 </Window>
             )}
-            {openWindows.includes("Terminal") && <Window title="Terminal" />}
+            {openWindows.includes("Terminal") && (
+                <Window title="Terminal">
+                    <Terminal /> {/* Pass Terminal Component here */}
+                </Window>
+            )}
 
             {/* Taskbar */}
             <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex items-center justify-between rounded-t-xl shadow-lg">
@@ -74,13 +78,13 @@ export default function Desktop() {
                 <div className="flex space-x-4">
                     <div
                         className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
-                        onClick={() => openWindow("File Explorer")} // Open File Explorer on click
+                        onClick={() => openWindow("File Explorer")}
                     >
                         📁
                     </div>
                     <div
                         className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
-                        onClick={() => openWindow("Terminal")} // Open Terminal on click
+                        onClick={() => openWindow("Terminal")}
                     >
                         💻
                     </div>
@@ -103,7 +107,7 @@ export default function Desktop() {
                         <div
                             ref={iconRef}
                             className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer top-20 left-20"
-                            onClick={() => openWindow(icon.title)} // Open window on icon click
+                            onClick={() => openWindow(icon.title)}
                         >
                             <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
                                 {icon.icon}
