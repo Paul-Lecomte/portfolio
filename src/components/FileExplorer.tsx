@@ -1,11 +1,10 @@
-// In FileExplorer.tsx
 import { useState } from "react";
 
 type File = {
     id: string;
     name: string;
     type: "file" | "folder";
-    children?: File[]; // Only folders will have children
+    children?: File[];
 };
 
 const initialFiles: File[] = [
@@ -25,6 +24,18 @@ const initialFiles: File[] = [
 export default function FileExplorer() {
     const [files, setFiles] = useState<File[]>(initialFiles);
     const [currentFolder, setCurrentFolder] = useState<File[]>(files); // Tracks current folder contents
+    const [newFolderName, setNewFolderName] = useState("");
+
+    // Create a new folder in the current folder
+    const createNewFolder = () => {
+        const newFolder: File = {
+            id: `${Date.now()}`, // Generate unique ID
+            name: newFolderName || "Untitled Folder",
+            type: "folder",
+        };
+        setCurrentFolder((prev) => [...prev, newFolder]);
+        setNewFolderName(""); // Reset folder name input
+    };
 
     const handleFolderClick = (folder: File) => {
         if (folder.type === "folder" && folder.children) {
@@ -44,6 +55,20 @@ export default function FileExplorer() {
                         {file.type === "folder" ? "📁" : "📄"} {file.name}
                     </div>
                 ))}
+            </div>
+
+            {/* Create new folder input */}
+            <div className="create-folder">
+                <input
+                    type="text"
+                    placeholder="New Folder Name"
+                    value={newFolderName}
+                    onChange={(e) => setNewFolderName(e.target.value)}
+                    className="input"
+                />
+                <button onClick={createNewFolder} className="button">
+                    Create Folder
+                </button>
             </div>
         </div>
     );
