@@ -38,24 +38,22 @@ export default function Desktop() {
     };
 
     const openWindow = (windowTitle: string) => {
-        if (!openWindows.includes(windowTitle)) {
-            setOpenWindows([...openWindows, windowTitle]);
-        }
+        setOpenWindows((prev) => (prev.includes(windowTitle) ? prev : [...prev, windowTitle]));
+    };
+
+    const closeWindow = (windowTitle: string) => {
+        setOpenWindows((prev) => prev.filter(title => title !== windowTitle));
     };
 
     return (
         <div className="w-full h-screen bg-gray-950 relative" onContextMenu={handleContextMenu}>
             {/* Windows */}
-            {openWindows.includes("File Explorer") && (
-                <Window title="File Explorer">
-                    <FileExplorer /> {/* Pass FileExplorer Component here */}
+            {openWindows.map((windowTitle) => (
+                <Window key={windowTitle} title={windowTitle} onClose={() => closeWindow(windowTitle)}>
+                    {windowTitle === "File Explorer" && <FileExplorer />}
+                    {windowTitle === "Terminal" && <Terminal />}
                 </Window>
-            )}
-            {openWindows.includes("Terminal") && (
-                <Window title="Terminal">
-                    <Terminal /> {/* Pass Terminal Component here */}
-                </Window>
-            )}
+            ))}
 
             {/* Taskbar */}
             <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex items-center justify-between rounded-t-xl shadow-lg">
@@ -76,18 +74,15 @@ export default function Desktop() {
 
                 {/* Task Icons */}
                 <div className="flex space-x-4">
-                    <div
-                        className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
-                        onDoubleClick={() => openWindow("File Explorer")}
-                    >
-                        📁
-                    </div>
-                    <div
-                        className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
-                        onDoubleClick={() => openWindow("Terminal")}
-                    >
-                        💻
-                    </div>
+                    {icons.map(icon => (
+                        <div
+                            key={icon.id}
+                            className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
+                            onDoubleClick={() => openWindow(icon.title)}
+                        >
+                            {icon.icon}
+                        </div>
+                    ))}
                 </div>
 
                 {/* System Tray */}
