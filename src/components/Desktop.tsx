@@ -112,13 +112,20 @@ export default function Desktop() {
             alert("Please enter a name for the file/folder.");
             return;
         }
+
+        // Append '.md' if no extension is provided
+        const fileNameWithExtension = newFileName.trim().endsWith(".md")
+            ? newFileName.trim()
+            : `${newFileName.trim()}.md`;
+
         const newFileOrFolder = {
             id: userFiles.length + 1 + defaultIcons.length, // Unique ID
-            title: newFileName.trim(),
+            title: fileNameWithExtension, // Use the file name with .md extension
             type: creatingFile,
             icon: creatingFile === "file" ? "📄" : "📁",
-            content: creatingFile === "file" && newFileName.endsWith(".md") ? "" : null, // Initialize content for .md files
+            content: creatingFile === "file" && fileNameWithExtension.endsWith(".md") ? "" : null, // Initialize content for .md files
         };
+
         setUserFiles((prevFiles) => [...prevFiles, newFileOrFolder]);
         setCreatingFile(null); // Reset creation type after creation
         setContextMenu({ ...contextMenu, visible: false }); // Close context menu after creation
