@@ -22,8 +22,10 @@ const initialFiles: File[] = [
 ];
 
 export default function FileExplorer() {
-    const [files, setFiles] = useState<File[]>(initialFiles);
+    const [files, setFiles] = useState<File[]>(initialFiles); // Root files
     const [currentFolder, setCurrentFolder] = useState<File[]>(files); // Tracks current folder contents
+    const [path, setPath] = useState<string>("Root"); // Tracks the current path
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({ x: 0, y: 0, visible: false });
     const [newFolderName, setNewFolderName] = useState("");
 
     // Create a new folder in the current folder
@@ -37,14 +39,58 @@ export default function FileExplorer() {
         setNewFolderName(""); // Reset folder name input
     };
 
+    // Handle folder click (navigate into a folder)
     const handleFolderClick = (folder: File) => {
         if (folder.type === "folder" && folder.children) {
             setCurrentFolder(folder.children);
+            setPath((prevPath) => `${prevPath} > ${folder.name}`);
         }
     };
 
+    // Navigate to the previous folder
+    const handleBackClick = () => {
+        const pathSegments = path.split(" > ");
+        if (pathSegments.length > 1) {
+            pathSegments.pop(); // Remove last folder
+            const newPath = pathSegments.join(" > ");
+            setPath(newPath);
+
+            // Find the parent folder based on the path
+            let parentFolder = files;
+            pathSegments.forEach((segment) => {
+                const folder = parentFolder.find((item) => item.name === segment);
+                if (folder && folder.children) {
+                    parentFolder = folder.children;
+                }
+            });
+            setCurrentFolder(parentFolder);
+        }
+    };
+
+    // Handle right-click for the context menu
+    const handleRightClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setContextMenu({
+            x: e.clientX,
+            y: e.clientY,
+            visible: true,
+        });
+    };
+
+    // Close context menu
+    const closeContextMenu = () => {
+        setContextMenu({ x: 0, y: 0, visible: false });
+    };
+
     return (
-        <div className="file-explorer">
+        <div className="file-explorer" onClick={closeContextMenu} onContextMenu={handleRightClick}>
+            {/* Path Display */}
+            <div className="path-display">
+                <button onClick={handleBackClick} className="back-button">Back</button>
+                <span>{path}</span>
+            </div>
+
+            {/* File Explorer content */}
             <div className="folders">
                 {currentFolder.map((file) => (
                     <div
@@ -57,19 +103,15 @@ export default function FileExplorer() {
                 ))}
             </div>
 
-            {/* Create new folder input */}
-            <div className="create-folder">
-                <input
-                    type="text"
-                    placeholder="New Folder Name"
-                    value={newFolderName}
-                    onChange={(e) => setNewFolderName(e.target.value)}
-                    className="input"
-                />
-                <button onClick={createNewFolder} className="button">
-                    Create Folder
-                </button>
-            </div>
+            {/* Right-click Context Menu */}
+            {contextMenu.visible && (
+                <div
+                    className="context-menu"
+                    style={{ top: contextMenu.y, left: contextMenu.x }}
+                >
+                    <button onClick={createNewFolder}>Create Folder</button>
+                </div>
+            )}
         </div>
     );
 }
