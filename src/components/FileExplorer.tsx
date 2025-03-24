@@ -27,6 +27,7 @@ export default function FileExplorer() {
     const [path, setPath] = useState<string>("Root"); // Tracks the current path
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({ x: 0, y: 0, visible: false });
     const [newFolderName, setNewFolderName] = useState("");
+    const [openedFile, setOpenedFile] = useState<File | null>(null); // Tracks the opened file
 
     // Create a new folder in the current folder
     const createNewFolder = () => {
@@ -44,6 +45,13 @@ export default function FileExplorer() {
         if (folder.type === "folder" && folder.children) {
             setCurrentFolder(folder.children);
             setPath((prevPath) => `${prevPath} > ${folder.name}`);
+        }
+    };
+
+    // Handle file double-click (open file)
+    const handleFileClick = (file: File) => {
+        if (file.type === "file") {
+            setOpenedFile(file); // Open the file
         }
     };
 
@@ -96,7 +104,8 @@ export default function FileExplorer() {
                     <div
                         key={file.id}
                         className="file-item"
-                        onClick={() => handleFolderClick(file)}
+                        onClick={() => file.type === "folder" ? handleFolderClick(file) : handleFileClick(file)}
+                        onDoubleClick={() => handleFileClick(file)} // Handle double-click to open file
                     >
                         {file.type === "folder" ? "📁" : "📄"} {file.name}
                     </div>
@@ -110,6 +119,15 @@ export default function FileExplorer() {
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
                     <button onClick={createNewFolder}>Create Folder</button>
+                </div>
+            )}
+
+            {/* Opened File Modal (optional) */}
+            {openedFile && (
+                <div className="opened-file-modal">
+                    <h2>{openedFile.name}</h2>
+                    <p>File content preview will go here...</p>
+                    <button onClick={() => setOpenedFile(null)}>Close</button>
                 </div>
             )}
         </div>
