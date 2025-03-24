@@ -91,7 +91,7 @@ export default function Window({
                 </div>
 
                 {/* Window Content */}
-                <div className="p-4" style={{ width: "100%", height: "100%" }}>
+                <div style={{ width: "100%", height: "100%" }}>
                     {/* Render children here */}
                     {children}
                 </div>
