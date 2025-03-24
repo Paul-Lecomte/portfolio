@@ -119,3 +119,65 @@ button:hover {
   background-color: #333940;
   transition: background-color 0.3s ease;
 }
+
+.file-explorer {
+  position: relative;
+  padding: 10px;
+  width: 300px;
+  height: 400px;
+  background-color: #2d2d2d;
+  color: white;
+}
+
+.path-display {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.back-button {
+  background-color: #444;
+  padding: 5px 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.folders {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.file-item {
+  padding: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.file-item:hover {
+  background-color: #444;
+}
+
+.context-menu {
+  position: absolute;
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 10;
+}
+
+.context-menu button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 5px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.context-menu button:hover {
+  background-color: #555;
+}
