@@ -11,6 +11,26 @@ const icons = [
     { id: 2, title: "Terminal", icon: "💻" },
 ];
 
+const DesktopIcon = ({ icon, position, openWindow }: any) => {
+    const iconRef = useRef(null);
+
+    return (
+        <Draggable nodeRef={iconRef}>
+            <div
+                ref={iconRef}
+                className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer"
+                style={{ top: position.top, left: position.left }}
+                onDoubleClick={() => openWindow(icon.title)}
+            >
+                <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
+                    {icon.icon}
+                </div>
+                <span className="text-sm mt-1">{icon.title}</span>
+            </div>
+        </Draggable>
+    );
+};
+
 export default function Desktop() {
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({
         x: 0,
@@ -94,22 +114,19 @@ export default function Desktop() {
                 </div>
             </div>
 
-            {/* Desktop Icons */}
-            {icons.map((icon) => {
-                const iconRef = useRef(null);
+            {/* Desktop Icons - Properly Positioned in a Grid Layout */}
+            {icons.map((icon, index) => {
+                const row = Math.floor(index / 3);
+                const col = index % 3;
+                const spacing = 100; // Distance between icons
+
                 return (
-                    <Draggable key={icon.id} nodeRef={iconRef}>
-                        <div
-                            ref={iconRef}
-                            className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer top-20 left-20"
-                            onDoubleClick={() => openWindow(icon.title)}
-                        >
-                            <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
-                                {icon.icon}
-                            </div>
-                            <span className="text-sm mt-1">{icon.title}</span>
-                        </div>
-                    </Draggable>
+                    <DesktopIcon
+                        key={icon.id}
+                        icon={icon}
+                        position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
+                        openWindow={openWindow}
+                    />
                 );
             })}
 
