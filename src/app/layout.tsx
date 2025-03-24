@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Desktop from "@/components/Desktop"; // Import Desktop component
+import Desktop from "@/components/Desktop";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: "Windows 11 Portfolio",
-    description: "A portfolio designed like Windows 11",
+    description: "A portfolio designed like an operatin system",
 };
 
 export default function RootLayout({

@@ -17,7 +17,28 @@ const initialFiles: File[] = [
             { id: "1-2", name: "file2.txt", type: "file" },
         ],
     },
-    { id: "2", name: "Music", type: "folder" },
+    { id: "2", name: "Music", type: "folder",
+    children: [
+        { id: "2-1", name: "junk", type: "folder", children: [
+                { id: "2-1-1", name: "wooze.mp4", type: "file" },
+                { id: "2-1-2", name: "test.mp4", type: "file" },
+                { id: "2-1-3", name: "blabla.mp4", type: "file" },
+            ]
+        },
+        { id: "2-2", name: "phonk", type: "folder", children: [
+                { id: "2-2-1", name: "phonk.mp4", type: "file" },
+                { id: "2-2-2", name: "turbo phonk.mp4", type: "file" },
+                { id: "2-2-3", name: "blabla.mp4", type: "file" },
+            ],
+        },
+        { id: "2-3", name: "metal", type: "folder", children: [
+                { id: "2-3-1", name: "turisas.mp4", type: "file" },
+                { id: "2-3-2", name: "Kanonefieber.mp4", type: "file" },
+                { id: "2-3-3", name: "Ghost.mp4", type: "file" },
+            ],
+        }
+    ],
+    },
     { id: "3", name: "video.mp4", type: "file" },
 ];
 
