@@ -227,7 +227,7 @@ export default function Desktop() {
 
             {/* Modal for naming new file/folder */}
             {creatingFile && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
                     <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
                     <input
                         type="text"

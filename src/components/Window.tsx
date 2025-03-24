@@ -57,7 +57,7 @@ export default function Window({
     }, [isResizing, handleResize]);
 
     return (
-        <Draggable nodeRef={nodeRef} handle=".window-header" defaultClassName="z-40">
+        <Draggable nodeRef={nodeRef} handle=".window-header" defaultClassName="z-1">
             <div
                 ref={nodeRef}
                 className={`absolute bg-gray-800 text-white border border-gray-600 rounded-lg shadow-lg overflow-hidden ${
