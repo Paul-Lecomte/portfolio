@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import SimpleMDE from "react-simplemde-editor";
-import "react-simplemde-editor/dist/simplemde.min.css"; // Styling for the markdown editor
+import dynamic from 'next/dynamic';
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false });
+import '../../public/simplemde.min.css';
 
 interface FileEditorProps {
     file: any; // The file to be edited

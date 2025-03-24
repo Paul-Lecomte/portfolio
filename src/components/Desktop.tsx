@@ -117,6 +117,7 @@ export default function Desktop() {
             title: newFileName.trim(),
             type: creatingFile,
             icon: creatingFile === "file" ? "📄" : "📁",
+            content: creatingFile === "file" && newFileName.endsWith(".md") ? "" : null, // Initialize content for .md files
         };
         setUserFiles((prevFiles) => [...prevFiles, newFileOrFolder]);
         setCreatingFile(null); // Reset creation type after creation
@@ -128,15 +129,32 @@ export default function Desktop() {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
+    // Function to save the content of a file
+    const saveFileContent = (fileId: number, content: string) => {
+        setUserFiles((prevFiles) =>
+            prevFiles.map((file) => (file.id === fileId ? { ...file, content } : file))
+        );
+    };
+
     return (
         <div className="w-full h-screen bg-gray-950 relative" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Windows */}
-            {openWindows.map((windowTitle) => (
-                <Window key={windowTitle} title={windowTitle} onClose={() => closeWindow(windowTitle)}>
-                    {windowTitle === "File Explorer" && <FileExplorer />}
-                    {windowTitle === "Terminal" && <Terminal />}
-                </Window>
-            ))}
+            {openWindows.map((windowTitle) => {
+                const file = userFiles.find((f) => f.title === windowTitle);
+                return (
+                    <Window key={windowTitle} title={windowTitle} onClose={() => closeWindow(windowTitle)}>
+                        {file && file.title.endsWith(".md") && (
+                            <FileEditor
+                                file={file}
+                                onClose={() => closeWindow(windowTitle)}
+                                onSave={saveFileContent}
+                            />
+                        )}
+                        {windowTitle === "File Explorer" && <FileExplorer />}
+                        {windowTitle === "Terminal" && <Terminal />}
+                    </Window>
+                );
+            })}
 
             {/* Taskbar */}
             <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex items-center justify-between rounded-t-xl shadow-lg">
