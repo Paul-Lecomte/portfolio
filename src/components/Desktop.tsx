@@ -79,19 +79,21 @@ export default function Desktop() {
     };
 
     const deleteFile = (title: string) => {
-        setUserFiles((prevFiles) => prevFiles.filter((file) => file.title !== title));
+        setUserFiles((prevFiles) => prevFiles.filter((file) => file.title.trim() !== title.trim()));
         setContextMenu({ ...contextMenu, visible: false }); // Close context menu after delete
     };
 
     const renameFile = (title: string) => {
         const newName = prompt("Enter a new name:", title);
-        if (newName && newName.trim() !== "") {
+        if (newName && newName.trim() !== "" && newName !== title) {
             setUserFiles((prevFiles) =>
                 prevFiles.map((file) =>
                     file.title === title ? { ...file, title: newName.trim() } : file
                 )
             );
             setContextMenu({ ...contextMenu, visible: false }); // Close context menu after rename
+        } else if (newName === title) {
+            alert("The name is the same. Please choose a new one.");
         }
     };
 
