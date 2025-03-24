@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import Window from "@/components/Window";
-import Terminal from "@/components/Terminal"; // Terminal component
-import FileExplorer from "@/components/FileExplorer"; // Import the FileExplorer component
+import Terminal from "@/components/Terminal";
+import FileExplorer from "@/components/FileExplorer";
 
 const icons = [
     { id: 1, title: "File Explorer", icon: "📁" },
@@ -78,13 +78,13 @@ export default function Desktop() {
                 <div className="flex space-x-4">
                     <div
                         className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
-                        onClick={() => openWindow("File Explorer")}
+                        onDoubleClick={() => openWindow("File Explorer")}
                     >
                         📁
                     </div>
                     <div
                         className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
-                        onClick={() => openWindow("Terminal")}
+                        onDoubleClick={() => openWindow("Terminal")}
                     >
                         💻
                     </div>
@@ -107,7 +107,7 @@ export default function Desktop() {
                         <div
                             ref={iconRef}
                             className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer top-20 left-20"
-                            onClick={() => openWindow(icon.title)}
+                            onDoubleClick={() => openWindow(icon.title)}
                         >
                             <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
                                 {icon.icon}
