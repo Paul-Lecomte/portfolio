@@ -3,7 +3,14 @@
 import { useState, useRef } from "react";
 import Draggable from "react-draggable";
 
-export default function Window({ title }: { title: string }) {
+// Modify the Window component to accept children as props
+export default function Window({
+                                   title,
+                                   children,
+                               }: {
+    title: string;
+    children: React.ReactNode; // Accept children prop
+}) {
     const [isOpen, setIsOpen] = useState(true);
     const [isMaximized, setIsMaximized] = useState(false);
 
@@ -35,7 +42,8 @@ export default function Window({ title }: { title: string }) {
 
                 {/* Window Content */}
                 <div className="p-4">
-                    <p>This is a window for {title}.</p>
+                    {/* Render children here */}
+                    {children}
                 </div>
             </div>
         </Draggable>
