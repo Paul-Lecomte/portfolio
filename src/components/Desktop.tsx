@@ -12,7 +12,7 @@ const defaultIcons = [
     { id: 2, title: "Terminal", icon: "💻" },
 ];
 
-const DesktopIcon = ({ icon, position, openWindow }: any) => {
+const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
     const iconRef = useRef(null);
 
     return (
@@ -22,6 +22,7 @@ const DesktopIcon = ({ icon, position, openWindow }: any) => {
                 className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer"
                 style={{ top: position.top, left: position.left }}
                 onDoubleClick={() => openWindow(icon.title)}
+                onContextMenu={(e) => onContextMenu(e, icon.title)}
             >
                 <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
                     {icon.icon}
@@ -43,6 +44,8 @@ export default function Desktop() {
     const [time, setTime] = useState<string>("");
     const [openWindows, setOpenWindows] = useState<string[]>([]);
     const [userFiles, setUserFiles] = useState<any[]>([]); // Track files created by the user
+    const [newFileName, setNewFileName] = useState<string>(""); // Track the new file/folder name
+    const [creatingFile, setCreatingFile] = useState<"file" | "folder" | null>(null); // Track creation type
 
     useEffect(() => {
         const updateTime = () => {
@@ -76,19 +79,44 @@ export default function Desktop() {
     };
 
     const deleteFile = (title: string) => {
-        // Only delete files created by the user
         setUserFiles((prevFiles) => prevFiles.filter((file) => file.title !== title));
         setContextMenu({ ...contextMenu, visible: false }); // Close context menu after delete
     };
 
+    const renameFile = (title: string) => {
+        const newName = prompt("Enter a new name:", title);
+        if (newName && newName.trim() !== "") {
+            setUserFiles((prevFiles) =>
+                prevFiles.map((file) =>
+                    file.title === title ? { ...file, title: newName.trim() } : file
+                )
+            );
+            setContextMenu({ ...contextMenu, visible: false }); // Close context menu after rename
+        }
+    };
+
     const createFileOrFolder = (type: string) => {
+        setCreatingFile(type as "file" | "folder");
+        setNewFileName(""); // Reset name input when starting new creation
+    };
+
+    const handleCreateFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewFileName(e.target.value);
+    };
+
+    const handleCreateFile = () => {
+        if (newFileName.trim() === "") {
+            alert("Please enter a name for the file/folder.");
+            return;
+        }
         const newFileOrFolder = {
             id: userFiles.length + 1 + defaultIcons.length, // Unique ID
-            title: type === "file" ? "New File" : "New Folder",
-            type: type, // "file" or "folder"
-            icon: type === "file" ? "📄" : "📁",
+            title: newFileName.trim(),
+            type: creatingFile,
+            icon: creatingFile === "file" ? "📄" : "📁",
         };
         setUserFiles((prevFiles) => [...prevFiles, newFileOrFolder]);
+        setCreatingFile(null); // Reset creation type after creation
         setContextMenu({ ...contextMenu, visible: false }); // Close context menu after creation
     };
 
@@ -98,7 +126,7 @@ export default function Desktop() {
     }, []);
 
     return (
-        <div className="w-full h-screen bg-gray-950 relative" onContextMenu={(e) => handleContextMenu(e, '')}>
+        <div className="w-full h-screen bg-gray-950 relative" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Windows */}
             {openWindows.map((windowTitle) => (
                 <Window key={windowTitle} title={windowTitle} onClose={() => closeWindow(windowTitle)}>
@@ -158,6 +186,7 @@ export default function Desktop() {
                         icon={icon}
                         position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
                         openWindow={openWindow}
+                        onContextMenu={handleContextMenu}
                     />
                 );
             })}
@@ -169,7 +198,12 @@ export default function Desktop() {
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
                     <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
-                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Rename</button>
+                    <button
+                        className="block w-full text-left px-3 py-1 hover:bg-gray-700"
+                        onClick={() => renameFile(contextMenu.iconTitle!)}
+                    >
+                        Rename
+                    </button>
                     <button
                         className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
                         onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle)}
@@ -187,6 +221,26 @@ export default function Desktop() {
                         onClick={() => createFileOrFolder("folder")}
                     >
                         Create Folder
+                    </button>
+                </div>
+            )}
+
+            {/* Modal for naming new file/folder */}
+            {creatingFile && (
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl">
+                    <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
+                    <input
+                        type="text"
+                        value={newFileName}
+                        onChange={handleCreateFileNameChange}
+                        className="w-full p-2 bg-gray-700 text-white rounded-md"
+                        placeholder={`New ${creatingFile}`}
+                    />
+                    <button
+                        onClick={handleCreateFile}
+                        className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
+                    >
+                        Create
                     </button>
                 </div>
             )}
