@@ -6,6 +6,7 @@ import Window from "@/components/Window";
 import Terminal from "@/components/Terminal";
 import FileExplorer from "@/components/FileExplorer";
 
+// Sample icons for the desktop
 const icons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
@@ -32,14 +33,16 @@ const DesktopIcon = ({ icon, position, openWindow }: any) => {
 };
 
 export default function Desktop() {
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean, iconTitle: string | null }>({
         x: 0,
         y: 0,
         visible: false,
+        iconTitle: null
     });
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const [time, setTime] = useState<string>("");
     const [openWindows, setOpenWindows] = useState<string[]>([]);
+    const [userFiles, setUserFiles] = useState<any[]>([]); // Track files created by the user
 
     useEffect(() => {
         const updateTime = () => {
@@ -52,9 +55,16 @@ export default function Desktop() {
         return () => clearInterval(interval);
     }, []);
 
-    const handleContextMenu = (e: React.MouseEvent) => {
+    const handleContextMenu = (e: React.MouseEvent, iconTitle: string) => {
         e.preventDefault();
-        setContextMenu({ x: e.clientX, y: e.clientY, visible: true });
+        setContextMenu({ x: e.clientX, y: e.clientY, visible: true, iconTitle });
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+        const contextMenuElement = document.querySelector(".context-menu");
+        if (contextMenuElement && !contextMenuElement.contains(e.target as Node)) {
+            setContextMenu({ ...contextMenu, visible: false });
+        }
     };
 
     const openWindow = (windowTitle: string) => {
@@ -65,8 +75,19 @@ export default function Desktop() {
         setOpenWindows((prev) => prev.filter(title => title !== windowTitle));
     };
 
+    const deleteFile = (title: string) => {
+        // Only delete files created by the user
+        setUserFiles(prevFiles => prevFiles.filter(file => file.title !== title));
+        setContextMenu({ ...contextMenu, visible: false }); // Close context menu after delete
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
+
     return (
-        <div className="w-full h-screen bg-gray-950 relative" onContextMenu={handleContextMenu}>
+        <div className="w-full h-screen bg-gray-950 relative" onContextMenu={(e) => handleContextMenu(e, '')}>
             {/* Windows */}
             {openWindows.map((windowTitle) => (
                 <Window key={windowTitle} title={windowTitle} onClose={() => closeWindow(windowTitle)}>
@@ -133,12 +154,17 @@ export default function Desktop() {
             {/* Context Menu */}
             {contextMenu.visible && (
                 <div
-                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
+                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg context-menu"
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
                     <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
                     <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Rename</button>
-                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500">Delete</button>
+                    <button
+                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
+                        onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle)}
+                    >
+                        Delete
+                    </button>
                 </div>
             )}
         </div>
