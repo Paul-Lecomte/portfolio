@@ -77,13 +77,13 @@ export default function Window({
                     <div className="flex space-x-2">
                         <button
                             onClick={() => setIsMaximized(!isMaximized)}
-                            className="w-6 h-6 bg-gray-600 hover:bg-gray-500 rounded"
+                            className="w-6 h-6  hover:bg-gray-500 rounded"
                         >
                             ⬜
                         </button>
                         <button
                             onClick={() => setIsOpen(false)}
-                            className="w-6 h-6 bg-red-600 hover:bg-red-500 rounded"
+                            className="w-6 h-6 hover:bg-red-500 rounded"
                         >
                             ❌
                         </button>
