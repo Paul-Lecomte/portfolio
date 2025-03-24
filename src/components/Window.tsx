@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Draggable from "react-draggable";
 
 export default function Window({ title }: { title: string }) {
     const [isOpen, setIsOpen] = useState(true);
     const [isMaximized, setIsMaximized] = useState(false);
 
+    // Create a reference for the window container
+    const nodeRef = useRef<HTMLDivElement>(null);
+
     if (!isOpen) return null;
 
     return (
-        <Draggable handle=".window-header">
+        <Draggable nodeRef={nodeRef} handle=".window-header">
             <div
+                ref={nodeRef} // Attach the ref to the window container
                 className={`absolute bg-gray-800 text-white border border-gray-600 rounded-lg shadow-lg overflow-hidden ${
                     isMaximized ? "w-full h-full top-0 left-0" : "w-96 h-64 top-32 left-32"
                 }`}
