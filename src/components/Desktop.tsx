@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
+import Window from "@/components/Window";
 
 const icons = [
     { id: 1, title: "File Explorer", icon: "📁" },
@@ -12,8 +13,6 @@ export default function Desktop() {
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({ x: 0, y: 0, visible: false });
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const [time, setTime] = useState<string>("");
-
-    const nodeRef = useRef(null);
 
     useEffect(() => {
         const updateTime = () => {
@@ -33,6 +32,10 @@ export default function Desktop() {
 
     return (
         <div className="w-full h-screen bg-gray-950 relative" onContextMenu={handleContextMenu}>
+            {/* Windows */}
+            <Window title="File Explorer" />
+            <Window title="Terminal" />
+
             {/* Taskbar */}
             <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex items-center justify-between rounded-t-xl shadow-lg">
                 {/* Start Menu Button */}
@@ -43,7 +46,6 @@ export default function Desktop() {
                     {startMenuOpen && (
                         <div className="absolute bottom-12 left-0 w-64 bg-gray-900 p-3 rounded-lg shadow-xl">
                             <p className="text-white">Start Menu</p>
-                            {/* Add actual app shortcuts here */}
                         </div>
                     )}
                 </div>
@@ -64,16 +66,19 @@ export default function Desktop() {
             </div>
 
             {/* Desktop Icons */}
-            {icons.map((icon) => (
-                <Draggable key={icon.id} nodeRef={nodeRef}>
-                    <div ref={nodeRef} className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer top-20 left-20">
-                        <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
-                            {icon.icon}
+            {icons.map((icon) => {
+                const iconRef = useRef(null);
+                return (
+                    <Draggable key={icon.id} nodeRef={iconRef}>
+                        <div ref={iconRef} className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer top-20 left-20">
+                            <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
+                                {icon.icon}
+                            </div>
+                            <span className="text-sm mt-1">{icon.title}</span>
                         </div>
-                        <span className="text-sm mt-1">{icon.title}</span>
-                    </div>
-                </Draggable>
-            ))}
+                    </Draggable>
+                );
+            })}
 
             {/* Context Menu */}
             {contextMenu.visible && (
