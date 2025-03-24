@@ -120,6 +120,33 @@ button:hover {
   transition: background-color 0.3s ease;
 }
 
+/* FILe explorer */
+
+.opened-file-modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  z-index: 1000;
+}
+
+.opened-file-modal h2 {
+  margin-top: 0;
+}
+
+.opened-file-modal button {
+  background-color: #444;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .file-explorer {
   position: relative;
   padding: 10px;
