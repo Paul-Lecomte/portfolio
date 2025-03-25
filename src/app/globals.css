@@ -120,6 +120,36 @@ button:hover {
   transition: background-color 0.3s ease;
 }
 
+/* Window content container inside the Window component */
+.window-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: auto; /* Ensures the content can scroll if it exceeds window size */
+  padding: 10px;
+}
+
+/* Add responsiveness to child elements inside the window */
+.window-content > * {
+  flex-grow: 1; /* This makes children inside the window grow and shrink as the window resizes */
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+/* Resize handle */
+.resize-handle {
+  background-color: #444;
+  cursor: se-resize;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
 /* FILe explorer */
 
 .opened-file-modal {
@@ -150,8 +180,8 @@ button:hover {
 .file-explorer {
   position: relative;
   padding: 10px;
-  width: 100vw; /* Full width of the viewport */
-  height: 100vh; /* Full height of the viewport */
+  width: 100%; /* Full width of the viewport */
+  height: 100%; /* Full height of the viewport */
   background-color: #2d2d2d;
   color: white;
   display: flex;
