@@ -79,7 +79,17 @@ export default function Window({
                 </div>
 
                 {/* Window Content */}
-                <div style={{ width: "100%", height: "100%" }}>{children}</div>
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "auto", // Ensure content is scrollable if it exceeds the size of the window
+                    }}
+                >
+                    {children}
+                </div>
 
                 {/* Resizing Handle */}
                 <div className="resize-handle absolute right-0 bottom-0 w-6 h-6 bg-gray-600 cursor-se-resize" onMouseDown={startResizing} />
