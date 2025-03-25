@@ -23,7 +23,10 @@ const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
                 className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer"
                 style={{ top: position.top, left: position.left }}
                 onDoubleClick={() => openWindow(icon.title)}
-                onContextMenu={(e) => onContextMenu(e, icon.title)}
+                onContextMenu={(e) => {
+                    e.stopPropagation(); // Stop the event from bubbling to the desktop
+                    onContextMenu(e, icon.title);
+                }}
             >
                 <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
                     {icon.icon}
