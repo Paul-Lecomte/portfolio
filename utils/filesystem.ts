@@ -16,7 +16,7 @@ export async function fetchFiles(path: string): Promise<File[]> {
             { name: "Desktop", type: "folder", path: "/C/Users/admin/Desktop" },
         ],
         "/C/Users/admin/Documents": [
-            { name: "notes.txt", type: "file", path: "/C/Users/admin/Documents/notes.txt" },
+            { name: "notes.txt", type: "file", path: "/C/Users/admin/Documents/notes.txt", url: "../filesystem/C/users/admin/Documents/notes.txt" },
         ],
         "/C/Users/admin/Pictures": [
             { name: "image1.png", type: "file", path: "/C/Users/admin/Pictures/image1.png" },
