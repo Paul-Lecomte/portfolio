@@ -45,7 +45,7 @@ export default function FileExplorer() {
     };
 
     return (
-        <div className="file-explorer p-4 bg-gray-800 text-white h-full">
+        <div className="file-explorer p-4 bg-gray-800 text-white flex flex-col h-full">
             {/* Path Navigation */}
             <div className="flex items-center mb-4">
                 <button onClick={handleBackClick} className="bg-gray-600 px-2 py-1 mr-2">🔙 Back</button>
@@ -53,25 +53,27 @@ export default function FileExplorer() {
             </div>
 
             {/* File/Folder List */}
-            <div className="grid grid-cols-3 gap-4">
-                {files.length > 0 ? (
-                    files.map((file) => (
-                        <div
-                            key={file.path}
-                            className="file-item p-2 cursor-pointer hover:bg-gray-700"
-                            onClick={() => file.type === "folder" ? handleFolderClick(file) : handleFileClick(file)}
-                        >
-                            {file.type === "folder" ? "📁" : "📄"} {file.name}
-                        </div>
-                    ))
-                ) : (
-                    <p className="col-span-3 text-gray-400">No files found.</p>
-                )}
+            <div className="flex-1 overflow-auto">
+                <div className="grid grid-cols-3 gap-4">
+                    {files.length > 0 ? (
+                        files.map((file) => (
+                            <div
+                                key={file.path}
+                                className="file-item p-2 cursor-pointer hover:bg-gray-700"
+                                onClick={() => file.type === "folder" ? handleFolderClick(file) : handleFileClick(file)}
+                            >
+                                {file.type === "folder" ? "📁" : "📄"} {file.name}
+                            </div>
+                        ))
+                    ) : (
+                        <p className="col-span-3 text-gray-400">No files found.</p>
+                    )}
+                </div>
             </div>
 
             {/* Opened File Modal */}
             {openedFile && (
-                <div className="absolute top-20 left-20 bg-black p-4 border border-white">
+                <div className="opened-file-modal absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black p-4 border border-white">
                     <h2 className="text-lg font-bold">{openedFile.name}</h2>
                     <pre className="whitespace-pre-wrap">{openedFile.content}</pre>
                     <button className="mt-2 bg-gray-600 px-2 py-1" onClick={() => setOpenedFile(null)}>Close</button>
