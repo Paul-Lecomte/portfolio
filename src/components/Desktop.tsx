@@ -93,33 +93,19 @@ export default function Desktop() {
     };
 
     const openWindow = (fileName: string, fileUrl: string, fileType: string) => {
-        // Add /public/filesystem to the file URL
-        console.log("File Name:", fileName);  // Log the file name
-        console.log("File URL:", fileUrl);    // Log the file URL
+        // Construct the file URL
         const adjustedUrl = `/filesystem${fileUrl}`;
 
-        const isFile = userFiles.some((file) => file.title === fileName);
+        // Log file details
+        console.log("Opening file:", fileName);
+        console.log("file type : "+ fileType);
+        console.log("File URL:", adjustedUrl);
 
-        if (isFile) {
-            const file = userFiles.find((f) => f.title === fileName);
-            if (file) {
-                console.log("Found file:", file.title, "at URL:", file.url); // Log found file URL
-                if (file.url === adjustedUrl) { // Check if the URL matches the adjusted URL
-                    setOpenWindows((prev) => [...prev, file.title]);
-                    console.log(`Opening file: ${fileName} at URL: ${adjustedUrl}`);
+        // Ensure the window is tracked as open
+        setOpenWindows((prev) => (prev.includes(fileName) ? prev : [...prev, fileName]));
 
-                    // Open the file using UniversalFileViewer component
-                    return <UniversalFileViewer filePath={adjustedUrl} fileType={fileType} onClose={() => { /* close logic */ }} />;
-                } else {
-                    console.error(`File with title "${fileName}" does not exist at the provided URL. Expected URL: ${file.url}, but got: ${adjustedUrl}`);
-                }
-            } else {
-                console.error(`No file found with title "${fileName}"`);
-            }
-        } else {
-            setOpenWindows((prev) => (prev.includes(fileName) ? prev : [...prev, fileName]));
-            console.log(`Error: File not found or invalid URL with : ${adjustedUrl}`);
-        }
+        // Directly open the file in UniversalFileViewer
+        return <UniversalFileViewer filePath={adjustedUrl} fileType={fileType} onClose={() => { /* close logic */ }} />;
     };
 
     const closeWindow = (windowTitle: string) => {

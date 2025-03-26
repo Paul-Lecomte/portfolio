@@ -33,8 +33,13 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
 
     const handleFileClick = (file: File) => {
         if (file.type === "file") {
-            // Pass both the file name and file path to the desktop component
-            onOpenFile(file.name, file.path, file.url);
+            // Ensure file URL is defined before passing
+            if (file.url) {
+                // Pass both the file name and file URL to the parent component
+                onOpenFile(file.name, file.path, file.url);
+            } else {
+                console.error(`Error: file URL is undefined for file: ${file.name}`);
+            }
         }
     };
 
