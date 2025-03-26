@@ -6,10 +6,11 @@ type File = {
     name: string;
     type: "file" | "folder";
     path: string; // Full path for the file/folder
+    url: string;
 };
 
 interface FileExplorerProps {
-    onOpenFile: (fileName: string, filePath: string) => void; // Modify the prop to accept the file path
+    onOpenFile: (fileName: string, filePath: string, fileUrl: string) => void; // Modify the prop to accept the file path
 }
 
 export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
@@ -33,7 +34,7 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
     const handleFileClick = (file: File) => {
         if (file.type === "file") {
             // Pass both the file name and file path to the desktop component
-            onOpenFile(file.name, file.path);
+            onOpenFile(file.name, file.path, file.url);
         }
     };
 
