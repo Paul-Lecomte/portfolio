@@ -12,3 +12,10 @@ Welcome to my 2025 personal portfolio, where I've reimagined the traditional por
 - **Fully Responsive Design:** Whether on desktop or mobile, the app adjusts seamlessly for optimal viewing and interaction.
 - **Dark Mode with Neon Accents:** Stylish and modern aesthetics with a dark theme and neon accents for an exciting visual experience.
 - **Page Navigation:** Easily navigate between different pages like **About**, **Projects**, **Settings**, and more through the desktop interface.
+
+## 🌱 Technologies Used
+
+- **Next.js** – A powerful React framework for building fast, server-rendered web applications.
+- **TypeScript** – Enhancing the development experience with static types for better maintainability and readability.
+- **Tailwind CSS** – A utility-first CSS framework for rapid UI development, ensuring responsive, customizable designs.
+- **Zustand** – A minimal state management library for React that helps manage app state efficiently.
