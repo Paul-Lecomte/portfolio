@@ -9,7 +9,7 @@ type File = {
 };
 
 interface FileExplorerProps {
-    onOpenFile: (fileName: string) => void; // Prop to handle file opening from the desktop
+    onOpenFile: (fileName: string, filePath: string) => void; // Modify the prop to accept the file path
 }
 
 export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
@@ -32,8 +32,8 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
 
     const handleFileClick = (file: File) => {
         if (file.type === "file") {
-            // Pass the file name to the desktop component to open in a new window
-            onOpenFile(file.name);
+            // Pass both the file name and file path to the desktop component
+            onOpenFile(file.name, file.path);
         }
     };
 
