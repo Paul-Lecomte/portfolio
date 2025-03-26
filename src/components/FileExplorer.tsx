@@ -8,10 +8,13 @@ type File = {
     path: string; // Full path for the file/folder
 };
 
-export default function FileExplorer() {
+interface FileExplorerProps {
+    onOpenFile: (fileName: string) => void; // Prop to handle file opening from the desktop
+}
+
+export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
     const [files, setFiles] = useState<File[]>([]);
     const [currentPath, setCurrentPath] = useState<string>("/C");
-    const [openedFile, setOpenedFile] = useState<{ path: string; type: string } | null>(null);
 
     useEffect(() => {
         const loadFiles = async () => {
@@ -28,9 +31,9 @@ export default function FileExplorer() {
     };
 
     const handleFileClick = (file: File) => {
-        if (file.type === "file" && file.url) {
-            const fileExtension = file.name.split(".").pop()?.toLowerCase() || "";
-            setOpenedFile({ path: file.url, type: fileExtension });
+        if (file.type === "file") {
+            // Pass the file name to the desktop component to open in a new window
+            onOpenFile(file.name);
         }
     };
 
@@ -65,15 +68,6 @@ export default function FileExplorer() {
                     )}
                 </div>
             </div>
-
-            {/* Show File Viewer Modal if a file is opened */}
-            {openedFile && (
-                <UniversalFileViewer
-                    filePath={openedFile.path}
-                    fileType={openedFile.type}
-                    onClose={() => setOpenedFile(null)}
-                />
-            )}
         </div>
     );
 }
