@@ -59,3 +59,11 @@ Here’s a brief overview of the project structure:
   ├── /styles               # Tailwind CSS and global styles
   ├── /utils                # Helper functions and utilities
 ```
+
+## 🛠️ Development Notes
+
+This project is a fun and interactive way to showcase my web development skills. It was designed to be as engaging as possible, transforming a simple portfolio into an interactive environment. Here are some important aspects I focused on:
+
+- **Realistic Desktop UI:** The goal was to make the portfolio feel like a real desktop operating system, with draggable windows, a taskbar, and interactive file system features.
+- **State Management:** By using Zustand, I’ve created a smooth experience where the app state is managed efficiently across multiple interactive windows and components.
+- **Mobile Responsiveness:** While the project is heavily inspired by a desktop experience, it’s also fully responsive and optimized for mobile viewing.
