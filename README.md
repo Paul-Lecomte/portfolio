@@ -67,3 +67,33 @@ This project is a fun and interactive way to showcase my web development skills.
 - **Realistic Desktop UI:** The goal was to make the portfolio feel like a real desktop operating system, with draggable windows, a taskbar, and interactive file system features.
 - **State Management:** By using Zustand, I’ve created a smooth experience where the app state is managed efficiently across multiple interactive windows and components.
 - **Mobile Responsiveness:** While the project is heavily inspired by a desktop experience, it’s also fully responsive and optimized for mobile viewing.
+
+## 🛣️ Roadmap
+
+Here’s a roadmap of planned features and improvements for the Portfolio project:
+
+### Phase 1: Core Features (Completed)
+- Implement Windows 11-inspired desktop UI with a taskbar and file explorer.
+- Create resizable, draggable windows for various sections (About, Projects, etc.).
+- Build the responsive design to ensure compatibility on both desktop and mobile devices.
+- Add interactive file explorer with basic file system navigation.
+
+### Phase 2: Enhancements & Usability Improvements
+- **Add Dynamic Content:** Allow for more personalized content in the file explorer, like "documents" for downloadable resources or "images" for project galleries.
+- **Add More Pages:** Extend the app with more sections such as a blog, resume, and contact page, accessible through the desktop interface.
+- **Improve Taskbar:** Add more functionality to the taskbar, such as a notification center or quick app shortcuts.
+
+### Phase 3: Interactivity & Animations
+- **Implement Animations:** Add smooth animations for window transitions, resizing, and file interactions to enhance the user experience.
+- **File Preview:** Allow users to preview files (e.g., image files, PDF, etc.) directly in the file explorer without opening a new window.
+
+### Phase 4: Additional Features & Polish
+- **Dark/Light Mode Toggle:** Provide a toggle to switch between dark and light themes for the desktop environment.
+- **Advanced State Management:** Optimize the state management system with further improvements to ensure seamless user interaction.
+- **Mobile-First Redesign:** Improve the mobile interface to better simulate a desktop experience on smaller screens.
+
+### Future Plans:
+- **Customizable Desktop Themes:** Allow users to customize their desktop theme, wallpaper, and taskbar color scheme.
+- **Portfolio Analytics:** Implement analytics features for visitors to track interactions with the portfolio.
+
+---
