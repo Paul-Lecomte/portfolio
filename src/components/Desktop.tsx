@@ -92,7 +92,15 @@ export default function Desktop() {
     };
 
     const openWindow = (windowTitle: string) => {
-        setOpenWindows((prev) => (prev.includes(windowTitle) ? prev : [...prev, windowTitle]));
+        const isFile = userFiles.some((file) => file.title === windowTitle);
+        if (isFile) {
+            const file = userFiles.find((f) => f.title === windowTitle);
+            if (file) {
+                setOpenWindows((prev) => [...prev, file.title]);
+            }
+        } else {
+            setOpenWindows((prev) => (prev.includes(windowTitle) ? prev : [...prev, windowTitle]));
+        }
     };
 
     const closeWindow = (windowTitle: string) => {
@@ -177,7 +185,7 @@ export default function Desktop() {
                                 onSave={saveFileContent}
                             />
                         )}
-                        {windowTitle === "File Explorer" && <FileExplorer />}
+                        {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow} />}
                         {windowTitle === "Terminal" && <Terminal />}
                     </Window>
                 );
