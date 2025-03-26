@@ -1,7 +1,6 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchFiles } from "../../utils/filesystem"; // Fetch function for mock filesystem
+import UniversalFileViewer from "./FileReader"; // Import the universal viewer
 
 type File = {
     name: string;
@@ -11,37 +10,33 @@ type File = {
 
 export default function FileExplorer() {
     const [files, setFiles] = useState<File[]>([]);
-    const [currentPath, setCurrentPath] = useState<string>("/C"); // Default starting path
-    const [openedFile, setOpenedFile] = useState<{ name: string; content: string } | null>(null);
+    const [currentPath, setCurrentPath] = useState<string>("/C");
+    const [openedFile, setOpenedFile] = useState<{ path: string; type: string } | null>(null);
 
-    // Fetch files whenever the path changes
     useEffect(() => {
         const loadFiles = async () => {
-            const fetchedFiles = await fetchFiles(currentPath); // Fetch files for current path
+            const fetchedFiles = await fetchFiles(currentPath);
             setFiles(fetchedFiles);
         };
         loadFiles();
     }, [currentPath]);
 
-    // Handle folder click (navigate to the folder)
     const handleFolderClick = (folder: File) => {
         if (folder.type === "folder") {
-            setCurrentPath(folder.path); // Update path to the folder
+            setCurrentPath(folder.path);
         }
     };
 
-    // Handle file click (open the file)
     const handleFileClick = (file: File) => {
-        if (file.type === "file") {
-            setOpenedFile({ name: file.name, content: `Preview of ${file.name} will go here...` });
-            // Optionally, fetch actual file content if necessary
+        if (file.type === "file" && file.url) {
+            const fileExtension = file.name.split(".").pop()?.toLowerCase() || "";
+            setOpenedFile({ path: file.url, type: fileExtension });
         }
     };
 
-    // Handle navigation back to the parent folder
     const handleBackClick = () => {
         const parentPath = currentPath.substring(0, currentPath.lastIndexOf("/")) || "/C";
-        setCurrentPath(parentPath); // Set the path back to the parent folder
+        setCurrentPath(parentPath);
     };
 
     return (
@@ -71,13 +66,13 @@ export default function FileExplorer() {
                 </div>
             </div>
 
-            {/* Opened File Modal */}
+            {/* Show File Viewer Modal if a file is opened */}
             {openedFile && (
-                <div className="opened-file-modal absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black p-4 border border-white">
-                    <h2 className="text-lg font-bold">{openedFile.name}</h2>
-                    <pre className="whitespace-pre-wrap">{openedFile.content}</pre>
-                    <button className="mt-2 bg-gray-600 px-2 py-1" onClick={() => setOpenedFile(null)}>Close</button>
-                </div>
+                <UniversalFileViewer
+                    filePath={openedFile.path}
+                    fileType={openedFile.type}
+                    onClose={() => setOpenedFile(null)}
+                />
             )}
         </div>
     );
