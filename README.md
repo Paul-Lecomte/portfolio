@@ -97,3 +97,11 @@ Here’s a roadmap of planned features and improvements for the Portfolio projec
 - **Portfolio Analytics:** Implement analytics features for visitors to track interactions with the portfolio.
 
 ---
+
+## 📝 License
+
+This project is open-source and available under the MIT License. Feel free to use, modify, or contribute to it.
+
+---
+
+For more details, visit the repository: [GitHub Repo](https://github.com/Paul-Lecomte/portfolio).
