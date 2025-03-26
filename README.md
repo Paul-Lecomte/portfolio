@@ -43,3 +43,19 @@ To get started with this project locally, follow the steps below:
    ```
 
 4. Visit `http://localhost:3000` in your browser to see the app in action.
+
+## 📦 File Structure
+
+Here’s a brief overview of the project structure:
+
+```
+/public                    # Static assets (images, icons, fonts)
+  ├── /icons                # App icons
+  ├── /assets               # Background images and other static files
+/src
+  ├── /app                  # Main Next.js app folder
+  ├── /components           # Reusable UI components (Buttons, Taskbar, etc.)
+  ├── /store                # Zustand state management
+  ├── /styles               # Tailwind CSS and global styles
+  ├── /utils                # Helper functions and utilities
+```
