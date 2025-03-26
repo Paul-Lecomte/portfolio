@@ -19,3 +19,27 @@ Welcome to my 2025 personal portfolio, where I've reimagined the traditional por
 - **TypeScript** – Enhancing the development experience with static types for better maintainability and readability.
 - **Tailwind CSS** – A utility-first CSS framework for rapid UI development, ensuring responsive, customizable designs.
 - **Zustand** – A minimal state management library for React that helps manage app state efficiently.
+
+## 🚀 Getting Started
+
+To get started with this project locally, follow the steps below:
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Paul-Lecomte/portfolio.git
+   ```
+
+2. **Install Dependencies**:
+   Navigate to the project folder and install all the required dependencies:
+   ```bash
+   cd portfolio
+   npm install
+   ```
+
+3. **Run the Development Server**:
+   Start the Next.js development server and open the app in your browser:
+   ```bash
+   npm run dev
+   ```
+
+4. Visit `http://localhost:3000` in your browser to see the app in action.
