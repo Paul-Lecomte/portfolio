@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
@@ -8,7 +8,7 @@ import FileExplorer from "@/components/FileExplorer";
 import FileEditor from "@/components/FileEditor";
 import UniversalFileViewer from "@/components/FileReader";
 
-// Default icons for the start menu
+// Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
@@ -171,6 +171,11 @@ export default function Desktop() {
                         )}
                         {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow} />}
                         {windowTitle === "Terminal" && <Terminal />}
+                        {/* Add the new apps here */}
+                        {windowTitle === "Notepad" && <FileEditor file={file} onClose={() => closeWindow(windowTitle)} onSave={saveFileContent} />}
+                        {windowTitle === "Image Viewer" && <UniversalFileViewer file={file} />}
+                        {windowTitle === "Media Player" && <UniversalFileViewer file={file} />}
+                        {windowTitle === "Web Browser" && <UniversalFileViewer file={file} />}
                     </Window>
                 );
             })}
@@ -226,7 +231,7 @@ export default function Desktop() {
             </div>
 
             {/* Desktop Icons */}
-            {[...defaultIcons, ...userFiles].map((icon, index) => {
+            {[...userFiles].map((icon, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
                 const spacing = 100;
