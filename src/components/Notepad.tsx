@@ -16,9 +16,9 @@ const Notepad = ({ onClose }: any) => {
     };
 
     return (
-        <div className="w-full h-full bg-gray-800 p-4 rounded-lg">
+        <div className="w-full h-full bg-gray-800 rounded-lg">
             <textarea
-                className="w-full h-full bg-gray-700 text-white p-2 rounded-md"
+                className="w-full h-full bg-gray-700 text-white p-2 "
                 value={content}
                 onChange={handleChange}
                 placeholder="Start typing here..."
