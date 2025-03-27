@@ -113,10 +113,10 @@ export default function Desktop() {
                 setOpenWindows((prev) => (prev.includes("Media Player") ? prev : [...prev, "Media Player"]));
             } else if (file.title.match(/\.(jpg|jpeg|png|gif)$/)) {
                 setOpenWindows((prev) => (prev.includes("Image Viewer") ? prev : [...prev, "Image Viewer"]));
-            } else if (file.title.match(/\.(.md)$/)) {
+            } else if (file.title.endsWith(".md")) {
                 setOpenWindows((prev) => (prev.includes("Markdown Editor") ? prev : [...prev, "Markdown Editor"]));
-            } else if (file.title.match(/\.(.md)$/)) {
-                setOpenWindows((prev) => (prev.includes("Markdown Editor") ? prev : [...prev, "Markdown Editor"]));
+            } else if (file.title.match(/\.(js|jsx|ts|tsx|py|html|css|json)$/)) {
+                setOpenWindows((prev) => (prev.includes("Code Editor") ? prev : [...prev, "Code Editor"]));
             } else if (file.title.startsWith("http")) {
                 setOpenWindows((prev) => (prev.includes("Web Browser") ? prev : [...prev, "Web Browser"]));
             } else {
