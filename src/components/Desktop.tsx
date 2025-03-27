@@ -12,6 +12,10 @@ import UniversalFileViewer from "@/components/FileReader";
 const defaultIcons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
+    { id: 3, title: "Notepad", icon: "📝" }, // Notepad
+    { id: 4, title: "Image Viewer", icon: "🖼️" }, // Image Viewer
+    { id: 5, title: "Media Player", icon: "🎥" }, // Media Player
+    { id: 6, title: "Web Browser", icon: "🌐" }, // Web Browser
 ];
 
 const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
