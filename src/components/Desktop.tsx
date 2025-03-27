@@ -11,6 +11,7 @@ import Notepad from "@/components/Notepad";
 import MediaPlayer from "@/components/MediaPlayer";
 import ImageViewer from "@/components/ImageViewer";
 import WebBrowser from "@/components/WebBrowser";
+import CodeEditor from "@/components/CodeEditor";
 
 // Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
@@ -112,6 +113,8 @@ export default function Desktop() {
                 setOpenWindows((prev) => (prev.includes("Media Player") ? prev : [...prev, "Media Player"]));
             } else if (file.title.match(/\.(jpg|jpeg|png|gif)$/)) {
                 setOpenWindows((prev) => (prev.includes("Image Viewer") ? prev : [...prev, "Image Viewer"]));
+            } else if (file.title.match(/\.(.md)$/)) {
+                setOpenWindows((prev) => (prev.includes("Markdown Editor") ? prev : [...prev, "Markdown Editor"]));
             } else if (file.title.match(/\.(.md)$/)) {
                 setOpenWindows((prev) => (prev.includes("Markdown Editor") ? prev : [...prev, "Markdown Editor"]));
             } else if (file.title.startsWith("http")) {
