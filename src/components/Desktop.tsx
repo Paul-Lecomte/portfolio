@@ -100,7 +100,26 @@ export default function Desktop() {
     };
 
     const openWindow = (fileName: string) => {
-        setOpenWindows((prev) => (prev.includes(fileName) ? prev : [...prev, fileName]));
+        const file = userFiles.find((f) => f.title === fileName);
+
+        if (file) {
+            if (file.title.endsWith(".txt")) {
+                setOpenWindows((prev) => (prev.includes("Notepad") ? prev : [...prev, "Notepad"]));
+            } else if (file.title.match(/\.(mp4|mkv|avi|mov)$/)) {
+                setOpenWindows((prev) => (prev.includes("Media Player") ? prev : [...prev, "Media Player"]));
+            } else if (file.title.match(/\.(jpg|jpeg|png|gif)$/)) {
+                setOpenWindows((prev) => (prev.includes("Image Viewer") ? prev : [...prev, "Image Viewer"]));
+            } else if (file.title.match(/\.(.md)$/)) {
+                setOpenWindows((prev) => (prev.includes("Markdown Editor") ? prev : [...prev, "Markdown Editor"]));
+            } else if (file.title.startsWith("http")) {
+                setOpenWindows((prev) => (prev.includes("Web Browser") ? prev : [...prev, "Web Browser"]));
+            } else {
+                // Open with a universal file viewer if no specific app is found
+                setOpenWindows((prev) => (prev.includes("UniversalFileViewer") ? prev : [...prev, "UniversalFileViewer"]));
+            }
+        } else {
+            setOpenWindows((prev) => (prev.includes(fileName) ? prev : [...prev, fileName]));
+        }
     };
 
     const closeWindow = (windowTitle: string) => {
