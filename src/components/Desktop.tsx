@@ -305,22 +305,34 @@ export default function Desktop() {
             {creatingFile && (
                 <div
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
-                            <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
-                            <input
-                                type="text"
-                                value={newFileName}
-                                onChange={handleCreateFileNameChange}
-                                className="w-full p-2 bg-gray-700 text-white rounded-md"
-                                placeholder={`New ${creatingFile}`}
-                            />
-                            <button
-                                onClick={handleCreateFile}
-                                className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
-                            >
-                                Create
-                            </button>
-                        </div>
-                    )}
+                    <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
+                    <input
+                        type="text"
+                        value={newFileName}
+                        onChange={handleCreateFileNameChange}
+                        className="w-full p-2 bg-gray-700 text-white rounded-md"
+                        placeholder="Enter file name"
+                    />
+
+                    <select
+                        value={selectedExtension}
+                        onChange={(e) => setSelectedExtension(e.target.value)}
+                        className="w-full p-2 mt-2 bg-gray-700 text-white rounded-md"
+                    >
+                        {fileExtensions.map((ext) => (
+                            <option key={ext} value={ext}>
+                                {ext}
+                            </option>
+                        ))}
+                    </select>
+                    <button
+                        onClick={handleCreateFile}
+                        className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
+                    >
+                        Create
+                    </button>
                 </div>
-            );
-            }
+            )}
+        </div>
+    );
+}
