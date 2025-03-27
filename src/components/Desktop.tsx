@@ -206,6 +206,7 @@ export default function Desktop() {
                         {windowTitle === "Media Player" && <MediaPlayer file={file} onClose={() => closeWindow(windowTitle)} />}
                         {windowTitle === "Web Browser" && <WebBrowser file={file} onClose={() => closeWindow(windowTitle)} />}
                         {windowTitle === "Markdown Editor" && <FileEditor file={null} onClose={() => closeWindow(windowTitle)} onSave={() => {}} />}
+                        {windowTitle === "Code Editor" && <CodeEditor onClose={() => closeWindow(windowTitle)} />}
                     </Window>
                 );
             })}
