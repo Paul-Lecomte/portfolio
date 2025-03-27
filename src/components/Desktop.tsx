@@ -20,6 +20,7 @@ const defaultIcons = [
     { id: 4, title: "Image Viewer", icon: "🖼️" },
     { id: 5, title: "Media Player", icon: "🎥" },
     { id: 6, title: "Web Browser", icon: "🌐" },
+    { id: 7, title: "Markdown Editor", icon: "📄" }
 ];
 
 const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
