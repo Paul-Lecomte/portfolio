@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { fetchFiles, FileItem } from "../../utils/filesystem";
 
 export default function Terminal() {
     const [input, setInput] = useState<string>("");
     const [output, setOutput] = useState<string[]>([]);
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number | null>(null);
-    const [currentPath, setCurrentPath] = useState<string>("~"); // Simulated filesystem
+    const [currentPath, setCurrentPath] = useState<string>("/C");
+    const [currentFiles, setCurrentFiles] = useState<FileItem[]>([]);
     const terminalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -16,6 +18,11 @@ export default function Terminal() {
             terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
         }
     }, [output]);
+
+    useEffect(() => {
+        // Fetch files when changing directories
+        fetchFiles(currentPath).then(setCurrentFiles);
+    }, [currentPath]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
@@ -29,7 +36,7 @@ export default function Terminal() {
                 setHistory((prev) => [...prev, input]);
                 setHistoryIndex(null);
             }
-            setInput(""); // Clear input
+            setInput("");
         } else if (e.key === "ArrowUp") {
             if (history.length > 0) {
                 setHistoryIndex((prev) => (prev === null ? history.length - 1 : Math.max(0, prev - 1)));
@@ -50,25 +57,48 @@ export default function Terminal() {
 
         switch (cmd) {
             case "ls":
-                result = "Desktop  Documents  Downloads  Pictures"; // Simulated directory listing
+                result = currentFiles.map((file) => file.name).join("  ") || "No files found";
                 break;
+
             case "pwd":
                 result = currentPath;
                 break;
+
             case "cd":
                 if (args[1]) {
-                    setCurrentPath(args[1] === ".." ? "~" : `${currentPath}/${args[1]}`);
-                    result = `Changed directory to ${currentPath}`;
+                    const target = args[1] === ".." ? "/C" : `${currentPath}/${args[1]}`;
+                    if (currentFiles.some((file) => file.name === args[1] && file.type === "folder")) {
+                        setCurrentPath(target);
+                        result = `Changed directory to ${target}`;
+                    } else {
+                        result = `No such directory: ${args[1]}`;
+                    }
                 } else {
                     result = "Usage: cd <directory>";
                 }
                 break;
+
+            case "cat":
+                const file = currentFiles.find((f) => f.name === args[1] && f.type === "file");
+                if (file && file.url) {
+                    fetch(file.url)
+                        .then((res) => res.text())
+                        .then((text) => setOutput((prev) => [...prev, `~$ ${command}`, text]))
+                        .catch(() => setOutput((prev) => [...prev, `~$ ${command}`, "Error reading file"]));
+                    return;
+                } else {
+                    result = `No such file: ${args[1]}`;
+                }
+                break;
+
             case "echo":
                 result = args.slice(1).join(" ");
                 break;
+
             case "clear":
                 setOutput([]);
                 return;
+
             default:
                 result = `Command not found: ${command}`;
                 break;
