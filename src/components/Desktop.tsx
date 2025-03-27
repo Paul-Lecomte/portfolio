@@ -176,10 +176,10 @@ export default function Desktop() {
                         {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow} />}
                         {windowTitle === "Terminal" && <Terminal />}
                         {/* Add the new apps here */}
-                        {windowTitle === "Notepad" && <FileEditor file={file} onClose={() => closeWindow(windowTitle)} onSave={saveFileContent} />}
-                        {windowTitle === "Image Viewer" && <UniversalFileViewer file={file} />}
-                        {windowTitle === "Media Player" && <UniversalFileViewer file={file} />}
-                        {windowTitle === "Web Browser" && <UniversalFileViewer file={file} />}
+                        {windowTitle === "Notepad" && <Notepad file={file} onClose={() => closeWindow(windowTitle)} />}
+                        {windowTitle === "Image Viewer" && <ImageViewer file={file} onClose={() => closeWindow(windowTitle)} />}
+                        {windowTitle === "Media Player" && <MediaPlayer file={file} onClose={() => closeWindow(windowTitle)} />}
+                        {windowTitle === "Web Browser" && <WebBrowser file={file} onClose={() => closeWindow(windowTitle)} />}
                     </Window>
                 );
             })}
