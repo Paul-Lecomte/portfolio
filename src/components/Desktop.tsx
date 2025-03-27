@@ -12,6 +12,7 @@ import MediaPlayer from "@/components/MediaPlayer";
 import ImageViewer from "@/components/ImageViewer";
 import WebBrowser from "@/components/WebBrowser";
 import CodeEditor from "@/components/CodeEditor";
+import SystemTray from './SystemTray';
 
 // Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
@@ -212,7 +213,7 @@ export default function Desktop() {
             })}
 
             {/* Taskbar */}
-            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex items-center justify-between rounded-t-xl shadow-lg">
+            <div className="fixed bottom-0 w-full bg-gray-800 p-2 flex items-center justify-between shadow-lg z-50">
                 {/* Start Menu Button */}
                 <div className="relative">
                     <button
@@ -254,10 +255,7 @@ export default function Desktop() {
 
                 {/* System Tray */}
                 <div className="flex space-x-3 text-white">
-                    <span>🔊</span>
-                    <span>📶</span>
-                    <span>⚡</span>
-                    <span>{time}</span>
+                    <SystemTray />
                 </div>
             </div>
 
