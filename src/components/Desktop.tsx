@@ -181,6 +181,7 @@ export default function Desktop() {
                         {windowTitle === "Image Viewer" && <ImageViewer file={file} onClose={() => closeWindow(windowTitle)} />}
                         {windowTitle === "Media Player" && <MediaPlayer file={file} onClose={() => closeWindow(windowTitle)} />}
                         {windowTitle === "Web Browser" && <WebBrowser file={file} onClose={() => closeWindow(windowTitle)} />}
+                        {windowTitle === "Markdown Editor" && <FileEditor file={null} onClose={() => closeWindow(windowTitle)} onSave={() => {}} />}
                     </Window>
                 );
             })}
@@ -257,7 +258,7 @@ export default function Desktop() {
                 <div
                     ref={menuRef}
                     className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
-                    style={{ top: contextMenu.y, left: contextMenu.x }}
+                    style={{top: contextMenu.y, left: contextMenu.x}}
                 >
                     <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
                     <button
@@ -265,6 +266,9 @@ export default function Desktop() {
                         onClick={() => renameFile(contextMenu.iconTitle!)}
                     >
                         Rename
+                    </button>
+                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700"
+                            onClick={() => createFileOrFolder("file")}>Create File
                     </button>
                     <button
                         className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
@@ -279,23 +283,24 @@ export default function Desktop() {
 
             {/* Modal for creating new file/folder */}
             {creatingFile && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
-                    <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
-                    <input
-                        type="text"
-                        value={newFileName}
-                        onChange={handleCreateFileNameChange}
-                        className="w-full p-2 bg-gray-700 text-white rounded-md"
-                        placeholder={`New ${creatingFile}`}
-                    />
-                    <button
-                        onClick={handleCreateFile}
-                        className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
-                    >
-                        Create
-                    </button>
+                <div
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
+                            <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
+                            <input
+                                type="text"
+                                value={newFileName}
+                                onChange={handleCreateFileNameChange}
+                                className="w-full p-2 bg-gray-700 text-white rounded-md"
+                                placeholder={`New ${creatingFile}`}
+                            />
+                            <button
+                                onClick={handleCreateFile}
+                                className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
+                            >
+                                Create
+                            </button>
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
-    );
-}
+            );
+            }
