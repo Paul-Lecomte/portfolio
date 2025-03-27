@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { fetchFiles } from "../../utils/filesystem"; // Fetch function for mock filesystem
-import UniversalFileViewer from "./FileReader"; // Import the universal viewer
+import { fetchFiles } from "../../utils/filesystem";
+import UniversalFileViewer from "./FileReader";
 
 type File = {
     name: string;
     type: "file" | "folder";
-    path: string; // Full path for the file/folder
+    path: string;
     url: string;
 };
 
 interface FileExplorerProps {
-    onOpenFile: (fileName: string, filePath: string, fileUrl: string) => void; // Modify the prop to accept the file path
+    onOpenFile: (fileName: string, filePath: string, fileUrl: string) => void;
 }
 
 export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
     const [files, setFiles] = useState<File[]>([]);
     const [currentPath, setCurrentPath] = useState<string>("/C");
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
     useEffect(() => {
         const loadFiles = async () => {
@@ -32,14 +33,8 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
     };
 
     const handleFileClick = (file: File) => {
-        if (file.type === "file") {
-            // Ensure file URL is defined before passing
-            if (file.url) {
-                // Pass both the file name and file URL to the parent component
-                onOpenFile(file.name, file.path, file.url);
-            } else {
-                console.error(`Error: file URL is undefined for file: ${file.name}`);
-            }
+        if (file.type === "file" && file.url) {
+            onOpenFile(file.name, file.path, file.url);
         }
     };
 
@@ -47,6 +42,10 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
         const parentPath = currentPath.substring(0, currentPath.lastIndexOf("/")) || "/C";
         setCurrentPath(parentPath);
     };
+
+    const filteredFiles = files.filter(file =>
+        file.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className="file-explorer p-4 bg-gray-800 text-white flex flex-col h-full">
@@ -56,11 +55,20 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
                 <span className="font-mono">{currentPath}</span>
             </div>
 
+            {/* Search Bar */}
+            <input
+                type="text"
+                className="mb-4 p-2 bg-gray-700 text-white border border-gray-600 rounded w-full"
+                placeholder="Search files..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
             {/* File/Folder List */}
             <div className="flex-1 overflow-auto">
                 <div className="grid grid-cols-3 gap-4">
-                    {files.length > 0 ? (
-                        files.map((file) => (
+                    {filteredFiles.length > 0 ? (
+                        filteredFiles.map((file) => (
                             <div
                                 key={file.path}
                                 className="file-item p-2 cursor-pointer hover:bg-gray-700"
