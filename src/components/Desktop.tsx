@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
@@ -13,7 +13,7 @@ import ImageViewer from "@/components/ImageViewer";
 import WebBrowser from "@/components/WebBrowser";
 import CodeEditor from "@/components/CodeEditor";
 
-// Default icons for the start menu (without showing on the desktop)
+// Add additional state variables
 const defaultIcons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
@@ -70,6 +70,9 @@ export default function Desktop() {
     const fileExtensions = [".txt", ".md", ".json", ".js", ".html", ".css", ".mp4", ".jpg", ".png"];
     const [selectedExtension, setSelectedExtension] = useState(fileExtensions[0]); // Default to .txt
 
+    // New state for volume and network connection
+    const [volume, setVolume] = useState(50); // 0-100 range
+    const [isConnected, setIsConnected] = useState(true); // Network connected status
 
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -188,6 +191,16 @@ export default function Desktop() {
         );
     };
 
+    // Handle volume change
+    const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setVolume(Number(e.target.value));
+    };
+
+    // Handle network connection toggle
+    const toggleNetworkConnection = () => {
+        setIsConnected((prev) => !prev);
+    };
+
     return (
         <div className="w-full h-screen bg-gray-950 relative" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Windows */}
@@ -254,8 +267,30 @@ export default function Desktop() {
 
                 {/* System Tray */}
                 <div className="flex space-x-3 text-white">
-                    <span>🔊</span>
-                    <span>📶</span>
+                    {/* Volume */}
+                    <div>
+                        <span>🔊</span>
+                        <input
+                            type="range"
+                            value={volume}
+                            min="0"
+                            max="100"
+                            onChange={handleVolumeChange}
+                            className="w-16 ml-2"
+                        />
+                    </div>
+
+                    {/* Network Status */}
+                    <div>
+                        <span>📶</span>
+                        <button
+                            onClick={toggleNetworkConnection}
+                            className={`ml-2 ${isConnected ? "text-green-400" : "text-red-400"}`}
+                        >
+                            {isConnected ? "Connected" : "Disconnected"}
+                        </button>
+                    </div>
+
                     <span>⚡</span>
                     <span>{time}</span>
                 </div>
@@ -283,59 +318,30 @@ export default function Desktop() {
                 <div
                     ref={menuRef}
                     className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
-                    style={{top: contextMenu.y, left: contextMenu.x}}
+                    style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
-                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
-                    <button
-                        className="block w-full text-left px-3 py-1 hover:bg-gray-700"
-                        onClick={() => renameFile(contextMenu.iconTitle!)}
-                    >
-                        Rename
+                    <button onClick={() => createFileOrFolder("file")} className="w-full text-left p-1 hover:bg-gray-700">
+                        Create File
                     </button>
-                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700"
-                            onClick={() => createFileOrFolder("file")}>Create File
+                    <button onClick={() => createFileOrFolder("folder")} className="w-full text-left p-1 hover:bg-gray-700">
+                        Create Folder
                     </button>
-                    <button
-                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
-                        onClick={() => {
-                            contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!);
-                        }}
-                    >
-                        Delete
-                    </button>
-                </div>
-            )}
-
-            {/* Modal for creating new file/folder */}
-            {creatingFile && (
-                <div
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
-                    <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
-                    <input
-                        type="text"
-                        value={newFileName}
-                        onChange={handleCreateFileNameChange}
-                        className="w-full p-2 bg-gray-700 text-white rounded-md"
-                        placeholder="Enter file name"
-                    />
-
-                    <select
-                        value={selectedExtension}
-                        onChange={(e) => setSelectedExtension(e.target.value)}
-                        className="w-full p-2 mt-2 bg-gray-700 text-white rounded-md"
-                    >
-                        {fileExtensions.map((ext) => (
-                            <option key={ext} value={ext}>
-                                {ext}
-                            </option>
-                        ))}
-                    </select>
-                    <button
-                        onClick={handleCreateFile}
-                        className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
-                    >
-                        Create
-                    </button>
+                    {contextMenu.iconTitle && (
+                        <>
+                            <button
+                                onClick={() => renameFile(contextMenu.iconTitle)}
+                                className="w-full text-left p-1 hover:bg-gray-700"
+                            >
+                                Rename
+                            </button>
+                            <button
+                                onClick={() => deleteFile(contextMenu.iconTitle)}
+                                className="w-full text-left p-1 hover:bg-gray-700"
+                            >
+                                Delete
+                            </button>
+                        </>
+                    )}
                 </div>
             )}
         </div>
