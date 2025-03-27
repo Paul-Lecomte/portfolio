@@ -7,15 +7,19 @@ import Terminal from "@/components/Terminal";
 import FileExplorer from "@/components/FileExplorer";
 import FileEditor from "@/components/FileEditor";
 import UniversalFileViewer from "@/components/FileReader";
+import Notepad from "@/components/Notepad";
+import MediaPlayer from "@/components/MediaPlayer";
+import ImageViewer from "@/components/ImageViewer";
+import WebBrowser from "@/components/WebBrowser";
 
 // Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
-    { id: 3, title: "Notepad", icon: "📝" }, // Notepad
-    { id: 4, title: "Image Viewer", icon: "🖼️" }, // Image Viewer
-    { id: 5, title: "Media Player", icon: "🎥" }, // Media Player
-    { id: 6, title: "Web Browser", icon: "🌐" }, // Web Browser
+    { id: 3, title: "Notepad", icon: "📝" },
+    { id: 4, title: "Image Viewer", icon: "🖼️" },
+    { id: 5, title: "Media Player", icon: "🎥" },
+    { id: 6, title: "Web Browser", icon: "🌐" },
 ];
 
 const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
