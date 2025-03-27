@@ -73,6 +73,8 @@ export default function Desktop() {
     // New state for volume and network connection
     const [volume, setVolume] = useState(50); // 0-100 range
     const [isConnected, setIsConnected] = useState(true); // Network connected status
+    const [showVolume, setShowVolume] = useState(false); // To toggle volume slider visibility
+    const [showNetwork, setShowNetwork] = useState(false); // To toggle network status visibility
 
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -266,82 +268,107 @@ export default function Desktop() {
                 </div>
 
                 {/* System Tray */}
-                <div className="flex space-x-3 text-white">
-                    {/* Volume */}
-                    <div>
-                        <span>🔊</span>
-                        <input
-                            type="range"
-                            value={volume}
-                            min="0"
-                            max="100"
-                            onChange={handleVolumeChange}
-                            className="w-16 ml-2"
-                        />
+                <div className="flex space-x-4 items-center">
+                    <div
+                        className="relative flex items-center cursor-pointer"
+                        onClick={() => setShowVolume((prev) => !prev)}
+                    >
+                        <div>🔊</div>
+                        {showVolume && (
+                            <div className="absolute bottom-12 right-0 bg-gray-800 p-3 rounded-md shadow-xl">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={volume}
+                                    onChange={handleVolumeChange}
+                                    className="w-24"
+                                />
+                                <span className="text-white ml-2">{volume}</span>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Network Status */}
-                    <div>
-                        <span>📶</span>
-                        <button
-                            onClick={toggleNetworkConnection}
-                            className={`ml-2 ${isConnected ? "text-green-400" : "text-red-400"}`}
-                        >
-                            {isConnected ? "Connected" : "Disconnected"}
-                        </button>
+                    <div
+                        className="relative flex items-center cursor-pointer"
+                        onClick={() => setShowNetwork((prev) => !prev)}
+                    >
+                        <div>🌐</div>
+                        {showNetwork && (
+                            <div className="absolute bottom-12 right-0 bg-gray-800 p-3 rounded-md shadow-xl">
+                                <p className="text-white">
+                                    {isConnected ? "Connected" : "Disconnected"}
+                                </p>
+                                <button onClick={toggleNetworkConnection} className="text-blue-500 mt-2">
+                                    {isConnected ? "Disconnect" : "Connect"}
+                                </button>
+                            </div>
+                        )}
                     </div>
 
-                    <span>⚡</span>
-                    <span>{time}</span>
+                    <div className="text-white">{time}</div>
                 </div>
             </div>
-
-            {/* Desktop Icons */}
-            {[...userFiles].map((icon, index) => {
-                const row = Math.floor(index / 3);
-                const col = index % 3;
-                const spacing = 100;
-
-                return (
-                    <DesktopIcon
-                        key={icon.id}
-                        icon={icon}
-                        position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
-                        openWindow={openWindow}
-                        onContextMenu={handleContextMenu}
-                    />
-                );
-            })}
 
             {/* Context Menu */}
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
-                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
-                    style={{ top: contextMenu.y, left: contextMenu.x }}
+                    className="absolute"
+                    style={{
+                        left: contextMenu.x,
+                        top: contextMenu.y,
+                        background: "#2D2D2D",
+                        borderRadius: "5px",
+                        padding: "5px 10px",
+                        color: "#FFF",
+                        zIndex: 999,
+                    }}
                 >
-                    <button onClick={() => createFileOrFolder("file")} className="w-full text-left p-1 hover:bg-gray-700">
-                        Create File
-                    </button>
-                    <button onClick={() => createFileOrFolder("folder")} className="w-full text-left p-1 hover:bg-gray-700">
-                        Create Folder
-                    </button>
-                    {contextMenu.iconTitle && (
-                        <>
-                            <button
-                                onClick={() => renameFile(contextMenu.iconTitle)}
-                                className="w-full text-left p-1 hover:bg-gray-700"
-                            >
-                                Rename
-                            </button>
-                            <button
-                                onClick={() => deleteFile(contextMenu.iconTitle)}
-                                className="w-full text-left p-1 hover:bg-gray-700"
-                            >
-                                Delete
-                            </button>
-                        </>
-                    )}
+                    <div
+                        onClick={() => {
+                            setContextMenu({ ...contextMenu, visible: false });
+                            renameFile(contextMenu.iconTitle as string);
+                        }}
+                    >
+                        Rename
+                    </div>
+                    <div
+                        onClick={() => {
+                            setContextMenu({ ...contextMenu, visible: false });
+                            deleteFile(contextMenu.iconTitle as string);
+                        }}
+                    >
+                        Delete
+                    </div>
+                </div>
+            )}
+
+            {/* Create File Modal */}
+            {creatingFile && (
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-700 text-white p-6 rounded-lg shadow-xl">
+                    <h3>Create a {creatingFile}</h3>
+                    <input
+                        type="text"
+                        placeholder="File name"
+                        value={newFileName}
+                        onChange={handleCreateFileNameChange}
+                        className="mt-2 p-2 bg-gray-800 rounded-md text-white w-full"
+                    />
+                    <div className="mt-4 flex items-center space-x-4">
+                        <button
+                            onClick={handleCreateFile}
+                            className="bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-500"
+                        >
+                            Create
+                        </button>
+                        <button
+                            onClick={() => setCreatingFile(null)}
+                            className="bg-gray-600 px-4 py-2 rounded-md hover:bg-gray-500"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
