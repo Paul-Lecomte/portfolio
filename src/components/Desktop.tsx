@@ -8,7 +8,7 @@ import FileExplorer from "@/components/FileExplorer";
 import FileEditor from "@/components/FileEditor";
 import UniversalFileViewer from "@/components/FileReader";
 
-// Default icons on the desktop
+// Default icons for the start menu
 const defaultIcons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
@@ -53,9 +53,9 @@ export default function Desktop() {
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const [time, setTime] = useState<string>("");
     const [openWindows, setOpenWindows] = useState<string[]>([]);
-    const [userFiles, setUserFiles] = useState<any[]>([]); // Track files created by the user
-    const [newFileName, setNewFileName] = useState<string>(""); // Track the new file/folder name
-    const [creatingFile, setCreatingFile] = useState<"file" | "folder" | null>(null); // Track creation type
+    const [userFiles, setUserFiles] = useState<any[]>([]);
+    const [newFileName, setNewFileName] = useState<string>("");
+    const [creatingFile, setCreatingFile] = useState<"file" | "folder" | null>(null);
 
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -73,8 +73,6 @@ export default function Desktop() {
 
     const handleContextMenu = (e: React.MouseEvent, iconTitle: string) => {
         e.preventDefault();
-        console.log(`Context menu triggered for: ${iconTitle}`);
-
         setContextMenu({
             x: e.clientX,
             y: e.clientY,
@@ -92,20 +90,8 @@ export default function Desktop() {
         }
     };
 
-    const openWindow = (fileName: string, fileUrl: string, fileType: string) => {
-        // Construct the file URL
-        const adjustedUrl = `/filesystem${fileUrl}`;
-
-        // Log file details
-        console.log("Opening file:", fileName);
-        console.log("file type : "+ fileType);
-        console.log("File URL:", adjustedUrl);
-
-        // Ensure the window is tracked as open
+    const openWindow = (fileName: string) => {
         setOpenWindows((prev) => (prev.includes(fileName) ? prev : [...prev, fileName]));
-
-        // Directly open the file in UniversalFileViewer
-        return <UniversalFileViewer filePath={adjustedUrl} fileType={fileType} onClose={() => { /* close logic */ }} />;
     };
 
     const closeWindow = (windowTitle: string) => {
@@ -113,9 +99,7 @@ export default function Desktop() {
     };
 
     const deleteFile = (title: string) => {
-        console.log(`Deleting file with title: ${title}`);
         setUserFiles((prevFiles) => prevFiles.filter((file) => file.title.trim() !== title.trim()));
-        // Only close the context menu after deleting
     };
 
     const renameFile = (title: string) => {
@@ -126,15 +110,12 @@ export default function Desktop() {
                     file.title === title ? { ...file, title: newName.trim() } : file
                 )
             );
-        } else if (newName === title) {
-            alert("The name is the same. Please choose a new one.");
         }
-        // Close context menu only after rename is done
     };
 
     const createFileOrFolder = (type: string) => {
         setCreatingFile(type as "file" | "folder");
-        setNewFileName(""); // Reset name input when starting new creation
+        setNewFileName("");
     };
 
     const handleCreateFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,21 +128,20 @@ export default function Desktop() {
             return;
         }
 
-        // Append '.md' if no extension is provided
         const fileNameWithExtension = newFileName.trim().endsWith(".md")
             ? newFileName.trim()
             : `${newFileName.trim()}.md`;
 
         const newFileOrFolder = {
-            id: userFiles.length + 1 + defaultIcons.length, // Unique ID
-            title: fileNameWithExtension, // Use the file name with .md extension
+            id: userFiles.length + 1 + defaultIcons.length,
+            title: fileNameWithExtension,
             type: creatingFile,
             icon: creatingFile === "file" ? "📄" : "📁",
-            content: creatingFile === "file" && fileNameWithExtension.endsWith(".md") ? "" : null, // Initialize content for .md files
+            content: creatingFile === "file" && fileNameWithExtension.endsWith(".md") ? "" : null,
         };
 
         setUserFiles((prevFiles) => [...prevFiles, newFileOrFolder]);
-        setCreatingFile(null); // Reset creation type after creation
+        setCreatingFile(null);
     };
 
     useEffect(() => {
@@ -169,7 +149,6 @@ export default function Desktop() {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
-    // Function to save the content of a file
     const saveFileContent = (fileId: number, content: string) => {
         setUserFiles((prevFiles) =>
             prevFiles.map((file) => (file.id === fileId ? { ...file, content } : file))
@@ -184,11 +163,7 @@ export default function Desktop() {
                 return (
                     <Window key={windowTitle} title={windowTitle} onClose={() => closeWindow(windowTitle)}>
                         {file && file.title.endsWith(".md") && (
-                            <FileEditor
-                                file={file}
-                                onClose={() => closeWindow(windowTitle)}
-                                onSave={saveFileContent}
-                            />
+                            <FileEditor file={file} onClose={() => closeWindow(windowTitle)} onSave={saveFileContent} />
                         )}
                         {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow} />}
                         {windowTitle === "Terminal" && <Terminal />}
@@ -209,19 +184,30 @@ export default function Desktop() {
                     {startMenuOpen && (
                         <div className="absolute bottom-12 left-0 w-64 bg-gray-900 p-3 rounded-lg shadow-xl">
                             <p className="text-white">Start Menu</p>
+                            <div className="space-y-2">
+                                {defaultIcons.map((icon) => (
+                                    <button
+                                        key={icon.id}
+                                        className="text-white"
+                                        onClick={() => openWindow(icon.title)}
+                                    >
+                                        {icon.icon} {icon.title}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
 
-                {/* Task Icons */}
+                {/* Taskbar Icons (currently open apps) */}
                 <div className="flex space-x-4">
-                    {defaultIcons.map((icon) => (
+                    {openWindows.map((windowTitle) => (
                         <div
-                            key={icon.id}
+                            key={windowTitle}
                             className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
-                            onDoubleClick={() => openWindow(icon.title)}
+                            onClick={() => openWindow(windowTitle)}
                         >
-                            {icon.icon}
+                            {windowTitle === "File Explorer" ? "📁" : "💻"} {windowTitle}
                         </div>
                     ))}
                 </div>
@@ -235,11 +221,11 @@ export default function Desktop() {
                 </div>
             </div>
 
-            {/* Desktop Icons - Merging default and user files */}
+            {/* Desktop Icons */}
             {[...defaultIcons, ...userFiles].map((icon, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
-                const spacing = 100; // Distance between icons
+                const spacing = 100;
 
                 return (
                     <DesktopIcon
@@ -256,7 +242,7 @@ export default function Desktop() {
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
-                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg context-menu"
+                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
                     <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
@@ -269,28 +255,15 @@ export default function Desktop() {
                     <button
                         className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
                         onClick={() => {
-                            console.log(`Delete button clicked for: ${contextMenu.iconTitle}`);
                             contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!);
                         }}
                     >
                         Delete
                     </button>
-                    <button
-                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-green-500"
-                        onClick={() => createFileOrFolder("file")}
-                    >
-                        Create File
-                    </button>
-                    <button
-                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-blue-500"
-                        onClick={() => createFileOrFolder("folder")}
-                    >
-                        Create Folder
-                    </button>
                 </div>
             )}
 
-            {/* Modal for naming new file/folder */}
+            {/* Modal for creating new file/folder */}
             {creatingFile && (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
                     <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
