@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
@@ -13,7 +13,7 @@ import ImageViewer from "@/components/ImageViewer";
 import WebBrowser from "@/components/WebBrowser";
 import CodeEditor from "@/components/CodeEditor";
 
-// Add additional state variables
+// Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
     { id: 1, title: "File Explorer", icon: "📁" },
     { id: 2, title: "Terminal", icon: "💻" },
@@ -70,11 +70,6 @@ export default function Desktop() {
     const fileExtensions = [".txt", ".md", ".json", ".js", ".html", ".css", ".mp4", ".jpg", ".png"];
     const [selectedExtension, setSelectedExtension] = useState(fileExtensions[0]); // Default to .txt
 
-    // New state for volume and network connection
-    const [volume, setVolume] = useState(50); // 0-100 range
-    const [isConnected, setIsConnected] = useState(true); // Network connected status
-    const [showVolume, setShowVolume] = useState(false); // To toggle volume slider visibility
-    const [showNetwork, setShowNetwork] = useState(false); // To toggle network status visibility
 
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -193,16 +188,6 @@ export default function Desktop() {
         );
     };
 
-    // Handle volume change
-    const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setVolume(Number(e.target.value));
-    };
-
-    // Handle network connection toggle
-    const toggleNetworkConnection = () => {
-        setIsConnected((prev) => !prev);
-    };
-
     return (
         <div className="w-full h-screen bg-gray-950 relative" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Windows */}
@@ -268,107 +253,89 @@ export default function Desktop() {
                 </div>
 
                 {/* System Tray */}
-                <div className="flex space-x-4 items-center">
-                    <div
-                        className="relative flex items-center cursor-pointer"
-                        onClick={() => setShowVolume((prev) => !prev)}
-                    >
-                        <div>🔊</div>
-                        {showVolume && (
-                            <div className="absolute bottom-12 right-0 bg-gray-800 p-3 rounded-md shadow-xl">
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    value={volume}
-                                    onChange={handleVolumeChange}
-                                    className="w-24"
-                                />
-                                <span className="text-white ml-2">{volume}</span>
-                            </div>
-                        )}
-                    </div>
-
-                    <div
-                        className="relative flex items-center cursor-pointer"
-                        onClick={() => setShowNetwork((prev) => !prev)}
-                    >
-                        <div>🌐</div>
-                        {showNetwork && (
-                            <div className="absolute bottom-12 right-0 bg-gray-800 p-3 rounded-md shadow-xl">
-                                <p className="text-white">
-                                    {isConnected ? "Connected" : "Disconnected"}
-                                </p>
-                                <button onClick={toggleNetworkConnection} className="text-blue-500 mt-2">
-                                    {isConnected ? "Disconnect" : "Connect"}
-                                </button>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="text-white">{time}</div>
+                <div className="flex space-x-3 text-white">
+                    <span>🔊</span>
+                    <span>📶</span>
+                    <span>⚡</span>
+                    <span>{time}</span>
                 </div>
             </div>
+
+            {/* Desktop Icons */}
+            {[...userFiles].map((icon, index) => {
+                const row = Math.floor(index / 3);
+                const col = index % 3;
+                const spacing = 100;
+
+                return (
+                    <DesktopIcon
+                        key={icon.id}
+                        icon={icon}
+                        position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
+                        openWindow={openWindow}
+                        onContextMenu={handleContextMenu}
+                    />
+                );
+            })}
 
             {/* Context Menu */}
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
-                    className="absolute"
-                    style={{
-                        left: contextMenu.x,
-                        top: contextMenu.y,
-                        background: "#2D2D2D",
-                        borderRadius: "5px",
-                        padding: "5px 10px",
-                        color: "#FFF",
-                        zIndex: 999,
-                    }}
+                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
+                    style={{top: contextMenu.y, left: contextMenu.x}}
                 >
-                    <div
-                        onClick={() => {
-                            setContextMenu({ ...contextMenu, visible: false });
-                            renameFile(contextMenu.iconTitle as string);
-                        }}
+                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
+                    <button
+                        className="block w-full text-left px-3 py-1 hover:bg-gray-700"
+                        onClick={() => renameFile(contextMenu.iconTitle!)}
                     >
                         Rename
-                    </div>
-                    <div
+                    </button>
+                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700"
+                            onClick={() => createFileOrFolder("file")}>Create File
+                    </button>
+                    <button
+                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
                         onClick={() => {
-                            setContextMenu({ ...contextMenu, visible: false });
-                            deleteFile(contextMenu.iconTitle as string);
+                            contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!);
                         }}
                     >
                         Delete
-                    </div>
+                    </button>
                 </div>
             )}
 
-            {/* Create File Modal */}
+            {/* Modal for creating new file/folder */}
             {creatingFile && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-700 text-white p-6 rounded-lg shadow-xl">
-                    <h3>Create a {creatingFile}</h3>
+                <div
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
+                    <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
                     <input
                         type="text"
-                        placeholder="File name"
                         value={newFileName}
                         onChange={handleCreateFileNameChange}
-                        className="mt-2 p-2 bg-gray-800 rounded-md text-white w-full"
+                        className="w-full p-2 bg-gray-700 text-white rounded-md"
+                        placeholder="Enter file name"
                     />
-                    <div className="mt-4 flex items-center space-x-4">
-                        <button
-                            onClick={handleCreateFile}
-                            className="bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-500"
-                        >
-                            Create
-                        </button>
-                        <button
-                            onClick={() => setCreatingFile(null)}
-                            className="bg-gray-600 px-4 py-2 rounded-md hover:bg-gray-500"
-                        >
-                            Cancel
-                        </button>
-                    </div>
+
+                    <select
+                        value={selectedExtension}
+                        onChange={(e) => setSelectedExtension(e.target.value)}
+                        className="w-full p-2 mt-2 bg-gray-700 text-white rounded-md"
+                    >
+                        {fileExtensions.map((ext) => (
+                            <option key={ext} value={ext}>
+                                {ext}
+                            </option>
+                        ))}
+                    </select>
+                    <button
+                        onClick={handleCreateFile}
+                        className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
+                    >
+                        Create
+                    </button>
                 </div>
             )}
         </div>
