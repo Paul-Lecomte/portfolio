@@ -65,6 +65,9 @@ export default function Desktop() {
     const [userFiles, setUserFiles] = useState<any[]>([]);
     const [newFileName, setNewFileName] = useState<string>("");
     const [creatingFile, setCreatingFile] = useState<"file" | "folder" | null>(null);
+    const fileExtensions = [".txt", ".md", ".json", ".js", ".html", ".css", ".mp4", ".jpg", ".png"];
+    const [selectedExtension, setSelectedExtension] = useState(fileExtensions[0]); // Default to .txt
+
 
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -152,23 +155,21 @@ export default function Desktop() {
 
     const handleCreateFile = () => {
         if (newFileName.trim() === "") {
-            alert("Please enter a name for the file/folder.");
+            alert("Please enter a name for the file.");
             return;
         }
 
-        const fileNameWithExtension = newFileName.trim().endsWith(".md")
-            ? newFileName.trim()
-            : `${newFileName.trim()}.md`;
+        const fileNameWithExtension = `${newFileName.trim()}${selectedExtension}`;
 
-        const newFileOrFolder = {
+        const newFile = {
             id: userFiles.length + 1 + defaultIcons.length,
             title: fileNameWithExtension,
-            type: creatingFile,
-            icon: creatingFile === "file" ? "📄" : "📁",
-            content: creatingFile === "file" && fileNameWithExtension.endsWith(".md") ? "" : null,
+            type: "file",
+            icon: "📄",
+            content: "",
         };
 
-        setUserFiles((prevFiles) => [...prevFiles, newFileOrFolder]);
+        setUserFiles((prevFiles) => [...prevFiles, newFile]);
         setCreatingFile(null);
     };
 
