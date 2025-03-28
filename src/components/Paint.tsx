@@ -43,6 +43,7 @@ export default function Paint() {
     const handleMouseMove = (e: any) => {
         if (isDrawing) {
             const pos = e.target.getStage().getPointerPosition();
+            // Update current line with the new mouse position
             setCurrentLine((prevLine: any[]) => [...prevLine, { x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
         } else if (activeTool === "rectangle" || activeTool === "ellipse" || activeTool === "line") {
             const pos = e.target.getStage().getPointerPosition();
@@ -217,6 +218,17 @@ export default function Paint() {
                                 );
                             }
                         })}
+                        {/* Draw the current line while it's being drawn */}
+                        {isDrawing && (
+                            <Line
+                                points={currentLine.flatMap((p) => [p.x, p.y])}
+                                stroke={currentLine[0].color}
+                                strokeWidth={currentLine[0].width}
+                                tension={0.5}
+                                lineCap="round"
+                                lineJoin="round"
+                            />
+                        )}
                     </Layer>
                 </Stage>
             </div>
