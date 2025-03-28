@@ -4,34 +4,32 @@ import * as fabric from 'fabric';
 export default function Paint() {
     const canvasRef = useRef(null);
     const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
-    const [isDrawing, setIsDrawing] = useState(false);
     const [brushColor, setBrushColor] = useState("#000000");
     const [brushWidth, setBrushWidth] = useState(5);
-    const [activeTool, setActiveTool] = useState("pen"); // Active tool (pen, eraser)
+    const [activeTool, setActiveTool] = useState("pen");
+    const [history, setHistory] = useState<any[]>([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Initialize the fabric canvas
+    // Initialize fabric canvas
     useEffect(() => {
         const fabricCanvas = new fabric.Canvas(canvasRef.current, {
             backgroundColor: '#ffffff',
-            isDrawingMode: true, // Set drawing mode initially
+            isDrawingMode: true,
+            selection: false,
         });
 
-        fabricCanvas.setWidth(800);  // Set a fixed width (adjust as needed)
-        fabricCanvas.setHeight(600); // Set a fixed height (adjust as needed)
+        fabricCanvas.setWidth(800); // Canvas Width
+        fabricCanvas.setHeight(600); // Canvas Height
 
-        // Set the default brush
-        const brush = fabricCanvas.freeDrawingBrush;
-        if (brush) {
-            brush.color = brushColor;
-            brush.width = brushWidth;
-        }
+        fabricCanvas.on('object:modified', () => {
+            saveState();
+        });
 
         setCanvas(fabricCanvas);
 
-        // Handle resize
         const handleResize = () => {
-            fabricCanvas.setWidth(window.innerWidth - 40); // Allow space for toolbar
-            fabricCanvas.setHeight(window.innerHeight - 100); // Allow space for toolbar
+            fabricCanvas.setWidth(window.innerWidth - 40);
+            fabricCanvas.setHeight(window.innerHeight - 100);
             fabricCanvas.renderAll();
         };
 
@@ -41,35 +39,34 @@ export default function Paint() {
             fabricCanvas.dispose();
             window.removeEventListener('resize', handleResize);
         };
-    }, [brushColor, brushWidth]);
+    }, []);
 
-    // Toggle Drawing Mode
-    const toggleDrawingMode = () => {
+    // Save state for undo/redo
+    const saveState = () => {
         if (canvas) {
-            canvas.isDrawingMode = !canvas.isDrawingMode;
-            setIsDrawing(canvas.isDrawingMode);
+            const canvasState = canvas.toJSON();
+            const newHistory = history.slice(0, currentIndex + 1);
+            newHistory.push(canvasState);
+            setHistory(newHistory);
+            setCurrentIndex(newHistory.length - 1);
         }
     };
 
-    // Change the active tool (pen or eraser)
-    const changeTool = (tool: string) => {
-        setActiveTool(tool);
-        if (canvas) {
-            if (tool === 'pen') {
-                canvas.isDrawingMode = true;
-                const brush = canvas.freeDrawingBrush;
-                if (brush) {
-                    brush.color = brushColor;
-                    brush.width = brushWidth;
-                }
-            } else if (tool === 'eraser') {
-                canvas.isDrawingMode = true;
-                const brush = canvas.freeDrawingBrush;
-                if (brush) {
-                    brush.color = '#ffffff'; // Eraser is white
-                    brush.width = 20; // Eraser size
-                }
-            }
+    // Undo action
+    const undo = () => {
+        if (currentIndex > 0) {
+            const prevState = history[currentIndex - 1];
+            canvas?.loadFromJSON(prevState, () => canvas?.renderAll());
+            setCurrentIndex(currentIndex - 1);
+        }
+    };
+
+    // Redo action
+    const redo = () => {
+        if (currentIndex < history.length - 1) {
+            const nextState = history[currentIndex + 1];
+            canvas?.loadFromJSON(nextState, () => canvas?.renderAll());
+            setCurrentIndex(currentIndex + 1);
         }
     };
 
@@ -78,6 +75,25 @@ export default function Paint() {
         if (canvas) {
             canvas.clear();
             canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
+        }
+    };
+
+    // Change the active tool (Pen, Eraser, Shapes)
+    const changeTool = (tool: string) => {
+        setActiveTool(tool);
+        if (canvas) {
+            const brush = canvas.freeDrawingBrush;
+            if (tool === 'pen') {
+                canvas.isDrawingMode = true;
+                brush.color = brushColor;
+                brush.width = brushWidth;
+            } else if (tool === 'eraser') {
+                canvas.isDrawingMode = true;
+                brush.color = '#ffffff'; // Eraser is white
+                brush.width = 20; // Eraser size
+            } else {
+                canvas.isDrawingMode = false;
+            }
         }
     };
 
@@ -99,58 +115,56 @@ export default function Paint() {
 
     return (
         <div className="w-full h-full flex flex-col items-center p-4 bg-gray-100">
-            {/* Toolbar Section */}
-            <div className="w-full bg-gray-800 p-4 flex justify-between items-center">
+            {/* Toolbar */}
+            <div className="w-full bg-[#e4e4e4] p-4 flex justify-between items-center rounded-t-xl shadow-lg">
                 <div className="flex gap-4">
-                    {/* Pen Tool */}
                     <button
                         onClick={() => changeTool("pen")}
-                        className={`px-4 py-2 text-white ${activeTool === "pen" ? "bg-blue-600" : "bg-gray-500"} rounded`}
+                        className={`p-3 text-black ${activeTool === "pen" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
                     >
                         Pen
                     </button>
-
-                    {/* Eraser Tool */}
                     <button
                         onClick={() => changeTool("eraser")}
-                        className={`px-4 py-2 text-white ${activeTool === "eraser" ? "bg-blue-600" : "bg-gray-500"} rounded`}
+                        className={`p-3 text-black ${activeTool === "eraser" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
                     >
                         Eraser
                     </button>
-
+                    <button
+                        onClick={() => changeTool("fill")}
+                        className={`p-3 text-black ${activeTool === "fill" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
+                    >
+                        Fill
+                    </button>
                     {/* Color Picker */}
                     <input
                         type="color"
                         value={brushColor}
                         onChange={(e) => changeColor(e.target.value)}
-                        className="w-12 h-12 border-2 border-gray-300 rounded"
+                        className="w-10 h-10 border-none rounded-full"
                     />
                 </div>
 
                 <div className="flex gap-4">
-                    {/* Brush Width Slider */}
+                    {/* Brush Width */}
                     <input
                         type="range"
                         min="1"
-                        max="20"
+                        max="50"
                         value={brushWidth}
                         onChange={(e) => changeBrushWidth(Number(e.target.value))}
-                        className="w-32"
+                        className="w-40"
                     />
-
-                    {/* Clear Canvas Button */}
-                    <button
-                        onClick={clearCanvas}
-                        className="px-4 py-2 bg-red-500 text-white rounded"
-                    >
-                        Clear
-                    </button>
+                    {/* Undo/Redo Buttons */}
+                    <button onClick={undo} className="px-4 py-2 bg-[#f0f0f0] text-black rounded-lg">Undo</button>
+                    <button onClick={redo} className="px-4 py-2 bg-[#f0f0f0] text-black rounded-lg">Redo</button>
+                    <button onClick={clearCanvas} className="px-4 py-2 bg-[#ff0000] text-white rounded-lg">Clear</button>
                 </div>
             </div>
 
             {/* Canvas Area */}
-            <div className="flex justify-center mt-6">
-                <canvas ref={canvasRef} className="border w-full h-full" />
+            <div className="flex justify-center mt-4">
+                <canvas ref={canvasRef} className="border bg-white w-full h-full rounded-lg" />
             </div>
         </div>
     );
