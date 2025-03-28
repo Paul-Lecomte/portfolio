@@ -12,6 +12,7 @@ import MediaPlayer from "@/components/MediaPlayer";
 import ImageViewer from "@/components/ImageViewer";
 import WebBrowser from "@/components/WebBrowser";
 import CodeEditor from "@/components/CodeEditor";
+import Paint from "@/components/Paint";
 import SystemTray from './SystemTray';
 
 // Default icons for the start menu (without showing on the desktop)
