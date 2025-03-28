@@ -12,11 +12,9 @@ export default function Paint() {
     const stageRef = useRef<any>(null);
     const layerRef = useRef<any>(null);
 
-    // Handle mouse events
     const handleMouseDown = (e: any) => {
         const pos = e.target.getStage().getPointerPosition();
-
-        if (activeTool === "pen" || activeTool === "eraser") {
+        if (activeTool === "pen") {
             // Start drawing a new line with the current color and width
             setCurrentLine([{ x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
             setIsDrawing(true);
@@ -30,23 +28,11 @@ export default function Paint() {
     };
 
     const handleMouseMove = (e: any) => {
-        const pos = e.target.getStage().getPointerPosition();
-
         if (isDrawing) {
-            if (activeTool === "eraser") {
-                // When eraser is active, check if we intersect with any line and remove it
-                const updatedLines = lines.filter((line: any) => {
-                    return !line.some((point: any) => {
-                        // Simple collision check, check if point is near the current mouse position
-                        return Math.abs(point.x - pos.x) < brushWidth && Math.abs(point.y - pos.y) < brushWidth;
-                    });
-                });
-                setLines(updatedLines);
-            } else {
-                // Update current line with the new mouse position if pen is active
-                setCurrentLine((prevLine: any[]) => [...prevLine, { x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
-            }
+            const pos = e.target.getStage().getPointerPosition();
+            setCurrentLine((prevLine: any[]) => [...prevLine, { x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
         } else if (activeTool === "rectangle" || activeTool === "ellipse" || activeTool === "line") {
+            const pos = e.target.getStage().getPointerPosition();
             const lastShape = shapes[shapes.length - 1];
 
             if (activeTool === "rectangle") {
@@ -64,38 +50,28 @@ export default function Paint() {
 
     const handleMouseUp = () => {
         if (isDrawing) {
-            if (activeTool === "eraser") {
-                // Don't save any new "eraser" lines
-                setIsDrawing(false);
-            } else {
-                setLines([...lines, currentLine]);
-                setCurrentLine([]);
-                setIsDrawing(false);
-            }
+            setLines([...lines, currentLine]);
+            setCurrentLine([]);
+            setIsDrawing(false);
         }
     };
 
-    // Change the active tool
     const changeTool = (tool: string) => {
         setActiveTool(tool);
     };
 
-    // Change brush color
     const changeColor = (color: string) => {
         setBrushColor(color);
     };
 
-    // Change brush width
     const changeBrushWidth = (width: number) => {
         setBrushWidth(width);
     };
 
-    // Undo action
     const undo = () => {
         setLines(lines.slice(0, -1));
     };
 
-    // Clear the canvas
     const clearCanvas = () => {
         setLines([]);
         setShapes([]);
@@ -106,52 +82,22 @@ export default function Paint() {
             {/* Toolbar */}
             <div className="w-full bg-[#e4e4e4] p-4 flex justify-between items-center rounded-t-xl shadow-lg">
                 <div className="flex gap-4">
-                    <button
-                        onClick={() => changeTool("pen")}
-                        className={`p-3 text-black ${activeTool === "pen" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
-                    >
+                    <button onClick={() => changeTool("pen")} className={`p-3 text-black ${activeTool === "pen" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}>
                         Pen
                     </button>
-                    <button
-                        onClick={() => changeTool("eraser")}
-                        className={`p-3 text-black ${activeTool === "eraser" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
-                    >
-                        Eraser
-                    </button>
-                    <button
-                        onClick={() => changeTool("rectangle")}
-                        className={`p-3 text-black ${activeTool === "rectangle" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
-                    >
+                    <button onClick={() => changeTool("rectangle")} className={`p-3 text-black ${activeTool === "rectangle" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}>
                         Rectangle
                     </button>
-                    <button
-                        onClick={() => changeTool("ellipse")}
-                        className={`p-3 text-black ${activeTool === "ellipse" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
-                    >
+                    <button onClick={() => changeTool("ellipse")} className={`p-3 text-black ${activeTool === "ellipse" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}>
                         Ellipse
                     </button>
-                    <button
-                        onClick={() => changeTool("line")}
-                        className={`p-3 text-black ${activeTool === "line" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
-                    >
+                    <button onClick={() => changeTool("line")} className={`p-3 text-black ${activeTool === "line" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}>
                         Line
                     </button>
-                    <input
-                        type="color"
-                        value={brushColor}
-                        onChange={(e) => changeColor(e.target.value)}
-                        className="w-10 h-10 border-none rounded-full"
-                    />
+                    <input type="color" value={brushColor} onChange={(e) => changeColor(e.target.value)} className="w-10 h-10 border-none rounded-full" />
                 </div>
                 <div className="flex gap-4">
-                    <input
-                        type="range"
-                        min="1"
-                        max="50"
-                        value={brushWidth}
-                        onChange={(e) => changeBrushWidth(Number(e.target.value))}
-                        className="w-40"
-                    />
+                    <input type="range" min="1" max="50" value={brushWidth} onChange={(e) => changeBrushWidth(Number(e.target.value))} className="w-40" />
                     <button onClick={undo} className="px-4 py-2 bg-[#f0f0f0] text-black rounded-lg">Undo</button>
                     <button onClick={clearCanvas} className="px-4 py-2 bg-[#ff0000] text-white rounded-lg">Clear</button>
                 </div>
@@ -186,39 +132,48 @@ export default function Paint() {
                                 return (
                                     <Rect
                                         key={index}
-                                        {...shape}
-                                        fill="transparent"
+                                        x={shape.x}
+                                        y={shape.y}
+                                        width={shape.width}
+                                        height={shape.height}
                                         stroke={shape.color}
                                         strokeWidth={shape.strokeWidth}
                                     />
                                 );
-                            }
-                            if (shape.type === "ellipse") {
+                            } else if (shape.type === "ellipse") {
                                 return (
                                     <Ellipse
                                         key={index}
-                                        {...shape}
-                                        fill="transparent"
+                                        x={shape.x}
+                                        y={shape.y}
+                                        radiusX={shape.radiusX}
+                                        radiusY={shape.radiusY}
                                         stroke={shape.color}
                                         strokeWidth={shape.strokeWidth}
                                     />
                                 );
-                            }
-                            if (shape.type === "line") {
+                            } else if (shape.type === "line") {
                                 return (
                                     <Line
                                         key={index}
-                                        {...shape}
+                                        points={shape.points}
                                         stroke={shape.color}
                                         strokeWidth={shape.strokeWidth}
-                                        tension={0.5}
-                                        lineCap="round"
-                                        lineJoin="round"
                                     />
                                 );
                             }
-                            return null;
                         })}
+                        {/* Draw the current line while it's being drawn */}
+                        {isDrawing && (
+                            <Line
+                                points={currentLine.flatMap((p) => [p.x, p.y])}
+                                stroke={currentLine[0].color}
+                                strokeWidth={currentLine[0].width}
+                                tension={0.5}
+                                lineCap="round"
+                                lineJoin="round"
+                            />
+                        )}
                     </Layer>
                 </Stage>
             </div>
