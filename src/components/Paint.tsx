@@ -1,125 +1,48 @@
-import { useEffect, useRef, useState } from 'react';
-import * as fabric from 'fabric';
+import React, { useEffect, useRef, useState } from 'react';
+import { Stage, Layer, Line } from 'react-konva';
 
 export default function Paint() {
-    const canvasRef = useRef(null);
-    const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+    const [lines, setLines] = useState<any[]>([]);
+    const [currentLine, setCurrentLine] = useState<any[]>([]);
     const [brushColor, setBrushColor] = useState("#000000");
     const [brushWidth, setBrushWidth] = useState(5);
     const [activeTool, setActiveTool] = useState("pen");
-    const [history, setHistory] = useState<any[]>([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const stageRef = useRef<any>(null);
 
-    // Initialize fabric canvas
-    useEffect(() => {
-        const fabricCanvas = new fabric.Canvas(canvasRef.current, {
-            backgroundColor: '#ffffff',
-            isDrawingMode: true,
-            selection: false,
-        });
-
-        fabricCanvas.setWidth(800); // Canvas Width
-        fabricCanvas.setHeight(600); // Canvas Height
-
-        // Ensure freeDrawingBrush is initialized and set
-        const brush = fabricCanvas.freeDrawingBrush;
-        if (brush) {
-            brush.color = brushColor;
-            brush.width = brushWidth;
-        }
-
-        fabricCanvas.on('object:modified', () => {
-            saveState();
-        });
-
-        setCanvas(fabricCanvas);
-
-        const handleResize = () => {
-            fabricCanvas.setWidth(window.innerWidth - 40);
-            fabricCanvas.setHeight(window.innerHeight - 100);
-            fabricCanvas.renderAll();
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            fabricCanvas.dispose();
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    // Save state for undo/redo
-    const saveState = () => {
-        if (canvas) {
-            const canvasState = canvas.toJSON();
-            const newHistory = history.slice(0, currentIndex + 1);
-            newHistory.push(canvasState);
-            setHistory(newHistory);
-            setCurrentIndex(newHistory.length - 1);
+    // Handle mouse events
+    const handleMouseDown = (e: any) => {
+        if (activeTool === "pen" || activeTool === "eraser") {
+            const pos = e.target.getStage().getPointerPosition();
+            setCurrentLine([{ x: pos.x, y: pos.y }]);
         }
     };
 
-    // Undo action
-    const undo = () => {
-        if (currentIndex > 0) {
-            const prevState = history[currentIndex - 1];
-            canvas?.loadFromJSON(prevState, () => canvas?.renderAll());
-            setCurrentIndex(currentIndex - 1);
+    const handleMouseMove = (e: any) => {
+        if (currentLine.length === 0) return;
+        const pos = e.target.getStage().getPointerPosition();
+        setCurrentLine((prevLine: any[]) => [...prevLine, { x: pos.x, y: pos.y }]);
+    };
+
+    const handleMouseUp = () => {
+        if (currentLine.length > 0) {
+            setLines((prevLines: any[]) => [...prevLines, currentLine]);
+            setCurrentLine([]);
         }
     };
 
-    // Redo action
-    const redo = () => {
-        if (currentIndex < history.length - 1) {
-            const nextState = history[currentIndex + 1];
-            canvas?.loadFromJSON(nextState, () => canvas?.renderAll());
-            setCurrentIndex(currentIndex + 1);
-        }
-    };
-
-    // Clear the canvas
-    const clearCanvas = () => {
-        if (canvas) {
-            canvas.clear();
-            canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
-        }
-    };
-
-    // Change the active tool (Pen, Eraser, Shapes)
+    // Change the active tool (Pen, Eraser)
     const changeTool = (tool: string) => {
         setActiveTool(tool);
-        if (canvas) {
-            const brush = canvas.freeDrawingBrush;
-            if (!brush) return; // Ensure brush is available
-
-            if (tool === 'pen') {
-                canvas.isDrawingMode = true;
-                brush.color = brushColor;
-                brush.width = brushWidth;
-            } else if (tool === 'eraser') {
-                canvas.isDrawingMode = true;
-                brush.color = '#ffffff'; // Eraser is white
-                brush.width = 20; // Eraser size
-            } else {
-                canvas.isDrawingMode = false;
-            }
-        }
     };
 
     // Change brush color
     const changeColor = (color: string) => {
         setBrushColor(color);
-        if (canvas && canvas.freeDrawingBrush) {
-            canvas.freeDrawingBrush.color = color;
-        }
     };
 
     // Change brush width
     const changeBrushWidth = (width: number) => {
         setBrushWidth(width);
-        if (canvas && canvas.freeDrawingBrush) {
-            canvas.freeDrawingBrush.width = width;
-        }
     };
 
     return (
@@ -138,12 +61,6 @@ export default function Paint() {
                         className={`p-3 text-black ${activeTool === "eraser" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
                     >
                         Eraser
-                    </button>
-                    <button
-                        onClick={() => changeTool("fill")}
-                        className={`p-3 text-black ${activeTool === "fill" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
-                    >
-                        Fill
                     </button>
                     {/* Color Picker */}
                     <input
@@ -164,16 +81,43 @@ export default function Paint() {
                         onChange={(e) => changeBrushWidth(Number(e.target.value))}
                         className="w-40"
                     />
-                    {/* Undo/Redo Buttons */}
-                    <button onClick={undo} className="px-4 py-2 bg-[#f0f0f0] text-black rounded-lg">Undo</button>
-                    <button onClick={redo} className="px-4 py-2 bg-[#f0f0f0] text-black rounded-lg">Redo</button>
-                    <button onClick={clearCanvas} className="px-4 py-2 bg-[#ff0000] text-white rounded-lg">Clear</button>
                 </div>
             </div>
 
             {/* Canvas Area */}
             <div className="flex justify-center mt-4">
-                <canvas ref={canvasRef} className="border bg-white w-full h-full rounded-lg" />
+                <Stage
+                    width={window.innerWidth - 40}
+                    height={window.innerHeight - 100}
+                    ref={stageRef}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                >
+                    <Layer>
+                        {lines.map((line, index) => (
+                            <Line
+                                key={index}
+                                points={line.flatMap(p => [p.x, p.y])}
+                                stroke={activeTool === "eraser" ? "#ffffff" : brushColor}
+                                strokeWidth={brushWidth}
+                                tension={0.5}
+                                lineCap="round"
+                                lineJoin="round"
+                            />
+                        ))}
+                        {currentLine.length > 0 && (
+                            <Line
+                                points={currentLine.flatMap(p => [p.x, p.y])}
+                                stroke={activeTool === "eraser" ? "#ffffff" : brushColor}
+                                strokeWidth={brushWidth}
+                                tension={0.5}
+                                lineCap="round"
+                                lineJoin="round"
+                            />
+                        )}
+                    </Layer>
+                </Stage>
             </div>
         </div>
     );

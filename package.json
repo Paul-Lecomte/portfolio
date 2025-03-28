@@ -11,12 +11,13 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "autoprefixer": "^10.4.21",
-    "fabric": "^6.6.1",
+    "konva": "^9.3.20",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-dom": "^19.0.0",
     "react-draggable": "^4.4.6",
+    "react-konva": "^19.0.3",
     "react-simplemde-editor": "^5.2.0"
   },
   "devDependencies": {
