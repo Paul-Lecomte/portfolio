@@ -1,32 +1,28 @@
 @import "tailwindcss";
 
+/* Root Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #1a1d22;
+  --foreground: #f5f5f5;
+  --primary-bg: #23272a;
+  --primary-hover: #333940;
+  --secondary-bg: #2c2f33;
+  --highlight-bg: #3c3f41;
+  --taskbar-bg: linear-gradient(180deg, rgba(32, 34, 37, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  --font-sans: "Segoe UI", Arial, sans-serif;
+  --font-mono: "Consolas", "Courier New", monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1a1d22;
-    --foreground: #f5f5f5;
-  }
-}
-
+/* Global Styles */
 body {
-  background: linear-gradient(to right, #23272a, #2c2f33);
+  background: linear-gradient(to right, var(--primary-bg), var(--secondary-bg));
   color: var(--foreground);
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 
 /* Desktop Area */
@@ -37,11 +33,13 @@ body {
   flex-grow: 1;
   padding: 40px;
   border-radius: 16px;
+  position: relative;
+  z-index: 10;
 }
 
 /* Taskbar */
 .taskbar {
-  background: linear-gradient(180deg, rgba(32, 34, 37, 1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: var(--taskbar-bg);
   box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
   color: var(--foreground);
   position: fixed;
@@ -58,6 +56,7 @@ body {
   z-index: 1000;
 }
 
+/* Start Menu Button */
 .start-menu {
   display: flex;
   align-items: center;
@@ -72,8 +71,45 @@ body {
   background-color: #0078d4;
   border-radius: 50%;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
+.start-button:hover {
+  background-color: #005fa0;
+}
+
+/* Start Menu */
+.start-menu-dropdown {
+  position: absolute;
+  bottom: 70px;
+  left: 0;
+  width: 250px;
+  background-color: var(--primary-bg);
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+.start-menu-dropdown.open {
+  display: block;
+}
+
+.start-menu-dropdown .menu-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-menu-dropdown .menu-item:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Taskbar Icons */
 .task-icons {
   display: flex;
   align-items: center;
@@ -85,11 +121,18 @@ body {
   align-items: center;
   width: 32px;
   height: 32px;
-  background-color: #3c3f41;
+  background-color: var(--highlight-bg);
   border-radius: 50%;
   cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.2s;
 }
 
+.task-icon:hover {
+  background-color: #0078d4;
+}
+
+/* System Tray */
 .system-tray {
   display: flex;
   align-items: center;
@@ -102,11 +145,18 @@ body {
   align-items: center;
   width: 32px;
   height: 32px;
-  background-color: #3c3f41;
+  background-color: var(--highlight-bg);
   border-radius: 50%;
   cursor: pointer;
+  margin-left: 10px;
 }
 
+.notification:hover,
+.user-avatar:hover {
+  background-color: #0078d4;
+}
+
+/* Desktop Icons */
 .desktop-icon {
   transition: transform 0.3s ease-in-out;
 }
@@ -115,129 +165,182 @@ body {
   transform: scale(1.05);
 }
 
-button:hover {
-  background-color: #333940;
-  transition: background-color 0.3s ease;
-}
-
-/* Window content container inside the Window component */
-.window-content {
+.desktop-icon .icon {
+  width: 40px;
+  height: 40px;
+  background-color: var(--highlight-bg);
+  border-radius: 10px;
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  overflow: auto; /* Ensures the content can scroll if it exceeds window size */
-  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: var(--foreground);
+  cursor: pointer;
+  margin-bottom: 5px;
 }
 
-/* Add responsiveness to child elements inside the window */
-.window-content > * {
-  flex-grow: 1; /* This makes children inside the window grow and shrink as the window resizes */
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
+.desktop-icon .text {
+  font-size: 12px;
+  text-align: center;
+  color: var(--foreground);
 }
 
-/* Resize handle */
-.resize-handle {
-  background-color: #444;
-  cursor: se-resize;
-  width: 20px;
-  height: 20px;
+/* Window Styles */
+.window {
   position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-
-/* FILe explorer */
-
-.opened-file-modal {
-  position: fixed;
-  top: 20%;
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 20px;
+  width: 600px;
+  height: 400px;
+  background-color: var(--primary-bg);
   border-radius: 10px;
-  max-width: 500px;
-  z-index: 1000;
-}
-
-.opened-file-modal h2 {
-  margin-top: 0;
-}
-
-.opened-file-modal button {
-  background-color: #444;
-  padding: 10px 20px;
-  margin-top: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.file-explorer {
-  position: relative;
-  padding: 10px;
-  width: 100%; /* Full width of the viewport */
-  height: 100%; /* Full height of the viewport */
-  background-color: #2d2d2d;
-  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
-.path-display {
+.window-header {
+  background-color: #0078d4;
+  color: #fff;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-  font-size: 14px;
+  cursor: move;
 }
 
-.back-button {
-  background-color: #444;
-  padding: 5px 10px;
-  margin-right: 10px;
-  border-radius: 5px;
+.window-header button {
+  background: transparent;
+  border: none;
+  color: #fff;
   cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s;
 }
 
-.folders {
-  max-height: 300px;
+.window-header button:hover {
+  color: #f5f5f5;
+}
+
+.window-content {
+  padding: 15px;
+  flex-grow: 1;
+  background-color: var(--secondary-bg);
   overflow-y: auto;
 }
 
-.file-item {
-  padding: 8px;
-  margin-bottom: 5px;
+/* File Explorer */
+.file-explorer {
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-bg);
+}
+
+.file-explorer .file {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.file-explorer .file:hover {
+  background-color: var(--primary-hover);
+}
+
+.file-explorer .file .icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* Modal for Creating File/Folder */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--primary-bg);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+}
+
+.modal input,
+.modal select,
+.modal button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--secondary-bg);
+  border: none;
+  border-radius: 8px;
+  color: var(--foreground);
+}
+
+.modal button {
+  background-color: #0078d4;
+  color: #fff;
   cursor: pointer;
 }
 
-.file-item:hover {
-  background-color: #444;
+.modal button:hover {
+  background-color: #005fa0;
 }
 
+/* Context Menu */
 .context-menu {
   position: absolute;
-  background-color: #333;
-  color: white;
-  border: 1px solid #555;
-  padding: 5px;
-  border-radius: 5px;
-  z-index: 10;
+  background-color: var(--primary-bg);
+  color: var(--foreground);
+  border: 1px solid #333;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1002;
+  border-radius: 8px;
 }
 
 .context-menu button {
-  background-color: transparent;
-  color: white;
-  border: none;
-  padding: 5px;
   width: 100%;
+  padding: 10px;
+  text-align: left;
+  border: none;
+  background-color: transparent;
+  color: var(--foreground);
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .context-menu button:hover {
-  background-color: #555;
+  background-color: var(--primary-hover);
+}
+
+/* File Editor / Code Editor */
+.code-editor,
+.file-editor {
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondary-bg);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #444;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #333;
 }
