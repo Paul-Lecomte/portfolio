@@ -199,43 +199,56 @@ export default function Desktop() {
                 return (
                     <Window key={windowTitle} title={windowTitle} onClose={() => closeWindow(windowTitle)}>
                         {file && file.title.endsWith(".md") && (
-                            <FileEditor file={file} onClose={() => closeWindow(windowTitle)} onSave={saveFileContent} />
+                            <FileEditor file={file} onClose={() => closeWindow(windowTitle)} onSave={saveFileContent}/>
                         )}
-                        {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow} />}
-                        {windowTitle === "Terminal" && <Terminal />}
-                        {/* Add the new apps here */}
-                        {windowTitle === "Notepad" && <Notepad file={file} onClose={() => closeWindow(windowTitle)} />}
-                        {windowTitle === "Image Viewer" && <ImageViewer file={file} onClose={() => closeWindow(windowTitle)} />}
-                        {windowTitle === "Media Player" && <MediaPlayer file={file} onClose={() => closeWindow(windowTitle)} />}
-                        {windowTitle === "Web Browser" && <WebBrowser file={file} onClose={() => closeWindow(windowTitle)} />}
-                        {windowTitle === "Markdown Editor" && <FileEditor file={""} onClose={() => closeWindow(windowTitle)} onSave={() => {}} />}
-                        {windowTitle === "Code Editor" && <CodeEditor onClose={() => closeWindow(windowTitle)} />}
-                        {windowTitle === "Paint" && <Paint onClose={() => closeWindow(windowTitle)} />}
+                        {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow}/>}
+                        {windowTitle === "Terminal" && <Terminal/>}
+                        {/* Add new apps */}
+                        {windowTitle === "Notepad" && <Notepad file={file} onClose={() => closeWindow(windowTitle)}/>}
+                        {windowTitle === "Image Viewer" &&
+                            <ImageViewer file={file} onClose={() => closeWindow(windowTitle)}/>}
+                        {windowTitle === "Media Player" &&
+                            <MediaPlayer file={file} onClose={() => closeWindow(windowTitle)}/>}
+                        {windowTitle === "Web Browser" &&
+                            <WebBrowser file={file} onClose={() => closeWindow(windowTitle)}/>}
+                        {windowTitle === "Markdown Editor" &&
+                            <FileEditor file={""} onClose={() => closeWindow(windowTitle)} onSave={() => {
+                            }}/>}
+                        {windowTitle === "Code Editor" && <CodeEditor onClose={() => closeWindow(windowTitle)}/>}
+                        {windowTitle === "Paint" && <Paint onClose={() => closeWindow(windowTitle)}/>}
                     </Window>
                 );
             })}
 
             {/* Taskbar */}
-            <div className="fixed bottom-0 w-full bg-gray-800 p-2 flex items-center justify-between shadow-lg z-50">
+            <div
+                className="fixed bottom-0 w-full bg-gray-800 p-3 flex items-center justify-between shadow-lg z-50">
                 {/* Start Menu Button */}
                 <div className="relative">
                     <button
                         onClick={() => setStartMenuOpen(!startMenuOpen)}
-                        className="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-full hover:bg-gray-600"
+                        className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-full hover:bg-gray-600 transition duration-200"
                     >
                         🏁
                     </button>
                     {startMenuOpen && (
-                        <div className="absolute bottom-12 left-0 w-64 bg-gray-900 p-3 rounded-lg shadow-xl">
-                            <p className="text-white">Start Menu</p>
+                        <div
+                            className="absolute bottom-14 left-0 w-72 bg-gray-900 p-4 rounded-3xl shadow-xl transition-all duration-300">
+                            <div className="flex items-center justify-between mb-4">
+                                <p className="text-white font-semibold">Start Menu</p>
+                                <button onClick={() => setStartMenuOpen(false)}
+                                        className="text-gray-400 hover:text-white">
+                                    ✖️
+                                </button>
+                            </div>
                             <div className="space-y-2">
                                 {defaultIcons.map((icon) => (
                                     <button
                                         key={icon.id}
-                                        className="text-white"
+                                        className="text-white flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md"
                                         onClick={() => openWindow(icon.title)}
                                     >
-                                        {icon.icon} {icon.title}
+                                        {icon.icon} <span>{icon.title}</span>
                                     </button>
                                 ))}
                             </div>
@@ -243,12 +256,12 @@ export default function Desktop() {
                     )}
                 </div>
 
-                {/* Taskbar Icons (currently open apps) */}
-                <div className="flex space-x-4">
+                {/* Taskbar Icons */}
+                <div className="flex space-x-4 overflow-x-auto">
                     {openWindows.map((windowTitle) => (
                         <div
                             key={windowTitle}
-                            className="bg-gray-600 text-white p-2 rounded-md cursor-pointer"
+                            className="bg-gray-600 text-white p-2 rounded-md cursor-pointer hover:bg-gray-500 transition"
                             onClick={() => openWindow(windowTitle)}
                         >
                             {windowTitle === "File Explorer" ? "📁" : "💻"} {windowTitle}
@@ -258,7 +271,7 @@ export default function Desktop() {
 
                 {/* System Tray */}
                 <div className="flex space-x-3 text-white">
-                    <SystemTray />
+                    <SystemTray/>
                 </div>
             </div>
 
@@ -272,7 +285,7 @@ export default function Desktop() {
                     <DesktopIcon
                         key={icon.id}
                         icon={icon}
-                        position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
+                        position={{top: 50 + row * spacing, left: 50 + col * spacing}}
                         openWindow={openWindow}
                         onContextMenu={handleContextMenu}
                     />
@@ -293,14 +306,15 @@ export default function Desktop() {
                     >
                         Rename
                     </button>
-                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700"
-                            onClick={() => createFileOrFolder("file")}>Create File
+                    <button
+                        className="block w-full text-left px-3 py-1 hover:bg-gray-700"
+                        onClick={() => createFileOrFolder("file")}
+                    >
+                        Create File
                     </button>
                     <button
                         className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
-                        onClick={() => {
-                            contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!);
-                        }}
+                        onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
                     >
                         Delete
                     </button>
