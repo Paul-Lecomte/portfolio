@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Stage, Layer, Line, Rect, Ellipse, Text as KonvaText } from 'react-konva';
+import { Stage, Layer, Line, Rect, Ellipse } from 'react-konva';
 
 export default function Paint() {
     const [lines, setLines] = useState<any[]>([]);
@@ -26,27 +26,27 @@ export default function Paint() {
             setShapes([...shapes, { type: "ellipse", x: pos.x, y: pos.y, radiusX: 0, radiusY: 0, color: brushColor, strokeWidth: brushWidth }]);
         } else if (activeTool === "line") {
             setShapes([...shapes, { type: "line", points: [pos.x, pos.y], color: brushColor, strokeWidth: brushWidth }]);
-        } else if (activeTool === "text") {
-            const newText = new window.Konva.Text({
-                x: pos.x,
-                y: pos.y,
-                text: "Text",
-                fontSize: 20,
-                fill: brushColor,
-                draggable: true,
-            });
-            layerRef.current.add(newText);
-            layerRef.current.batchDraw();
         }
     };
 
     const handleMouseMove = (e: any) => {
+        const pos = e.target.getStage().getPointerPosition();
+
         if (isDrawing) {
-            const pos = e.target.getStage().getPointerPosition();
-            // Update current line with the new mouse position
-            setCurrentLine((prevLine: any[]) => [...prevLine, { x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
+            if (activeTool === "eraser") {
+                // When eraser is active, check if we intersect with any line and remove it
+                const updatedLines = lines.filter((line: any) => {
+                    return !line.some((point: any) => {
+                        // Simple collision check, check if point is near the current mouse position
+                        return Math.abs(point.x - pos.x) < brushWidth && Math.abs(point.y - pos.y) < brushWidth;
+                    });
+                });
+                setLines(updatedLines);
+            } else {
+                // Update current line with the new mouse position if pen is active
+                setCurrentLine((prevLine: any[]) => [...prevLine, { x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
+            }
         } else if (activeTool === "rectangle" || activeTool === "ellipse" || activeTool === "line") {
-            const pos = e.target.getStage().getPointerPosition();
             const lastShape = shapes[shapes.length - 1];
 
             if (activeTool === "rectangle") {
@@ -64,9 +64,14 @@ export default function Paint() {
 
     const handleMouseUp = () => {
         if (isDrawing) {
-            setLines([...lines, currentLine]);
-            setCurrentLine([]);
-            setIsDrawing(false);
+            if (activeTool === "eraser") {
+                // Don't save any new "eraser" lines
+                setIsDrawing(false);
+            } else {
+                setLines([...lines, currentLine]);
+                setCurrentLine([]);
+                setIsDrawing(false);
+            }
         }
     };
 
@@ -131,12 +136,6 @@ export default function Paint() {
                     >
                         Line
                     </button>
-                    <button
-                        onClick={() => changeTool("text")}
-                        className={`p-3 text-black ${activeTool === "text" ? "bg-[#f1f1f1]" : "bg-[#e0e0e0]"} rounded-lg`}
-                    >
-                        Text
-                    </button>
                     <input
                         type="color"
                         value={brushColor}
@@ -187,48 +186,39 @@ export default function Paint() {
                                 return (
                                     <Rect
                                         key={index}
-                                        x={shape.x}
-                                        y={shape.y}
-                                        width={shape.width}
-                                        height={shape.height}
-                                        stroke={shape.color}
-                                        strokeWidth={shape.strokeWidth}
-                                    />
-                                );
-                            } else if (shape.type === "ellipse") {
-                                return (
-                                    <Ellipse
-                                        key={index}
-                                        x={shape.x}
-                                        y={shape.y}
-                                        radiusX={shape.radiusX}
-                                        radiusY={shape.radiusY}
-                                        stroke={shape.color}
-                                        strokeWidth={shape.strokeWidth}
-                                    />
-                                );
-                            } else if (shape.type === "line") {
-                                return (
-                                    <Line
-                                        key={index}
-                                        points={shape.points}
+                                        {...shape}
+                                        fill="transparent"
                                         stroke={shape.color}
                                         strokeWidth={shape.strokeWidth}
                                     />
                                 );
                             }
+                            if (shape.type === "ellipse") {
+                                return (
+                                    <Ellipse
+                                        key={index}
+                                        {...shape}
+                                        fill="transparent"
+                                        stroke={shape.color}
+                                        strokeWidth={shape.strokeWidth}
+                                    />
+                                );
+                            }
+                            if (shape.type === "line") {
+                                return (
+                                    <Line
+                                        key={index}
+                                        {...shape}
+                                        stroke={shape.color}
+                                        strokeWidth={shape.strokeWidth}
+                                        tension={0.5}
+                                        lineCap="round"
+                                        lineJoin="round"
+                                    />
+                                );
+                            }
+                            return null;
                         })}
-                        {/* Draw the current line while it's being drawn */}
-                        {isDrawing && (
-                            <Line
-                                points={currentLine.flatMap((p) => [p.x, p.y])}
-                                stroke={currentLine[0].color}
-                                strokeWidth={currentLine[0].width}
-                                tension={0.5}
-                                lineCap="round"
-                                lineJoin="round"
-                            />
-                        )}
                     </Layer>
                 </Stage>
             </div>
