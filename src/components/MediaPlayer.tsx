@@ -28,9 +28,6 @@ const MediaPlayer = ({ mediaUrl, onClose }: any) => {
                 <button onClick={handlePlayPause} className="bg-blue-500 p-2 rounded-md text-white">
                     {isPlaying ? "Pause" : "Play"}
                 </button>
-                <button onClick={onClose} className="bg-red-500 p-2 rounded-md text-white">
-                    Close
-                </button>
             </div>
         </div>
     );
