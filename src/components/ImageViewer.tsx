@@ -19,7 +19,6 @@ const ImageViewer = ({ imageUrl, onClose }: any) => {
                     <button onClick={handleZoomIn} className="bg-gray-700 text-white p-2 rounded-full">+</button>
                     <button onClick={handleZoomOut} className="bg-gray-700 text-white p-2 rounded-full">-</button>
                 </div>
-                <button onClick={onClose} className="absolute top-2 left-2 bg-red-500 text-white p-2 rounded-full">X</button>
             </div>
         </div>
     );
