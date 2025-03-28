@@ -210,7 +210,7 @@ export default function Desktop() {
                         {windowTitle === "Web Browser" && <WebBrowser file={file} onClose={() => closeWindow(windowTitle)} />}
                         {windowTitle === "Markdown Editor" && <FileEditor file={null} onClose={() => closeWindow(windowTitle)} onSave={() => {}} />}
                         {windowTitle === "Code Editor" && <CodeEditor onClose={() => closeWindow(windowTitle)} />}
-                        {windowTitle === "Code Editor" && <Paint onClose={() => closeWindow(windowTitle)} />}
+                        {windowTitle === "Paint" && <Paint onClose={() => closeWindow(windowTitle)} />}
                     </Window>
                 );
             })}
