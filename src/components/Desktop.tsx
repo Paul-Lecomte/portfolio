@@ -24,7 +24,8 @@ const defaultIcons = [
     { id: 5, title: "Media Player", icon: "🎥" },
     { id: 6, title: "Web Browser", icon: "🌐" },
     { id: 7, title: "Markdown Editor", icon: "📄" },
-    { id: 8, title: "Code Editor", icon: "🖥️" }
+    { id: 8, title: "Code Editor", icon: "🖥️" },
+    { id: 9, title: "Paint", icon: "🎨" },
 ];
 
 const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
