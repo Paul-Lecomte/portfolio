@@ -21,6 +21,13 @@ export default function Paint() {
         fabricCanvas.setWidth(800); // Canvas Width
         fabricCanvas.setHeight(600); // Canvas Height
 
+        // Ensure freeDrawingBrush is initialized and set
+        const brush = fabricCanvas.freeDrawingBrush;
+        if (brush) {
+            brush.color = brushColor;
+            brush.width = brushWidth;
+        }
+
         fabricCanvas.on('object:modified', () => {
             saveState();
         });
@@ -83,6 +90,8 @@ export default function Paint() {
         setActiveTool(tool);
         if (canvas) {
             const brush = canvas.freeDrawingBrush;
+            if (!brush) return; // Ensure brush is available
+
             if (tool === 'pen') {
                 canvas.isDrawingMode = true;
                 brush.color = brushColor;
