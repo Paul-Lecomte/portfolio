@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { fabric } from "fabric";
-import { Button } from "@/components/ui/button";
+import * as fabric from "fabric";
 
 export default function Paint() {
     const canvasRef = useRef(null);
@@ -34,12 +33,18 @@ export default function Paint() {
     return (
         <div className="w-full h-full flex flex-col items-center p-4 bg-gray-100">
             <div className="flex gap-2 mb-2">
-                <Button onClick={toggleDrawMode}>
+                <button
+                    onClick={toggleDrawMode}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
                     {isDrawing ? "Disable Draw Mode" : "Enable Draw Mode"}
-                </Button>
-                <Button onClick={clearCanvas} variant="destructive">
+                </button>
+                <button
+                    onClick={clearCanvas}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                >
                     Clear Canvas
-                </Button>
+                </button>
             </div>
             <canvas ref={canvasRef} className="border w-full h-[500px]" />
         </div>
