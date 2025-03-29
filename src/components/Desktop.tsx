@@ -201,6 +201,33 @@ export default function Desktop() {
         );
     };
 
+    const handleFileUpload = () => {
+        // Create an input element to allow file selection
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "*"; // Accept all file types
+        input.multiple = true; // Allow multiple file uploads
+
+        input.click(); // Trigger the file input
+
+        input.onchange = (e) => {
+            const files = e.target?.files;
+            if (files) {
+                const newFiles = Array.from(files).map((file) => {
+                    return {
+                        id: userFiles.length + 1 + defaultIcons.length,
+                        title: file.name,
+                        type: "file",
+                        icon: "📄", // You can customize the icon based on file type
+                        content: "", // You can store content here if necessary
+                    };
+                });
+
+                setUserFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            }
+        };
+    };
+
     return (
         <div className="w-full h-screen relative desktop-body" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Windows */}
@@ -334,7 +361,7 @@ export default function Desktop() {
                     <DesktopIcon
                         key={icon.id}
                         icon={icon}
-                        position={{top: 50 + row * spacing, left: 50 + col * spacing}}
+                        position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
                         openWindow={openWindow}
                         onContextMenu={handleContextMenu}
                     />
@@ -370,13 +397,13 @@ export default function Desktop() {
                         <span>Rename</span>
                     </button>
 
-                    {/* Create File Button */}
+                    {/* Upload File Button */}
                     <button
                         className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
-                        onClick={() => createFileOrFolder("file")}
+                        onClick={handleFileUpload}
                     >
-                        <img src="/path/to/create-file-icon.png" alt="" className="h-6 w-6"/>
-                        <span>Create File</span>
+                        <img src="/path/to/upload-icon.png" alt="" className="h-6 w-6"/>
+                        <span>Upload File</span>
                     </button>
 
                     {/* Delete Button */}
