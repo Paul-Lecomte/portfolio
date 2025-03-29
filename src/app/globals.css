@@ -26,7 +26,7 @@ body {
 }
 
 .desktop-body {
-  background-image: url("../../public/10462.svg"); /* Path to your SVG file */
+  background-image: url("../../public/background/10462.svg"); /* Path to your SVG file */
   background-size: cover;        /* Ensures the background covers the entire viewport */
   background-repeat: no-repeat;  /* Prevents repeating the image */
   background-position: center;   /* Centers the image */
