@@ -305,31 +305,43 @@ body {
   background-color: #005fa0;
 }
 
-/* Context Menu */
-.context-menu {
-  position: absolute;
-  background-color: var(--primary-bg);
-  color: var(--foreground);
-  border: 1px solid #333;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  z-index: 1002;
+/* Base styles for context menu */
+.main-menu {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 300px;
+  background-color: #1a1a1a;
+  color: white;
+  padding: 1rem;
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.context-menu button {
-  width: 100%;
+.menu-item {
+  display: flex;
+  align-items: center;
   padding: 10px;
-  text-align: left;
-  border: none;
-  background-color: transparent;
-  color: var(--foreground);
-  cursor: pointer;
-  transition: background-color 0.2s;
+  border-radius: 8px;
+  background-color: #2b2b2b;
+  transition: background-color 0.2s ease;
 }
 
-.context-menu button:hover {
-  background-color: var(--primary-hover);
+.menu-item:hover {
+  background-color: #333;
 }
+
+.menu-item img {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+}
+
+.menu-item figcaption {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 
 /* File Editor / Code Editor */
 .code-editor,
