@@ -25,6 +25,18 @@ body {
   overflow: hidden;
 }
 
+.desktop-body {
+  background-image: url("../../public/10462.svg"); /* Path to your SVG file */
+  background-size: cover;        /* Ensures the background covers the entire viewport */
+  background-repeat: no-repeat;  /* Prevents repeating the image */
+  background-position: center;   /* Centers the image */
+  background-attachment: fixed;  /* Keeps the background fixed during scrolling */
+  min-height: 100vh;             /* Ensures the body takes at least the full viewport height */
+  display: flex;
+  justify-content: center;       /* Centers the content horizontally */
+  align-items: center;           /* Centers the content vertically */
+}
+
 /* Desktop Area */
 .desktop-container {
   display: flex;
@@ -54,6 +66,7 @@ body {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   z-index: 1000;
+  backdrop-filter: blur(10px);
 }
 
 /* Start Menu Button */
@@ -70,14 +83,14 @@ body {
   height: 40px;
   background-color: #0078d4;
   border-radius: 50%;
+  color: white;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s;
 }
 
 .start-button:hover {
-  background-color: #005fa0;
+  background-color: #006bb3;
 }
-
 /* Start Menu */
 .start-menu-dropdown {
   position: absolute;
