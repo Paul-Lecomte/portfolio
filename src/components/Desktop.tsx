@@ -275,7 +275,45 @@ export default function Desktop() {
                             className="bg-gray-600 text-white p-2 rounded-md cursor-pointer hover:bg-gray-500 transition"
                             onClick={() => openWindow(windowTitle)}
                         >
-                            {windowTitle === "File Explorer" ? "📁" : "💻"} {windowTitle}
+                            {windowTitle === "File Explorer" && (
+                                <>📁 {windowTitle}</>
+                            )}
+                            {windowTitle === "Terminal" && (
+                                <>💻 {windowTitle}</>
+                            )}
+                            {windowTitle === "Notepad" && (
+                                <>📝 {windowTitle}</>
+                            )}
+                            {windowTitle === "Image Viewer" && (
+                                <>🖼️ {windowTitle}</>
+                            )}
+                            {windowTitle === "Media Player" && (
+                                <>🎥 {windowTitle}</>
+                            )}
+                            {windowTitle === "Web Browser" && (
+                                <>🌐 {windowTitle}</>
+                            )}
+                            {windowTitle === "Markdown Editor" && (
+                                <>📄 {windowTitle}</>
+                            )}
+                            {windowTitle === "Code Editor" && (
+                                <>🖥️ {windowTitle}</>
+                            )}
+                            {windowTitle === "Paint" && (
+                                <>🎨 {windowTitle}</>
+                            )}
+                            {/* Default case */}
+                            {windowTitle !== "File Explorer" &&
+                                windowTitle !== "Terminal" &&
+                                windowTitle !== "Notepad" &&
+                                windowTitle !== "Image Viewer" &&
+                                windowTitle !== "Media Player" &&
+                                windowTitle !== "Web Browser" &&
+                                windowTitle !== "Markdown Editor" &&
+                                windowTitle !== "Code Editor" &&
+                                windowTitle !== "Paint" && (
+                                    <>💻 {windowTitle}</>
+                                )}
                         </div>
                     ))}
                 </div>
@@ -317,7 +355,8 @@ export default function Desktop() {
                     }}
                 >
                     {/* Open Button */}
-                    <button className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white">
+                    <button
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white">
                         <img src="/path/to/open-icon.png" alt="" className="h-6 w-6"/>
                         <span>Open</span>
                     </button>
