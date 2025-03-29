@@ -297,35 +297,67 @@ export default function Desktop() {
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
-                    className="absolute bg-gray-800 text-white p-2 border border-gray-700 rounded-md shadow-lg"
-                    style={{top: contextMenu.y, left: contextMenu.x}}
+                    className="absolute p-4 rounded-lg shadow-lg grid gap-4 main-menu"
+                    style={{
+                        top: contextMenu.y,
+                        left: contextMenu.x,
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",  // Acrylic/Mica Effect
+                        backdropFilter: "blur(10px)",  // Blur effect
+                        minWidth: "200px",
+                    }}
                 >
-                    <button className="block w-full text-left px-3 py-1 hover:bg-gray-700">Open</button>
-                    <button
-                        className="block w-full text-left px-3 py-1 hover:bg-gray-700"
-                        onClick={() => renameFile(contextMenu.iconTitle!)}
-                    >
-                        Rename
+                    {/* Open Button */}
+                    <button className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700">
+                        <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
+                        <span>Open</span>
                     </button>
-                    <button
-                        className="block w-full text-left px-3 py-1 hover:bg-gray-700"
-                        onClick={() => createFileOrFolder("file")}
-                    >
-                        Create File
+
+                    {/* Rename Button */}
+                    <button className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" onClick={() => renameFile(contextMenu.iconTitle!)}>
+                        <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
+                        <span>Rename</span>
                     </button>
+
+                    {/* More Options Button */}
+                    <div className="menu-item relative">
+                        <button className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700">
+                            <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
+                            <span>More</span>
+                        </button>
+
+                        {/* Additional Options */}
+                        {contextMenu.showMoreOptions && (
+                            <div className="more-options absolute left-0 top-full mt-2 p-2 bg-gray-800 rounded-lg">
+                                <button className="p-2 text-white hover:bg-gray-700">Option 1</button>
+                                <button className="p-2 text-white hover:bg-gray-700">Option 2</button>
+                                <button className="p-2 text-white hover:bg-gray-700">Option 3</button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Create File Button */}
+                    <button className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" onClick={() => createFileOrFolder("file")}>
+                        <img src="../../public/vercel.svg" alt="" className="h-6 w-6"/>
+                        <span>Create File</span>
+                    </button>
+
+                    {/* Delete Button */}
                     <button
-                        className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-red-500"
+                        className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 text-red-500"
                         onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
                     >
-                        Delete
+                        <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
+                        <span>Delete</span>
                     </button>
                 </div>
             )}
 
+
             {/* Modal for creating new file/folder */}
             {creatingFile && (
                 <div
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2">
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2"
+                >
                     <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
                     <input
                         type="text"
@@ -334,7 +366,6 @@ export default function Desktop() {
                         className="w-full p-2 bg-gray-700 text-white rounded-md"
                         placeholder="Enter file name"
                     />
-
                     <select
                         value={selectedExtension}
                         onChange={(e) => setSelectedExtension(e.target.value)}
