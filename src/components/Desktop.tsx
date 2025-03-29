@@ -58,11 +58,13 @@ export default function Desktop() {
         y: number;
         visible: boolean;
         iconTitle: string | null;
+        showMoreOptions: boolean;  // Added flag for "More Options"
     }>({
         x: 0,
         y: 0,
         visible: false,
         iconTitle: null,
+        showMoreOptions: false,  // Initially set to false
     });
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const [time, setTime] = useState<string>("");
@@ -71,7 +73,7 @@ export default function Desktop() {
     const [newFileName, setNewFileName] = useState<string>("");
     const [creatingFile, setCreatingFile] = useState<"file" | "folder" | null>(null);
     const fileExtensions = [".txt", ".md", ".json", ".js", ".html", ".css", ".mp4", ".jpg", ".png"];
-    const [selectedExtension, setSelectedExtension] = useState(fileExtensions[0]); // Default to .txt
+    const [selectedExtension, setSelectedExtension] = useState(fileExtensions[0]);
 
 
     const contextMenuRef = useRef(contextMenu);
@@ -87,6 +89,13 @@ export default function Desktop() {
         const interval = setInterval(updateTime, 60000);
         return () => clearInterval(interval);
     }, []);
+
+    const toggleMoreOptions = () => {
+        setContextMenu((prevState) => ({
+            ...prevState,
+            showMoreOptions: !prevState.showMoreOptions,
+        }));
+    };
 
     const handleContextMenu = (e: React.MouseEvent, iconTitle: string) => {
         e.preventDefault();
@@ -293,7 +302,6 @@ export default function Desktop() {
                 );
             })}
 
-            {/* Context Menu */}
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
@@ -307,21 +315,45 @@ export default function Desktop() {
                     }}
                 >
                     {/* Open Button */}
-                    <button className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700">
-                        <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
+                    <button className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700">
+                        <img src="/path/to/open-icon.png" alt="" className="h-6 w-6"/>
                         <span>Open</span>
                     </button>
 
                     {/* Rename Button */}
-                    <button className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" onClick={() => renameFile(contextMenu.iconTitle!)}>
-                        <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
+                    <button
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700"
+                        onClick={() => renameFile(contextMenu.iconTitle!)}
+                    >
+                        <img src="/path/to/rename-icon.png" alt="" className="h-6 w-6"/>
                         <span>Rename</span>
+                    </button>
+
+                    {/* Create File Button */}
+                    <button
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700"
+                        onClick={() => createFileOrFolder("file")}
+                    >
+                        <img src="/path/to/create-file-icon.png" alt="" className="h-6 w-6"/>
+                        <span>Create File</span>
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 text-red-500"
+                        onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
+                    >
+                        <img src="/path/to/delete-icon.png" alt="" className="h-6 w-6"/>
+                        <span>Delete</span>
                     </button>
 
                     {/* More Options Button */}
                     <div className="menu-item relative">
-                        <button className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700">
-                            <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
+                        <button
+                            className="flex items-center rounded-lg"
+                            onClick={toggleMoreOptions}
+                        >
+                            <img src="/path/to/more-options-icon.png" alt="" className="h-6 w-6"/>
                             <span>More</span>
                         </button>
 
@@ -334,21 +366,6 @@ export default function Desktop() {
                             </div>
                         )}
                     </div>
-
-                    {/* Create File Button */}
-                    <button className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" onClick={() => createFileOrFolder("file")}>
-                        <img src="../../public/vercel.svg" alt="" className="h-6 w-6"/>
-                        <span>Create File</span>
-                    </button>
-
-                    {/* Delete Button */}
-                    <button
-                        className="menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 text-red-500"
-                        onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
-                    >
-                        <img src="/public/vercel.svg" alt="" className="h-6 w-6"/>
-                        <span>Delete</span>
-                    </button>
                 </div>
             )}
 
