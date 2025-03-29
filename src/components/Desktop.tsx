@@ -100,10 +100,11 @@ export default function Desktop() {
     const handleContextMenu = (e: React.MouseEvent, iconTitle: string) => {
         e.preventDefault();
         setContextMenu({
+            showMoreOptions: false,
             x: e.clientX,
             y: e.clientY,
             visible: true,
-            iconTitle,
+            iconTitle
         });
     };
 
@@ -232,7 +233,7 @@ export default function Desktop() {
 
             {/* Taskbar */}
             <div
-                className="fixed bottom-0 w-full bg-gradient-to-t from-gray-800 via-gray-800 to-transparent p-3 flex items-center justify-between rounded-t-3xl shadow-lg z-50 backdrop-blur-md">
+                className="fixed bottom-0 w-full bg-gradient-to-t from-gray-800 via-gray-800 to-transparent p-3 flex items-center justify-between shadow-lg z-50 backdrop-blur-md">
                 {/* Start Menu Button */}
                 <div className="relative">
                     <button
