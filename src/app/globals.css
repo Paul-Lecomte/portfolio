@@ -342,6 +342,22 @@ body {
   font-weight: 500;
 }
 
+.more-options {
+  display: none;
+  background-color: #333;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item:hover .more-options {
+  display: block;
+}
+
+.more-options button:hover {
+  background-color: #444;
+}
+
 
 /* File Editor / Code Editor */
 .code-editor,
