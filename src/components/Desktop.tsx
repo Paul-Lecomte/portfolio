@@ -316,14 +316,14 @@ export default function Desktop() {
                     }}
                 >
                     {/* Open Button */}
-                    <button className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700">
+                    <button className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white">
                         <img src="/path/to/open-icon.png" alt="" className="h-6 w-6"/>
                         <span>Open</span>
                     </button>
 
                     {/* Rename Button */}
                     <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700"
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
                         onClick={() => renameFile(contextMenu.iconTitle!)}
                     >
                         <img src="/path/to/rename-icon.png" alt="" className="h-6 w-6"/>
@@ -332,7 +332,7 @@ export default function Desktop() {
 
                     {/* Create File Button */}
                     <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700"
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
                         onClick={() => createFileOrFolder("file")}
                     >
                         <img src="/path/to/create-file-icon.png" alt="" className="h-6 w-6"/>
@@ -341,7 +341,7 @@ export default function Desktop() {
 
                     {/* Delete Button */}
                     <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 text-red-500"
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white text-red-500"
                         onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
                     >
                         <img src="/path/to/delete-icon.png" alt="" className="h-6 w-6"/>
@@ -351,7 +351,7 @@ export default function Desktop() {
                     {/* More Options Button */}
                     <div className="menu-item relative">
                         <button
-                            className="flex items-center rounded-lg"
+                            className="flex items-center rounded-lg hover:bg-gray-700 hover:text-white"
                             onClick={toggleMoreOptions}
                         >
                             <img src="/path/to/more-options-icon.png" alt="" className="h-6 w-6"/>
