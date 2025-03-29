@@ -202,11 +202,10 @@ export default function Desktop() {
     };
 
     const handleFileUpload = () => {
-        // Create an input element to allow file selection
         const input = document.createElement("input");
         input.type = "file";
-        input.accept = "*"; // Accept all file types
-        input.multiple = true; // Allow multiple file uploads
+        input.accept = "*";
+        input.multiple = true;
 
         input.click(); // Trigger the file input
 
@@ -214,16 +213,52 @@ export default function Desktop() {
             const files = e.target?.files;
             if (files) {
                 const newFiles = Array.from(files).map((file) => {
-                    return {
-                        id: userFiles.length + 1 + defaultIcons.length,
-                        title: file.name,
-                        type: "file",
-                        icon: "📄", // You can customize the icon based on file type
-                        content: "", // You can store content here if necessary
-                    };
+                    return new Promise((resolve, reject) => {
+                        // Limit file size to 2MB (2 * 1024 * 1024 bytes)
+                        const maxFileSize = 2 * 1024 * 1024;
+                        if (file.size > maxFileSize) {
+                            alert(`File ${file.name} exceeds the size limit of 2MB.`);
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        if (file.type.startsWith("image/")) {
+                            reader.onloadend = () => {
+                                const fileContent = reader.result as string;
+                                resolve({
+                                    id: Date.now(),
+                                    title: file.name,
+                                    type: "file",
+                                    icon: "📄",
+                                    content: fileContent,
+                                });
+                            };
+                        } else {
+                            reader.onloadend = () => {
+                                const fileContent = reader.result as string;
+                                resolve({
+                                    id: Date.now(),
+                                    title: file.name,
+                                    type: "file",
+                                    icon: "📄",
+                                    content: fileContent,
+                                });
+                            };
+                        }
+
+                        reader.onerror = (error) => reject(error);
+                        reader.readAsDataURL(file);
+                    });
                 });
 
-                setUserFiles((prevFiles) => [...prevFiles, ...newFiles]);
+                Promise.all(newFiles)
+                    .then((processedFiles) => {
+                        const existingFiles = JSON.parse(localStorage.getItem("userFiles") || "[]");
+                        const updatedFiles = [...existingFiles, ...processedFiles];
+                        localStorage.setItem("userFiles", JSON.stringify(updatedFiles));
+                        setUserFiles(updatedFiles);
+                    })
+                    .catch((error) => console.error("Error reading file:", error));
             }
         };
     };
