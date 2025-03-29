@@ -302,6 +302,7 @@ export default function Desktop() {
                 );
             })}
 
+            {/* context menu */}
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
