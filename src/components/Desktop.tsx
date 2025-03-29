@@ -39,11 +39,11 @@ const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
                 style={{ top: position.top, left: position.left }}
                 onDoubleClick={() => openWindow(icon.title)}
                 onContextMenu={(e) => {
-                    e.stopPropagation(); // Stop the event from bubbling to the desktop
+                    e.stopPropagation();
                     onContextMenu(e, icon.title);
                 }}
             >
-                <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-md text-xl">
+                <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-lg text-xl">
                     {icon.icon}
                 </div>
                 <span className="text-sm mt-1">{icon.title}</span>
@@ -192,7 +192,7 @@ export default function Desktop() {
     };
 
     return (
-        <div className="w-full h-screen bg-gray-950 relative" onContextMenu={(e) => handleContextMenu(e, "")}>
+        <div className="w-full h-screen relative desktop-body" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Windows */}
             {openWindows.map((windowTitle) => {
                 const file = userFiles.find((f) => f.title === windowTitle);
@@ -213,7 +213,8 @@ export default function Desktop() {
                             <WebBrowser file={file} onClose={() => closeWindow(windowTitle)}/>}
                         {windowTitle === "Markdown Editor" &&
                             <FileEditor file={""} onClose={() => closeWindow(windowTitle)} onSave={() => {
-                            }}/>}
+                            }}/>
+                        }
                         {windowTitle === "Code Editor" && <CodeEditor onClose={() => closeWindow(windowTitle)}/>}
                         {windowTitle === "Paint" && <Paint onClose={() => closeWindow(windowTitle)}/>}
                     </Window>
@@ -222,7 +223,7 @@ export default function Desktop() {
 
             {/* Taskbar */}
             <div
-                className="fixed bottom-0 w-full bg-gray-800 p-3 flex items-center justify-between shadow-lg z-50">
+                className="fixed bottom-0 w-full bg-gradient-to-t from-gray-800 via-gray-800 to-transparent p-3 flex items-center justify-between rounded-t-3xl shadow-lg z-50 backdrop-blur-md">
                 {/* Start Menu Button */}
                 <div className="relative">
                     <button
@@ -233,7 +234,7 @@ export default function Desktop() {
                     </button>
                     {startMenuOpen && (
                         <div
-                            className="absolute bottom-14 left-0 w-72 bg-gray-900 p-4 rounded-3xl shadow-xl transition-all duration-300">
+                            className="absolute bottom-14 left-0 w-72 bg-gray-900 p-4 rounded-3xl shadow-xl transition-all duration-300 backdrop-blur-md">
                             <div className="flex items-center justify-between mb-4">
                                 <p className="text-white font-semibold">Start Menu</p>
                                 <button onClick={() => setStartMenuOpen(false)}
