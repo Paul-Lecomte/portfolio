@@ -108,7 +108,7 @@ export default function Desktop() {
             y: e.clientY,
             visible: true,
             iconTitle,
-            fileExtension: extension, // Store file extension
+            fileExtension: extension,
         });
     };
 
