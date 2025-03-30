@@ -165,6 +165,10 @@ export default function Desktop() {
         }
     };
 
+    const handleShowCreateModal = () => {
+        setCreatingFile("file"); // Show the modal for creating a file
+    };
+
 
     const handleCreateFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewFileName(e.target.value);
@@ -418,9 +422,10 @@ export default function Desktop() {
                 >
                     {/* Open Button */}
                     <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white">
+                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
+                        onClick={handleShowCreateModal}>
                         <img src="/path/to/open-icon.png" alt="" className="h-6 w-6"/>
-                        <span>Open</span>
+                        <span>Create a file</span>
                     </button>
 
                     {/* Rename Button */}
