@@ -407,7 +407,7 @@ export default function Desktop() {
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
-                    className="absolute p-4 rounded-lg shadow-lg grid gap-4 main-menu"
+                    className="absolute p-4 rounded-lg shadow-lg grid gap-4 main-menu z-40"
                     style={{
                         top: contextMenu.y,
                         left: contextMenu.x,
