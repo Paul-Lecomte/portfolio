@@ -99,12 +99,16 @@ export default function Desktop() {
 
     const handleContextMenu = (e: React.MouseEvent, iconTitle: string) => {
         e.preventDefault();
+        const file = userFiles.find((f) => f.title === iconTitle);
+        const extension = file ? file.title.split('.').pop() : "";
+
         setContextMenu({
             showMoreOptions: false,
             x: e.clientX,
             y: e.clientY,
             visible: true,
-            iconTitle
+            iconTitle,
+            fileExtension: extension, // Store file extension
         });
     };
 
