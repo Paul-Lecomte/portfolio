@@ -33,7 +33,7 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
     };
 
     const handleFileClick = (file: File) => {
-        if (file.type === "file" && file.url) {
+        if (file.type === "file") {
             onOpenFile(file.name, file.path, file.url);
         }
     };
