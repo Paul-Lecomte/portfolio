@@ -161,10 +161,6 @@ export default function Desktop() {
         }
     };
 
-    const createFileOrFolder = (type: string) => {
-        setCreatingFile(type as "file" | "folder");
-        setNewFileName("");
-    };
 
     const handleCreateFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewFileName(e.target.value);
