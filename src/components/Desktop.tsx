@@ -298,7 +298,7 @@ export default function Desktop() {
             })}
 
             {/* Taskbar */}
-            <div className="fixed bottom-0 w-full bg-gradient-to-t from-gray-800 via-gray-800 to-transparent p-3 flex items-center justify-between shadow-lg z-50 backdrop-blur-md">
+            <div className="taskbar">
                 {/* Start Menu Button */}
                 <div className="relative">
                     <button onClick={() => setStartMenuOpen(!startMenuOpen)} className="start-button">
@@ -336,11 +336,11 @@ export default function Desktop() {
                 </div>
 
                 {/* Taskbar Icons */}
-                <div className="flex space-x-4 overflow-x-auto">
+                <div className="taskbar-icons">
                     {openWindows.map((windowTitle) => (
                         <div
                             key={windowTitle}
-                            className="bg-gray-600 text-white p-2 rounded-md cursor-pointer hover:bg-gray-500 transition"
+                            className="taskbar-icon"
                             onClick={() => openWindow(windowTitle)}
                         >
                             {windowTitle === "File Explorer" && (
@@ -387,8 +387,8 @@ export default function Desktop() {
                 </div>
 
                 {/* System Tray */}
-                <div className="flex space-x-3 text-white">
-                    <SystemTray/>
+                <div className="system-tray">
+                    <SystemTray />
                 </div>
             </div>
 
