@@ -79,6 +79,11 @@ export default function Desktop() {
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
 
+    // Clear local storage on page reload
+    useEffect(() => {
+        localStorage.clear();
+    }, []);  // Empty dependency array ensures this effect runs only once when the component is mounted
+
     useEffect(() => {
         const updateTime = () => {
             const now = new Date();
