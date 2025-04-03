@@ -301,29 +301,35 @@ export default function Desktop() {
             <div className="fixed bottom-0 w-full bg-gradient-to-t from-gray-800 via-gray-800 to-transparent p-3 flex items-center justify-between shadow-lg z-50 backdrop-blur-md">
                 {/* Start Menu Button */}
                 <div className="relative">
-                    <button onClick={() => setStartMenuOpen(!startMenuOpen)} className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-full hover:bg-gray-600 transition duration-200">
+                    <button onClick={() => setStartMenuOpen(!startMenuOpen)} className="start-button">
                         🏁
                     </button>
                     {startMenuOpen && (
-                        <div className="absolute bottom-14 left-45 transform -translate-x-1/2 w-96 bg-gray-900 p-4 rounded-3xl shadow-xl transition-all duration-300 backdrop-blur-md">
-                            <div className="flex justify-between items-center mb-4">
+                        <div className="start-menu">
+                            <div className="start-menu-header">
                                 <p className="text-white text-lg font-semibold">Start</p>
                                 <button onClick={() => setStartMenuOpen(false)} className="text-gray-400 hover:text-white">✖️</button>
                             </div>
 
                             {/* Pinned Apps */}
-                            <div className="grid grid-cols-6 gap-4 mb-4">
+                            <div className="pinned-apps">
                                 {defaultIcons.map((icon) => (
-                                    <button key={icon.id} className="flex flex-col items-center space-y-1 p-2 rounded-md hover:bg-gray-700 transition" onClick={() => openWindow(icon.title)}>
+                                    <button key={icon.id} className="pinned-app" onClick={() => openWindow(icon.title)}>
                                         {icon.icon}
-                                        <span className="text-xs text-white text-center truncate w-14">{icon.title}</span>
+                                        <span className="app-title">{icon.title}</span>
                                     </button>
                                 ))}
                             </div>
 
                             {/* Search Bar */}
-                            <div className="w-full bg-gray-800 p-2 rounded-lg flex items-center space-x-2">
-                                🔍 <input type="text" placeholder="Type here to search" className="w-full bg-transparent text-white outline-none" />
+                            <div className="search-bar">
+                                🔍 <input type="text" placeholder="Type here to search" className="search-input" />
+                            </div>
+
+                            {/* User Profile Section (Optional) */}
+                            <div className="user-profile">
+                                <img src="/user.png" alt="User Avatar" className="user-avatar"/>
+                                <span className="user-name">Admin</span>
                             </div>
                         </div>
                     )}
