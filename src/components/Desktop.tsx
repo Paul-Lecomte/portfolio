@@ -231,46 +231,37 @@ export default function Desktop() {
                         }
 
                         const reader = new FileReader();
-                        if (file.type.startsWith("image/")) {
-                            reader.onloadend = () => {
-                                const fileContent = reader.result as string;
-                                resolve({
-                                    id: Date.now(),
-                                    title: file.name,
-                                    type: "file",
-                                    icon: "📄",
-                                    content: fileContent,
-                                });
-                            };
-                        } else {
-                            reader.onloadend = () => {
-                                const fileContent = reader.result as string;
-                                resolve({
-                                    id: Date.now(),
-                                    title: file.name,
-                                    type: "file",
-                                    icon: "📄",
-                                    content: fileContent,
-                                });
-                            };
-                        }
+                        reader.onloadend = () => {
+                            const fileContent = reader.result as string; // Base64 content
+                            resolve({
+                                id: Date.now(),
+                                title: file.name,
+                                type: "file",
+                                icon: "📄",
+                                content: fileContent, // Store file content as Base64
+                            });
+                        };
 
                         reader.onerror = (error) => reject(error);
-                        reader.readAsDataURL(file);
+                        reader.readAsDataURL(file); // Read file as Base64
                     });
                 });
 
                 Promise.all(newFiles)
                     .then((processedFiles) => {
+                        // Retrieve existing files from localStorage or use an empty array
                         const existingFiles = JSON.parse(localStorage.getItem("userFiles") || "[]");
                         const updatedFiles = [...existingFiles, ...processedFiles];
+
+                        // Save files to localStorage as Base64
                         localStorage.setItem("userFiles", JSON.stringify(updatedFiles));
-                        setUserFiles(updatedFiles);
+                        setUserFiles(updatedFiles); // Update state to reflect new files
                     })
                     .catch((error) => console.error("Error reading file:", error));
             }
         };
     };
+
 
     return (
         <div className="w-full h-screen relative desktop-body" onContextMenu={(e) => handleContextMenu(e, "")}>
@@ -431,7 +422,7 @@ export default function Desktop() {
                     <button
                         className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
                         onClick={handleShowCreateModal}>
-                        <img src="/path/to/open-icon.png" alt="" className="h-6 w-6"/>
+                        <img src="/contextmenu/create.png" alt="" className="h-6 w-6"/>
                         <span>Create a file</span>
                     </button>
 
@@ -440,7 +431,7 @@ export default function Desktop() {
                         className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
                         onClick={() => renameFile(contextMenu.iconTitle!)}
                     >
-                        <img src="/path/to/rename-icon.png" alt="" className="h-6 w-6"/>
+                        <img src="/contextmenu/edit.png" alt="" className="h-6 w-6"/>
                         <span>Rename</span>
                     </button>
 
@@ -449,7 +440,7 @@ export default function Desktop() {
                         className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
                         onClick={handleFileUpload}
                     >
-                        <img src="/path/to/upload-icon.png" alt="" className="h-6 w-6"/>
+                        <img src="/contextmenu/upload.png" alt="" className="h-6 w-6"/>
                         <span>Upload File</span>
                     </button>
 
@@ -458,7 +449,7 @@ export default function Desktop() {
                         className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white text-red-500"
                         onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
                     >
-                        <img src="/path/to/delete-icon.png" alt="" className="h-6 w-6"/>
+                        <img src="/contextmenu/delete.png" alt="" className="h-6 w-6"/>
                         <span>Delete</span>
                     </button>
 
@@ -468,7 +459,7 @@ export default function Desktop() {
                             className="flex items-center rounded-lg hover:bg-gray-700 hover:text-white"
                             onClick={toggleMoreOptions}
                         >
-                            <img src="/path/to/more-options-icon.png" alt="" className="h-6 w-6"/>
+                            <img src="/contextmenu/more.png" alt="" className="h-6 w-6"/>
                             <span>More</span>
                         </button>
 
