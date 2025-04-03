@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from 'react';
 
 const SystemTray = () => {
-    // State for controlling volume, muted status, network status, and battery level
-    const [volume, setVolume] = useState(50); // Volume control (0-100)
-    const [muted, setMuted] = useState(false); // Mute toggle
-    const [networkStatus, setNetworkStatus] = useState("online"); // Network status (online/offline)
-    const [batteryLevel, setBatteryLevel] = useState(100); // Battery level percentage
-    const [time, setTime] = useState(""); // Time for the system tray (to be updated every second)
-    const [showDate, setShowDate] = useState(false); // Toggle between showing date or time
+    const [volume, setVolume] = useState(50);
+    const [muted, setMuted] = useState(false);
+    const [networkStatus, setNetworkStatus] = useState("online");
+    const [batteryLevel, setBatteryLevel] = useState(100);
+    const [time, setTime] = useState("");
+    const [showDate, setShowDate] = useState(false);
     const [showVolumePopup, setShowVolumePopup] = useState(false);
     const [showNetworkPopup, setShowNetworkPopup] = useState(false);
     const [showBatteryPopup, setShowBatteryPopup] = useState(false);
     const [showTimePopup, setShowTimePopup] = useState(false);
 
-    // Set up effect to update time, battery status, and network changes
     useEffect(() => {
-        // Update time every second
         const timeInterval = setInterval(() => {
             setTime(new Date().toLocaleTimeString());
         }, 1000);
 
-        // Network status change handler
         const handleNetworkChange = () => {
             setNetworkStatus(navigator.onLine ? "online" : "offline");
         };
         window.addEventListener("online", handleNetworkChange);
         window.addEventListener("offline", handleNetworkChange);
 
-        // Battery status update (only in the client-side environment)
         if (typeof navigator !== 'undefined' && navigator.getBattery) {
             const updateBatteryStatus = async () => {
                 const battery = await navigator.getBattery();
@@ -36,7 +31,6 @@ const SystemTray = () => {
             updateBatteryStatus();
         }
 
-        // Cleanup on unmount
         return () => {
             window.removeEventListener("online", handleNetworkChange);
             window.removeEventListener("offline", handleNetworkChange);
@@ -44,30 +38,16 @@ const SystemTray = () => {
         };
     }, []);
 
-    // Handle volume slider change
-    const handleVolumeChange = (e) => {
-        setVolume(e.target.value);
-    };
-
-    // Toggle between showing time or date
-    const toggleTimeDate = () => {
-        setShowDate(!showDate);
-    };
-
-    // Toggle popups
+    const handleVolumeChange = (e) => setVolume(e.target.value);
+    const toggleMute = () => setMuted(!muted);
+    const toggleTimeDate = () => setShowDate(!showDate);
     const toggleVolumePopup = () => setShowVolumePopup(!showVolumePopup);
     const toggleNetworkPopup = () => setShowNetworkPopup(!showNetworkPopup);
     const toggleBatteryPopup = () => setShowBatteryPopup(!showBatteryPopup);
     const toggleTimePopup = () => setShowTimePopup(!showTimePopup);
 
-    // Toggle mute inside the popup
-    const toggleMute = () => {
-        setMuted(!muted);
-        if (!muted) setVolume(50); // Restore volume when unmuted
-    };
-
     return (
-        <div className="flex items-center space-x-4 text-white">
+        <div className="flex items-center space-x-6 text-white">
             {/* Network Status */}
             <div className="relative">
                 <span
@@ -77,7 +57,7 @@ const SystemTray = () => {
                     {networkStatus === "online" ? "📶" : "🚫"}
                 </span>
                 {showNetworkPopup && (
-                    <div className="absolute top-[-130px] left-0 bg-gray-800 p-4 text-white rounded shadow-lg z-50 transition-transform">
+                    <div className="popup">
                         <p>Status: {networkStatus}</p>
                         <button onClick={() => alert('Network settings clicked')}>Network Settings</button>
                     </div>
@@ -90,7 +70,7 @@ const SystemTray = () => {
                     {muted ? "🔇" : "🔊"}
                 </button>
                 {showVolumePopup && (
-                    <div className="absolute top-[-130px] left-0 bg-gray-800 p-4 text-white rounded shadow-lg z-50 transition-transform">
+                    <div className="popup">
                         <p>Volume: {volume}%</p>
                         <button onClick={toggleMute} className="block mb-2">
                             {muted ? "Unmute" : "Mute"}
@@ -102,7 +82,7 @@ const SystemTray = () => {
                             value={muted ? 0 : volume}
                             onChange={handleVolumeChange}
                             className="w-full"
-                            disabled={muted} // Disable the slider if muted
+                            disabled={muted}
                         />
                     </div>
                 )}
@@ -114,7 +94,7 @@ const SystemTray = () => {
                     {batteryLevel >= 20 ? "⚡" : "🔋"} {batteryLevel}%
                 </span>
                 {showBatteryPopup && (
-                    <div className="absolute top-[-130px] left-16 bg-gray-800 p-4 text-white rounded shadow-lg z-50 transition-transform">
+                    <div className="popup">
                         <p>Battery: {batteryLevel}%</p>
                         <button onClick={() => alert('Battery settings clicked')}>Battery Settings</button>
                     </div>
@@ -127,7 +107,7 @@ const SystemTray = () => {
                     {showDate ? new Date().toLocaleDateString() : time}
                 </span>
                 {showTimePopup && (
-                    <div className="absolute top-[-130px] left-24 bg-gray-800 p-4 text-white rounded shadow-lg z-50 transition-transform">
+                    <div className="popup">
                         <p>{showDate ? new Date().toLocaleDateString() : time}</p>
                         <button onClick={toggleTimeDate}>Toggle Date/Time</button>
                     </div>
