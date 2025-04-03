@@ -77,27 +77,23 @@ export default function Desktop() {
     const [selectedExtension, setSelectedExtension] = useState(fileExtensions[0]);
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
-    const [wallpaper, setWallpaper] = useState<JSX.Element | null>(null);
+    const [wallpaperType, setWallpaperType] = useState<string>("static");
 
     //------------------------------------------------------------------------------------------------------------------------------
     // WALLPAPER LOGIC
 
-    const handleWallpaperChange = (wallpaperType) => {
-        if (wallpaperType === "animatedWallpaper") {
-            // Set the wallpaper to an animated wallpaper
-        } else if (wallpaperType === "staticWallpaper") {
-            // Set the wallpaper to a static image
-        }
+    const handleWallpaperChange = (wallpaperType: string) => {
+        setWallpaperType(wallpaperType);
+        setContextMenu((prevState: any) => ({
+            ...prevState,
+            isAnimatedWallpaper: wallpaperType === "animatedWallpaper"
+        }));
     };
 
-    const AnimatedWallpaper = () => {
-        return (
-            <div className="w-full h-full bg-cover bg-center">
-                {/* Add your animated wallpaper content, such as canvas or video */}
-                <canvas id="animated-canvas" className="w-full h-full"></canvas>
-            </div>
-        );
-    };
+    // Static Wallpaper Component
+    const StaticWallpaper = () => (
+        <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: 'url(/path-to-your-image.jpg)' }}></div>
+    );
 
     //------------------------------------------------------------------------------------------------------------------------------
 
@@ -287,9 +283,13 @@ export default function Desktop() {
 
     return (
         <div className="w-full h-screen relative desktop-body" onContextMenu={(e) => handleContextMenu(e, "")}>
-            {/* Render the wallpaper */}
+            {/* Render the selected wallpaper */}
             <div className="absolute w-full h-full">
-                {wallpaper} {/* Dynamically show wallpaper based on the selected option */}
+                {wallpaperType === "animated" ? (
+                    <AnimatedWallpaper />
+                ) : (
+                    <StaticWallpaper />
+                )}
             </div>
             {/* Windows */}
             {openWindows.map((windowTitle) => {
@@ -496,14 +496,16 @@ export default function Desktop() {
                             <div className="more-options absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
                                 {/* Check if the wallpaper is animated */}
                                 {contextMenu.isAnimatedWallpaper ? (
-                                    <button className="p-2 text-white hover:bg-gray-700"
-                                            onClick={() => handleWallpaperChange("animatedWallpaper")}>
-                                        Set Animated Wallpaper
+                                    <button
+                                        className="p-2 text-white hover:bg-gray-700"
+                                        onClick={() => handleWallpaperChange("staticWallpaper")}>
+                                        Set Static Wallpaper
                                     </button>
                                 ) : (
-                                    <button className="p-2 text-white hover:bg-gray-700"
-                                            onClick={() => handleWallpaperChange("staticWallpaper")}>
-                                        Set Static Wallpaper
+                                    <button
+                                        className="p-2 text-white hover:bg-gray-700"
+                                        onClick={() => handleWallpaperChange("animatedWallpaper")}>
+                                        Set Animated Wallpaper
                                     </button>
                                 )}
 
