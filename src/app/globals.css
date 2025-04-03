@@ -86,19 +86,6 @@ body {
 }
 
 /* Start Menu */
-.start-menu {
-  position: absolute;
-  bottom: 3.5rem;
-  left: 300%;
-  transform: translateX(-50%);
-  width: 20rem;
-  background-color: rgba(32, 32, 32, 0.9); /* Semi-transparent */
-  padding: 1rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
 
 /* Header Section */
 .start-menu-header {
@@ -246,7 +233,7 @@ body {
 .start-menu {
   position: absolute;
   bottom: 3.5rem;
-  left: 50%;
+  left: 300%;
   transform: translateX(-50%);
   width: 20rem;
   background-color: rgba(32, 32, 32, 0.9);
@@ -254,7 +241,7 @@ body {
   border-radius: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all 1s ease-in-out;
 }
 
 /* Header Section */
