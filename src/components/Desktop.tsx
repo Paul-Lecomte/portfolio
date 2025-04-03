@@ -92,7 +92,10 @@ export default function Desktop() {
 
     // Static Wallpaper Component
     const StaticWallpaper = () => (
-        <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: 'url(/path-to-your-image.jpg)' }}></div>
+        <div className="w-full h-full bg-cover bg-center">
+            <img src="/background/10462.svg" alt="Static Wallpaper"
+                 className="w-full h-full object-cover"/>
+        </div>
     );
 
     //------------------------------------------------------------------------------------------------------------------------------
