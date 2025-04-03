@@ -75,10 +75,31 @@ export default function Desktop() {
     const [creatingFile, setCreatingFile] = useState<"file" | "folder" | null>(null);
     const fileExtensions = [".txt", ".md", ".json", ".js", ".html", ".css", ".mp4", ".jpg", ".png"];
     const [selectedExtension, setSelectedExtension] = useState(fileExtensions[0]);
-
-
     const contextMenuRef = useRef(contextMenu);
     const menuRef = useRef<HTMLDivElement | null>(null);
+    const [wallpaper, setWallpaper] = useState<JSX.Element | null>(null);
+
+    //------------------------------------------------------------------------------------------------------------------------------
+    // WALLPAPER LOGIC
+
+    const handleWallpaperChange = (wallpaperType) => {
+        if (wallpaperType === "animatedWallpaper") {
+            // Set the wallpaper to an animated wallpaper
+        } else if (wallpaperType === "staticWallpaper") {
+            // Set the wallpaper to a static image
+        }
+    };
+
+    const AnimatedWallpaper = () => {
+        return (
+            <div className="w-full h-full bg-cover bg-center">
+                {/* Add your animated wallpaper content, such as canvas or video */}
+                <canvas id="animated-canvas" className="w-full h-full"></canvas>
+            </div>
+        );
+    };
+
+    //------------------------------------------------------------------------------------------------------------------------------
 
     // Clear local storage on page reload
     useEffect(() => {
@@ -266,6 +287,10 @@ export default function Desktop() {
 
     return (
         <div className="w-full h-screen relative desktop-body" onContextMenu={(e) => handleContextMenu(e, "")}>
+            {/* Render the wallpaper */}
+            <div className="absolute w-full h-full">
+                {wallpaper} {/* Dynamically show wallpaper based on the selected option */}
+            </div>
             {/* Windows */}
             {openWindows.map((windowTitle) => {
                 const file = userFiles.find((f) => f.title === windowTitle);
@@ -274,7 +299,7 @@ export default function Desktop() {
                         {file && file.title.endsWith(".md") && (
                             <FileEditor file={file} onClose={() => closeWindow(windowTitle)} onSave={saveFileContent}/>
                         )}
-                        {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow} />}
+                        {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow}/>}
                         {windowTitle === "Terminal" && <Terminal/>}
                         {/* Add new apps */}
                         {windowTitle === "Notepad" && <Notepad file={file} onClose={() => closeWindow(windowTitle)}/>}
@@ -305,7 +330,9 @@ export default function Desktop() {
                         <div className="start-menu">
                             <div className="start-menu-header">
                                 <p className="text-white text-lg font-semibold">Start</p>
-                                <button onClick={() => setStartMenuOpen(false)} className="text-gray-400 hover:text-white">✖️</button>
+                                <button onClick={() => setStartMenuOpen(false)}
+                                        className="text-gray-400 hover:text-white">✖️
+                                </button>
                             </div>
 
                             {/* Pinned Apps */}
@@ -320,7 +347,7 @@ export default function Desktop() {
 
                             {/* Search Bar */}
                             <div className="search-bar">
-                                🔍 <input type="text" placeholder="Type here to search" className="search-input" />
+                                🔍 <input type="text" placeholder="Type here to search" className="search-input"/>
                             </div>
 
                             {/* User Profile Section (Optional) */}
@@ -385,7 +412,7 @@ export default function Desktop() {
 
                 {/* System Tray */}
                 <div className="system-tray">
-                    <SystemTray />
+                    <SystemTray/>
                 </div>
             </div>
 
@@ -399,7 +426,7 @@ export default function Desktop() {
                     <DesktopIcon
                         key={icon.id}
                         icon={icon}
-                        position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
+                        position={{top: 50 + row * spacing, left: 50 + col * spacing}}
                         openWindow={openWindow}
                         onContextMenu={handleContextMenu}
                     />
@@ -467,9 +494,20 @@ export default function Desktop() {
                         {/* Additional Options */}
                         {contextMenu.showMoreOptions && (
                             <div className="more-options absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
-                                <button className="p-2 text-white hover:bg-gray-700" onClick={() => handleWallpaperChange("animatedWallpaper")}>
-                                    Set Animated Wallpaper
-                                </button>
+                                {/* Check if the wallpaper is animated */}
+                                {contextMenu.isAnimatedWallpaper ? (
+                                    <button className="p-2 text-white hover:bg-gray-700"
+                                            onClick={() => handleWallpaperChange("animatedWallpaper")}>
+                                        Set Animated Wallpaper
+                                    </button>
+                                ) : (
+                                    <button className="p-2 text-white hover:bg-gray-700"
+                                            onClick={() => handleWallpaperChange("staticWallpaper")}>
+                                        Set Static Wallpaper
+                                    </button>
+                                )}
+
+                                {/* Other options */}
                                 <button className="p-2 text-white hover:bg-gray-700">Option 2</button>
                                 <button className="p-2 text-white hover:bg-gray-700">Option 3</button>
                             </div>
