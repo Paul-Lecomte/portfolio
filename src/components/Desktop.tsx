@@ -14,6 +14,7 @@ import WebBrowser from "@/components/WebBrowser";
 import CodeEditor from "@/components/CodeEditor";
 import Paint from "@/components/Paint";
 import SystemTray from './SystemTray';
+import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 
 // Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
@@ -465,8 +466,10 @@ export default function Desktop() {
 
                         {/* Additional Options */}
                         {contextMenu.showMoreOptions && (
-                            <div className="more-options absolute left-0 top-full mt-2 p-2 bg-gray-800 rounded-lg">
-                                <button className="p-2 text-white hover:bg-gray-700">Option 1</button>
+                            <div className="more-options absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
+                                <button className="p-2 text-white hover:bg-gray-700" onClick={() => handleWallpaperChange("animatedWallpaper")}>
+                                    Set Animated Wallpaper
+                                </button>
                                 <button className="p-2 text-white hover:bg-gray-700">Option 2</button>
                                 <button className="p-2 text-white hover:bg-gray-700">Option 3</button>
                             </div>
