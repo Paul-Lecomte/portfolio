@@ -15,6 +15,7 @@ import CodeEditor from "@/components/CodeEditor";
 import Paint from "@/components/Paint";
 import SystemTray from './SystemTray';
 import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
+import BlobWallpaper from "@/components/wallpaper/BlobWallpaper";
 
 // Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
