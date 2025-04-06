@@ -290,7 +290,13 @@ export default function Desktop() {
         <div className="w-full h-screen relative desktop-body" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Render the selected wallpaper */}
             <div className="absolute w-full h-full">
-                {wallpaperType === "animated" ? <AnimatedWallpaper/> : <StaticWallpaper/>}
+                {wallpaperType === "animated" ? (
+                    <AnimatedWallpaper/>
+                ) : wallpaperType === "blob" ? (
+                    <BlobWallpaper/>
+                ) : (
+                    <StaticWallpaper/>
+                )}
             </div>
             {/* Windows */}
             {openWindows.map((windowTitle) => {
