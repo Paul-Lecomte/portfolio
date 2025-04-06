@@ -20,7 +20,8 @@
     "react-draggable": "^4.4.6",
     "react-konva": "^19.0.3",
     "react-p5": "^1.4.1",
-    "react-simplemde-editor": "^5.2.0"
+    "react-simplemde-editor": "^5.2.0",
+    "three": "^0.175.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
