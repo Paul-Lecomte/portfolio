@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-const ParticleEffect = () => {
+const SublimeWallpaper: React.FC = () => {
     const canvasRef = useRef<HTMLDivElement>(null); // Reference to the canvas container
 
     useEffect(() => {
@@ -14,79 +14,114 @@ const ParticleEffect = () => {
 
         // Set up the scene
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 
         // Set up the renderer size
         renderer.setSize(window.innerWidth, window.innerHeight);
-        canvasRef.current.appendChild(renderer.domElement); // Make sure we add the renderer to the DOM
 
-        // Array to store particles
-        const particles = [];
-        const particleCount = 300; // You can adjust the number of particles
+        // Create stars
+        const starCount = 10000;
+        const starsGeometry = new THREE.BufferGeometry();
+        const starsPositions = new Float32Array(starCount * 3);
+        const starsColors = new Float32Array(starCount * 3);
 
-        // Create the particle system
-        const createParticle = (x: number, y: number, color: THREE.Color) => {
-            const geometry = new THREE.CircleGeometry(5, 16); // Using circles as particles
-            const material = new THREE.MeshBasicMaterial({ color, opacity: 0.5, transparent: true });
-            const particle = new THREE.Mesh(geometry, material);
+        // Create stars in a spherical distribution
+        for (let i = 0; i < starCount; i++) {
+            const theta = Math.random() * Math.PI * 2;  // Random angle in the horizontal plane
+            const phi = Math.random() * Math.PI;  // Random angle in the vertical plane
 
-            particle.position.set(x, y, Math.random() * 500 - 250); // Add some depth
-            particles.push(particle);
-            scene.add(particle);
+            // Convert spherical coordinates to cartesian coordinates
+            const radius = Math.random() * 5000 + 1000;  // Random radius between 1000 and 6000
+            starsPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+            starsPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+            starsPositions[i * 3 + 2] = radius * Math.cos(phi);
 
-            particle.userData = {
-                velocity: new THREE.Vector3(Math.random() * 0.5 - 0.25, Math.random() * 0.5 - 0.25, Math.random() * 0.5 - 0.25),
-            };
-        };
-
-        // Create a field of particles
-        for (let i = 0; i < particleCount; i++) {
-            const x = Math.random() * window.innerWidth - window.innerWidth / 2;
-            const y = Math.random() * window.innerHeight - window.innerHeight / 2;
+            // Assign random color to each star
             const color = new THREE.Color(Math.random(), Math.random(), Math.random());
-            createParticle(x, y, color);
+            starsColors[i * 3] = color.r;
+            starsColors[i * 3 + 1] = color.g;
+            starsColors[i * 3 + 2] = color.b;
         }
 
-        // Setup camera
-        camera.position.z = 500;
+        // Add the stars to the scene
+        starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
+        starsGeometry.setAttribute('color', new THREE.BufferAttribute(starsColors, 3));
 
-        // Handle mouse interaction
-        const mouse = new THREE.Vector2(0, 0);
+        const starsMaterial = new THREE.PointsMaterial({
+            size: 2,  // Size of the stars
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+        });
 
-        const onMouseMove = (event: MouseEvent) => {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        const stars = new THREE.Points(starsGeometry, starsMaterial);
+        scene.add(stars);
+
+        // Create the Black Hole
+        const blackHoleGeometry = new THREE.SphereGeometry(50, 32, 32);
+        const blackHoleMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const blackHole = new THREE.Mesh(blackHoleGeometry, blackHoleMaterial);
+        scene.add(blackHole);
+
+        // Create Supernova effect (bright expanding star)
+        const supernovaGeometry = new THREE.SphereGeometry(100, 32, 32);
+        const supernovaMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffff00,  // Supernova bright yellow
+            emissive: 0xffff00,
+            emissiveIntensity: 1.5,
+        });
+        const supernova = new THREE.Mesh(supernovaGeometry, supernovaMaterial);
+        supernova.position.set(2000, 2000, 2000);
+        scene.add(supernova);
+
+        // Create planets orbiting the black hole
+        const planetTexture = new THREE.TextureLoader().load('https://www.solarsystemscope.com/textures/download/earthmap1k.jpg'); // Earth texture
+
+        const createPlanet = (radius: number, orbitSpeed: number, size: number, color: number) => {
+            const geometry = new THREE.SphereGeometry(size, 32, 32);
+            const material = new THREE.MeshStandardMaterial({ color: color, map: planetTexture });
+            const planet = new THREE.Mesh(geometry, material);
+            planet.position.set(radius, 0, 0);  // Set initial position on the orbit
+
+            // Animate orbit
+            let angle = Math.random() * Math.PI * 2;
+            planet.userData = { angle: angle, orbitSpeed: orbitSpeed };
+
+            return planet;
         };
 
-        window.addEventListener('mousemove', onMouseMove, false);
+        const planets = [
+            createPlanet(200, 0.005, 20, 0x00ff00),  // Green planet
+            createPlanet(400, 0.003, 30, 0x0000ff),  // Blue planet
+            createPlanet(600, 0.002, 40, 0xff0000),  // Red planet
+        ];
 
-        // Update particles every frame
+        planets.forEach(planet => scene.add(planet));
+
+        // Set up camera position
+        camera.position.z = 1500; // Camera stays in the center of the scene
+
+        // Animation loop
         const animate = () => {
             requestAnimationFrame(animate);
 
-            particles.forEach((particle) => {
-                particle.position.x += particle.userData.velocity.x;
-                particle.position.y += particle.userData.velocity.y;
-                particle.position.z += particle.userData.velocity.z;
+            // Rotate the entire starry system
+            stars.rotation.x += 0.0005;
+            stars.rotation.y += 0.001;
+            stars.rotation.z += 0.0002;
 
-                // Collision with window borders
-                if (Math.abs(particle.position.x) > window.innerWidth / 2) particle.userData.velocity.x *= -1;
-                if (Math.abs(particle.position.y) > window.innerHeight / 2) particle.userData.velocity.y *= -1;
-
-                // Add simple attraction to mouse position
-                const dx = mouse.x * window.innerWidth / 2 - particle.position.x;
-                const dy = mouse.y * window.innerHeight / 2 - particle.position.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const force = 0.1 / distance;
-
-                particle.userData.velocity.x += force * dx;
-                particle.userData.velocity.y += force * dy;
+            // Rotate planets around the black hole
+            planets.forEach(planet => {
+                planet.userData.angle += planet.userData.orbitSpeed;
+                planet.position.x = Math.cos(planet.userData.angle) * planet.position.length();
+                planet.position.z = Math.sin(planet.userData.angle) * planet.position.length();
             });
 
-            // Update the camera position
-            camera.position.x += (mouse.x * 100 - camera.position.x) * 0.05;
-            camera.position.y += (-mouse.y * 100 - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
+            // Animate the supernova (it expands and fades over time)
+            supernova.scale.set(1.5 + Math.sin(Date.now() * 0.001) * 0.5, 1.5 + Math.sin(Date.now() * 0.001) * 0.5, 1.5 + Math.sin(Date.now() * 0.001) * 0.5);
+
+            // Gravitational lensing effect for the black hole (distorting stars around it)
+            stars.geometry.attributes.position.needsUpdate = true;
 
             // Render the scene
             renderer.render(scene, camera);
@@ -126,4 +161,4 @@ const ParticleEffect = () => {
     );
 };
 
-export default ParticleEffect;
+export default SublimeWallpaper;
