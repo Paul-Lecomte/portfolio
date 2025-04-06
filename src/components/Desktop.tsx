@@ -87,7 +87,7 @@ export default function Desktop() {
         setWallpaperType(type);
         setContextMenu((prevState: any) => ({
             ...prevState,
-            isAnimatedWallpaper: type === "animated"
+            isAnimatedWallpaper: type === "animated",
         }));
     };
 
@@ -494,24 +494,19 @@ export default function Desktop() {
                         {/* Additional Options */}
                         {contextMenu.showMoreOptions && (
                             <div className="more-options absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
-                                {/* Check if the wallpaper is animated */}
-                                {contextMenu.isAnimatedWallpaper ? (
-                                    <button
-                                        className="p-2 text-white hover:bg-gray-700"
-                                        onClick={() => handleWallpaperChange("static")}
-                                    >
-                                        Set Static Wallpaper
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="p-2 text-white hover:bg-gray-700"
-                                        onClick={() => handleWallpaperChange("animated")}
-                                    >
-                                        Set Animated Wallpaper
-                                    </button>
-                                )}
-
-                                {/* Other options */}
+                                <button
+                                    className="p-2 text-white hover:bg-gray-700"
+                                    onClick={() => handleWallpaperChange("static")}
+                                >
+                                    Default
+                                </button>
+                                <button
+                                    className="p-2 text-white hover:bg-gray-700"
+                                    onClick={() => handleWallpaperChange("animated")}
+                                >
+                                    Simple
+                                </button>
+                                {/* Add more options for other wallpaper types here */}
                                 <button className="p-2 text-white hover:bg-gray-700">Option 2</button>
                                 <button className="p-2 text-white hover:bg-gray-700">Option 3</button>
                             </div>
