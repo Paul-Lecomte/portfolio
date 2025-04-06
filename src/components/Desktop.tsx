@@ -500,7 +500,7 @@ export default function Desktop() {
 
                         {/* Additional Options */}
                         {contextMenu.showMoreOptions && (
-                            <div className="more-options absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
+                            <div className="more-options flex flex-col absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
                                 <button
                                     className="p-2 text-white hover:bg-gray-700"
                                     onClick={() => handleWallpaperChange("static")}
@@ -513,9 +513,12 @@ export default function Desktop() {
                                 >
                                     Simple
                                 </button>
-                                {/* Add more options for other wallpaper types here */}
-                                <button className="p-2 text-white hover:bg-gray-700">Option 2</button>
-                                <button className="p-2 text-white hover:bg-gray-700">Option 3</button>
+                                <button
+                                    className="p-2 text-white hover:bg-gray-700"
+                                    onClick={() => handleWallpaperChange("blob")}
+                                >
+                                    Blob
+                                </button>
                             </div>
                         )}
                     </div>
