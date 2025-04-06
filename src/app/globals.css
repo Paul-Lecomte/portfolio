@@ -579,7 +579,9 @@ body {
 }
 
 .menu-item:hover .more-options {
-  display: block;
+  display: flex;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
 .more-options button:hover {
