@@ -16,6 +16,7 @@ import Paint from "@/components/Paint";
 import SystemTray from './SystemTray';
 import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import BlobWallpaper from "@/components/wallpaper/BlobWallpaper";
+import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
 
 // Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
@@ -291,11 +292,13 @@ export default function Desktop() {
             {/* Render the selected wallpaper */}
             <div className="absolute w-full h-full">
                 {wallpaperType === "animated" ? (
-                    <AnimatedWallpaper/>
+                    <AnimatedWallpaper />
                 ) : wallpaperType === "blob" ? (
-                    <BlobWallpaper/>
+                    <BlobWallpaper />
+                ) : wallpaperType === "cluster" ? (
+                    <ClusterWallpaper />
                 ) : (
-                    <StaticWallpaper/>
+                    <StaticWallpaper />
                 )}
             </div>
             {/* Windows */}
@@ -500,7 +503,8 @@ export default function Desktop() {
 
                         {/* Additional Options */}
                         {contextMenu.showMoreOptions && (
-                            <div className="more-options flex flex-col absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
+                            <div
+                                className="more-options flex flex-col absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
                                 <button
                                     className="p-2 text-white hover:bg-gray-700"
                                     onClick={() => handleWallpaperChange("static")}
@@ -518,6 +522,12 @@ export default function Desktop() {
                                     onClick={() => handleWallpaperChange("blob")}
                                 >
                                     Blob
+                                </button>
+                                <button
+                                    className="flex items-center rounded-lg hover:bg-gray-700 hover:text-white"
+                                    onClick={() => setWallpaperType("cluster")}
+                                >
+                                    Cluster
                                 </button>
                             </div>
                         )}
