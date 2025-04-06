@@ -20,28 +20,59 @@ const ClusterWallpaper = () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
         canvasRef.current.appendChild(renderer.domElement); // Make sure we add the renderer to the DOM
 
-        // Create a simple cluster of particles
+        // Array to store all objects (spheres, cubes, etc.)
+        const objects = [];
         const particleCount = 500;
-        const particles = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const velocities = new Float32Array(particleCount * 3);
 
+        // Function to create a random shape
+        const createRandomShape = () => {
+            const geometryType = Math.random() > 0.5 ? 'sphere' : 'cube'; // Randomly choose between a sphere and a cube
+            const color = new THREE.Color(Math.random(), Math.random(), Math.random()); // Random color
+
+            let geometry;
+            let size = Math.random() * 10 + 5;
+
+            if (geometryType === 'sphere') {
+                geometry = new THREE.SphereGeometry(size, 16, 16);
+            } else {
+                geometry = new THREE.BoxGeometry(size, size, size);
+            }
+
+            const material = new THREE.MeshBasicMaterial({
+                color: color,
+                wireframe: Math.random() > 0.5, // Random wireframe or solid
+            });
+
+            const shape = new THREE.Mesh(geometry, material);
+
+            shape.position.set(
+                Math.random() * 1000 - 500, // Random x position
+                Math.random() * 1000 - 500, // Random y position
+                Math.random() * 1000 - 500  // Random z position
+            );
+
+            // Random speed and direction
+            shape.userData = {
+                velocity: new THREE.Vector3(
+                    Math.random() * 2 - 1,
+                    Math.random() * 2 - 1,
+                    Math.random() * 2 - 1
+                ),
+                rotationSpeed: new THREE.Vector3(
+                    Math.random() * 0.05,
+                    Math.random() * 0.05,
+                    Math.random() * 0.05
+                ),
+            };
+
+            objects.push(shape);
+            scene.add(shape);
+        };
+
+        // Create multiple random shapes
         for (let i = 0; i < particleCount; i++) {
-            positions[i * 3] = Math.random() * 2000 - 1000;
-            positions[i * 3 + 1] = Math.random() * 2000 - 1000;
-            positions[i * 3 + 2] = Math.random() * 2000 - 1000;
-
-            velocities[i * 3] = Math.random() * 2 - 1;
-            velocities[i * 3 + 1] = Math.random() * 2 - 1;
-            velocities[i * 3 + 2] = Math.random() * 2 - 1;
+            createRandomShape();
         }
-
-        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-        const material = new THREE.PointsMaterial({ color: 0x00ff00, size: 1 });
-        const particleSystem = new THREE.Points(particles, material);
-
-        scene.add(particleSystem);
 
         // Set up camera position
         camera.position.z = 500;
@@ -50,18 +81,20 @@ const ClusterWallpaper = () => {
         const animate = () => {
             requestAnimationFrame(animate);
 
-            // Update particle positions based on velocities
-            const positions = particleSystem.geometry.attributes.position.array;
-            for (let i = 0; i < particleCount; i++) {
-                positions[i * 3] += velocities[i * 3];
-                positions[i * 3 + 1] += velocities[i * 3 + 1];
-                positions[i * 3 + 2] += velocities[i * 3 + 2];
-            }
+            // Update positions and rotations of the shapes
+            objects.forEach((obj) => {
+                obj.position.add(obj.userData.velocity); // Update position based on velocity
 
-            particleSystem.geometry.attributes.position.needsUpdate = true;
+                // Bounce the shapes off the walls
+                if (Math.abs(obj.position.x) > 500) obj.userData.velocity.x *= -1;
+                if (Math.abs(obj.position.y) > 500) obj.userData.velocity.y *= -1;
+                if (Math.abs(obj.position.z) > 500) obj.userData.velocity.z *= -1;
 
-            particleSystem.rotation.x += 0.001;
-            particleSystem.rotation.y += 0.001;
+                // Update rotations
+                obj.rotation.x += obj.userData.rotationSpeed.x;
+                obj.rotation.y += obj.userData.rotationSpeed.y;
+                obj.rotation.z += obj.userData.rotationSpeed.z;
+            });
 
             // Render the scene
             renderer.render(scene, camera);
