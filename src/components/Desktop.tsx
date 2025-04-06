@@ -297,6 +297,8 @@ export default function Desktop() {
                     <AnimatedWallpaper />
                 ) : wallpaperType === "blob" ? (
                     <BlobWallpaper />
+                ) : wallpaperType === "particle" ? (
+                    <ParticleEffect />
                 ) : wallpaperType === "cluster" ? (
                     <ClusterWallpaper />
                 ) : (
@@ -524,6 +526,12 @@ export default function Desktop() {
                                     onClick={() => handleWallpaperChange("blob")}
                                 >
                                     Blob
+                                </button>
+                                <button
+                                    className="p-2 text-white hover:bg-gray-700"
+                                    onClick={() => handleWallpaperChange("particle")}
+                                >
+                                    Particle
                                 </button>
                                 <button
                                     className="flex items-center rounded-lg hover:bg-gray-700 hover:text-white"
