@@ -17,6 +17,7 @@ import SystemTray from './SystemTray';
 import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import BlobWallpaper from "@/components/wallpaper/BlobWallpaper";
 import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
+import ParticleEffect from "@/components/wallpaper/ParticlesWallpaper";
 
 
 // Default icons for the start menu (without showing on the desktop)
