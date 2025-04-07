@@ -1,6 +1,7 @@
 # Portfolio 2025
 
 This repository contains my personal portfolio, showcasing projects and skills in web development, particularly in React, Next.js, and UI/UX design. The portfolio is built to highlight my current projects, tools, and experiences, and is intended to be a dynamic showcase of my work for 2025 and beyond.
+
 ## ✨ Key Features
 
 - **Interactive Desktop UI:** Explore my portfolio through a dynamic, desktop-like interface that mimics Windows 11.
@@ -51,6 +52,7 @@ Here’s a brief overview of the project structure:
 /public                    # Static assets (images, icons, fonts)
   ├── /icons                # App icons
   ├── /assets               # Background images and other static files
+  ├── /models               # files for the star ship
 /src
   ├── /app                  # Main Next.js app folder
   ├── /components           # Reusable UI components (Buttons, Taskbar, etc.)
