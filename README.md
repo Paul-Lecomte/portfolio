@@ -52,6 +52,7 @@ Here’s a brief overview of the project structure:
 /public                     # Static assets (images, icons, fonts)
   ├── /icons                # App icons
   ├── /assets               # Background images and other static files
+  ├── /background           # file for the default background
   ├── /models               # files for the star ship
   ├── /textures             # textures for planets
 /src
