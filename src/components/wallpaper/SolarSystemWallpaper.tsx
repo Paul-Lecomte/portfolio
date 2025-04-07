@@ -35,6 +35,7 @@ const SublimeWallpaper = () => {
 
         // Planets
         const planetsData = [
+            { name: "Sun", texture: "2k_sun.jpg", size: 150, distance: 0, speed: 0 }, // Sun at the center
             { name: "Mercury", texture: "2k_mercury.jpg", size: 25, distance: 400, speed: 0.01 },
             { name: "Venus", texture: "2k_venus_surface.jpg", size: 40, distance: 600, speed: 0.008 },
             { name: "Earth", texture: "2k_earth_daymap.jpg", size: 50, distance: 800, speed: 0.006 },
@@ -43,6 +44,9 @@ const SublimeWallpaper = () => {
             { name: "Saturn", texture: "2k_saturn.jpg", size: 95, distance: 1700, speed: 0.0025 },
             { name: "Uranus", texture: "2k_uranus.jpg", size: 70, distance: 2000, speed: 0.002 },
             { name: "Neptune", texture: "2k_neptune.jpg", size: 70, distance: 2300, speed: 0.0018 },
+            { name: "Pluto", texture: "2k_pluto.jpg", size: 20, distance: 2700, speed: 0.001 },
+            { name: "Ceres", texture: "2k_ceres.jpg", size: 15, distance: 1200, speed: 0.004 },
+            { name: "Moon", texture: "2k_moon.jpg", size: 12, distance: 150, speed: 0.02, orbiting: "Earth" },
         ];
 
         const planets: THREE.Mesh[] = [];
@@ -81,6 +85,49 @@ const SublimeWallpaper = () => {
 
         setInterval(createBlackHole, 20000); // every 20s
 
+        // ☄️ Comets with glowing tails
+        const comets: { core: THREE.Mesh; trail: THREE.Points; velocity: THREE.Vector3 }[] = [];
+
+        const createComet = () => {
+            const cometCore = new THREE.Mesh(
+                new THREE.SphereGeometry(10, 16, 16),
+                new THREE.MeshBasicMaterial({ color: 0xffffff })
+            );
+            cometCore.position.set(-3000, Math.random() * 2000 - 1000, -3000);
+
+            const trailGeometry = new THREE.BufferGeometry();
+            const trailLength = 100;
+            const trailPositions = new Float32Array(trailLength * 3);
+            for (let i = 0; i < trailLength; i++) {
+                trailPositions[i * 3 + 0] = cometCore.position.x;
+                trailPositions[i * 3 + 1] = cometCore.position.y;
+                trailPositions[i * 3 + 2] = cometCore.position.z;
+            }
+            trailGeometry.setAttribute("position", new THREE.BufferAttribute(trailPositions, 3));
+            const trailMaterial = new THREE.PointsMaterial({
+                size: 4,
+                color: 0x88ccff,
+                transparent: true,
+                opacity: 0.6,
+            });
+            const trail = new THREE.Points(trailGeometry, trailMaterial);
+
+            const velocity = new THREE.Vector3(10 + Math.random() * 5, 0, 10 + Math.random() * 5);
+
+            scene.add(cometCore);
+            scene.add(trail);
+
+            comets.push({ core: cometCore, trail, velocity });
+
+            setTimeout(() => {
+                scene.remove(cometCore);
+                scene.remove(trail);
+                comets.splice(0, 1);
+            }, 10000); // lasts 10s
+        };
+
+        setInterval(createComet, 15000); // create a comet every 15s
+
         // ☄️ Meteorites
         const meteors: THREE.Mesh[] = [];
 
@@ -100,10 +147,10 @@ const SublimeWallpaper = () => {
             setTimeout(() => {
                 scene.remove(meteor);
                 meteors.splice(meteors.indexOf(meteor), 1);
-            }, 7000);
+            }, 7000); // lasts 7s
         };
 
-        setInterval(createMeteor, 1000); // every 10s
+        setInterval(createMeteor, 1000); // create meteor every 1s
 
         // 💡 Random Light Flashes
         const flashLight = new THREE.PointLight(0xffccaa, 1, 800);
@@ -120,7 +167,7 @@ const SublimeWallpaper = () => {
             setTimeout(() => {
                 flashLight.intensity = 0;
             }, 500);
-        }, 7000);
+        }, 7000); // every 7s
 
         // Animation loop
         const animate = () => {
@@ -136,6 +183,19 @@ const SublimeWallpaper = () => {
 
             meteors.forEach((meteor) => {
                 meteor.position.add(meteor.userData.velocity);
+            });
+
+            comets.forEach(({ core, trail, velocity }) => {
+                core.position.add(velocity);
+
+                const positions = trail.geometry.attributes.position.array as Float32Array;
+                for (let i = positions.length - 3; i >= 3; i--) {
+                    positions[i] = positions[i - 3];
+                }
+                positions[0] = core.position.x;
+                positions[1] = core.position.y;
+                positions[2] = core.position.z;
+                trail.geometry.attributes.position.needsUpdate = true;
             });
 
             backgroundSphere.rotation.y += 0.0001;
