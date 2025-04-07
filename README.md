@@ -49,10 +49,11 @@ To get started with this project locally, follow the steps below:
 Here’s a brief overview of the project structure:
 
 ```
-/public                    # Static assets (images, icons, fonts)
+/public                     # Static assets (images, icons, fonts)
   ├── /icons                # App icons
   ├── /assets               # Background images and other static files
   ├── /models               # files for the star ship
+  ├── /textures             # textures for planets
 /src
   ├── /app                  # Main Next.js app folder
   ├── /components           # Reusable UI components (Buttons, Taskbar, etc.)
