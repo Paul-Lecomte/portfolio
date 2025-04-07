@@ -17,9 +17,12 @@ const SublimeWallpaper = () => {
         camera.position.z = 2000;
 
         // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2);
         scene.add(ambientLight);
-        const sunLight = new THREE.PointLight(0xffffff, 1.5, 0);
+
+        // Sun's Point Light (strong light outside the texture)
+        const sunLight = new THREE.PointLight(0xffffff, 200, 0, 2);
+        sunLight.position.set(0, 0, 0); // Sun at the center
         scene.add(sunLight);
 
         // Background
@@ -54,7 +57,7 @@ const SublimeWallpaper = () => {
         planetsData.forEach((data) => {
             const tex = textureLoader.load(`/textures/${data.texture}`);
             const geometry = new THREE.SphereGeometry(data.size, 32, 32);
-            const material = new THREE.MeshStandardMaterial({ map: tex });
+            const material = new THREE.MeshStandardMaterial({ map: tex, emissive: data.name === "Sun" ? 0xffcc00 : 0x000000, emissiveIntensity: data.name === "Sun" ? 1 : 0 });
             const planet = new THREE.Mesh(geometry, material);
             planet.userData = { angle: Math.random() * Math.PI * 2, speed: data.speed, radius: data.distance };
             planet.position.x = data.distance;
