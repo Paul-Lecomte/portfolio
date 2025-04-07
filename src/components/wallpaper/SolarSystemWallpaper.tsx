@@ -49,7 +49,7 @@ const SublimeWallpaper = () => {
             { name: "Neptune", texture: "2k_neptune.jpg", size: 70, distance: 2300, speed: 0.0018 },
             { name: "Pluto", texture: "2k_pluto.jpg", size: 20, distance: 2700, speed: 0.001 },
             { name: "Ceres", texture: "2k_ceres.jpg", size: 15, distance: 1200, speed: 0.004 },
-            { name: "Moon", texture: "2k_moon.jpg", size: 12, distance: 150, speed: 0.02, orbiting: "Earth" },
+            { name: "Moon", texture: "2k_moon.jpg", size: 12, distance: 100, speed: 0.02, orbiting: "Earth" },
         ];
 
         const planets: THREE.Mesh[] = [];
