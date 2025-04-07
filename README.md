@@ -1,7 +1,6 @@
 # Portfolio 2025
 
-Welcome to my 2025 personal portfolio, where I've reimagined the traditional portfolio layout into a Windows 11-inspired desktop environment. This project showcases my skills as a developer while offering a unique, interactive, and immersive experience. Built with **Next.js**, **TypeScript**, and **Tailwind CSS**, the app mimics a desktop UI complete with resizable windows, a taskbar, a file explorer, and a dynamic system for navigating through different pages and projects.
-
+This repository contains my personal portfolio, showcasing projects and skills in web development, particularly in React, Next.js, and UI/UX design. The portfolio is built to highlight my current projects, tools, and experiences, and is intended to be a dynamic showcase of my work for 2025 and beyond.
 ## ✨ Key Features
 
 - **Interactive Desktop UI:** Explore my portfolio through a dynamic, desktop-like interface that mimics Windows 11.
