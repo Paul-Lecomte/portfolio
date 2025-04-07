@@ -18,6 +18,7 @@ import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import BlobWallpaper from "@/components/wallpaper/BlobWallpaper";
 import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
 import ParticleEffect from "@/components/wallpaper/ParticlesWallpaper";
+import SublimeWallpaper from "@/components/wallpaper/SolarSystemWallpaper";
 
 
 // Default icons for the start menu (without showing on the desktop)
@@ -297,6 +298,8 @@ export default function Desktop() {
                     <AnimatedWallpaper />
                 ) : wallpaperType === "blob" ? (
                     <BlobWallpaper />
+                ) : wallpaperType === "solar" ? (
+                    <SublimeWallpaper />
                 ) : wallpaperType === "particle" ? (
                     <ParticleEffect />
                 ) : wallpaperType === "cluster" ? (
@@ -520,6 +523,12 @@ export default function Desktop() {
                                     onClick={() => handleWallpaperChange("animated")}
                                 >
                                     Simple
+                                </button>
+                                <button
+                                    className="p-2 text-white hover:bg-gray-700"
+                                    onClick={() => handleWallpaperChange("solar")}
+                                >
+                                    Solar system
                                 </button>
                                 <button
                                     className="p-2 text-white hover:bg-gray-700"
