@@ -58,8 +58,7 @@ Here’s a brief overview of the project structure:
 /src
   ├── /app                  # Main Next.js app folder
   ├── /components           # Reusable UI components (Buttons, Taskbar, etc.)
-  ├── /store                # Zustand state management
-  ├── /styles               # Tailwind CSS and global styles
+      ├── /wallpaper        # file for all the wallpapers
   ├── /utils                # Helper functions and utilities
 ```
 
