@@ -14,7 +14,8 @@ const SublimeWallpaper = () => {
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 20000);
-        camera.position.z = 2000;
+        camera.position.set(0, 1500, 2500);
+        camera.lookAt(0, 0, 0); // Look toward the center of the scene
 
         // Lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 2);
