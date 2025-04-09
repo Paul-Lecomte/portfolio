@@ -296,9 +296,7 @@ export default function Desktop() {
             <div className="absolute w-full h-full">
                 {wallpaperType === "animated" ? (
                     <AnimatedWallpaper />
-                ) : wallpaperType === "blob" ? (
-                    <BlobWallpaper />
-                ) : wallpaperType === "solar" ? (
+                ) : wallpaperType === "solar system" ? (
                     <SublimeWallpaper />
                 ) : wallpaperType === "particle" ? (
                     <ParticleEffect />
@@ -510,7 +508,7 @@ export default function Desktop() {
 
                             {contextMenu.showMoreOptions && (
                                 <div className="absolute left-full top-0 ml-1 bg-white/10 border border-white/20 rounded-xl shadow-xl backdrop-blur-xl z-50 w-48 p-2">
-                                    {["Default", "Simple", "Solar system", "Blob", "Particle", "Cluster"].map((label) => (
+                                    {["Default", "Solar system", "Particle", "Cluster"].map((label) => (
                                         <button
                                             key={label}
                                             className="text-white text-sm w-full text-left px-3 py-2 hover:bg-white/20 rounded-md transition"
@@ -529,31 +527,40 @@ export default function Desktop() {
 
             {/* Modal for creating new file/folder */}
             {creatingFile && (
-                <div
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-5 rounded-lg shadow-xl z-2"
-                >
-                    <h2 className="text-white text-lg mb-3">Enter name for the {creatingFile}</h2>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                    bg-white/10 backdrop-blur-xl border border-white/20
+                    p-6 rounded-2xl shadow-2xl z-50 w-80 animate-fade-in">
+                    <h2 className="text-white text-lg font-semibold mb-4">
+                        Enter name for the {creatingFile}
+                    </h2>
+
                     <input
                         type="text"
                         value={newFileName}
                         onChange={handleCreateFileNameChange}
-                        className="w-full p-2 bg-gray-700 text-white rounded-md"
+                        className="w-full px-3 py-2 mb-3 bg-white/10 border border-white/20
+                       text-white rounded-lg placeholder-white/50
+                       focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter file name"
                     />
+
                     <select
                         value={selectedExtension}
                         onChange={(e) => setSelectedExtension(e.target.value)}
-                        className="w-full p-2 mt-2 bg-gray-700 text-white rounded-md"
+                        className="w-full px-3 py-2 mb-4 bg-white/10 border border-white/20
+                       text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         {fileExtensions.map((ext) => (
-                            <option key={ext} value={ext}>
+                            <option key={ext} value={ext} className="text-black">
                                 {ext}
                             </option>
                         ))}
                     </select>
+
                     <button
                         onClick={handleCreateFile}
-                        className="mt-3 w-full bg-green-500 p-2 rounded-md text-white"
+                        className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white
+                       rounded-lg font-medium transition"
                     >
                         Create
                     </button>
