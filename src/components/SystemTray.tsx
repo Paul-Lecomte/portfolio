@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaVolumeUp, FaVolumeMute, FaWifi, FaBatteryFull, FaBatteryEmpty, FaRegClock, FaCalendarAlt } from 'react-icons/fa';
 
 const SystemTray = () => {
     const [volume, setVolume] = useState(50);
@@ -51,28 +52,28 @@ const SystemTray = () => {
             {/* Network Status */}
             <div className="relative">
                 <span
-                    className={`text-xl ${networkStatus === "online" ? "text-green-500" : "text-red-500"}`}
                     onClick={toggleNetworkPopup}
+                    className={'cursor-pointer p-3 rounded-full bg-opacity-20 hover:bg-opacity-30 transition-all'}
                 >
-                    {networkStatus === "online" ? "📶" : "🚫"}
+                    {networkStatus === "online" ? <FaWifi size={24} /> : <FaWifi size={24} />}
                 </span>
                 {showNetworkPopup && (
-                    <div className="popup">
+                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
                         <p>Status: {networkStatus}</p>
-                        <button onClick={() => alert('Network settings clicked')}>Network Settings</button>
+                        <button onClick={() => alert('Network settings clicked')} className="text-blue-500 hover:underline">Network Settings</button>
                     </div>
                 )}
             </div>
 
             {/* Volume Control */}
             <div className="relative">
-                <button onClick={toggleVolumePopup} className="cursor-pointer">
-                    {muted ? "🔇" : "🔊"}
+                <button onClick={toggleVolumePopup} className="cursor-pointer p-3 rounded-full bg-opacity-20 hover:bg-opacity-30 transition-all">
+                    {muted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
                 </button>
                 {showVolumePopup && (
-                    <div className="popup">
+                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
                         <p>Volume: {volume}%</p>
-                        <button onClick={toggleMute} className="block mb-2">
+                        <button onClick={toggleMute} className="block mb-2 text-blue-500 hover:underline">
                             {muted ? "Unmute" : "Mute"}
                         </button>
                         <input
@@ -90,26 +91,26 @@ const SystemTray = () => {
 
             {/* Battery Status */}
             <div className="relative">
-                <span className="text-xl" onClick={toggleBatteryPopup}>
-                    {batteryLevel >= 20 ? "⚡" : "🔋"} {batteryLevel}%
+                <span onClick={toggleBatteryPopup} className="cursor-pointer p-3 rounded-full bg-opacity-20 hover:bg-opacity-30 transition-all">
+                    {batteryLevel >= 20 ? <FaBatteryFull size={24} /> : <FaBatteryEmpty size={24} />}
                 </span>
                 {showBatteryPopup && (
-                    <div className="popup">
+                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
                         <p>Battery: {batteryLevel}%</p>
-                        <button onClick={() => alert('Battery settings clicked')}>Battery Settings</button>
+                        <button onClick={() => alert('Battery settings clicked')} className="text-blue-500 hover:underline">Battery Settings</button>
                     </div>
                 )}
             </div>
 
             {/* Toggle Time/Date */}
             <div className="relative">
-                <span onClick={toggleTimePopup} className="cursor-pointer text-lg hover:text-gray-400">
-                    {showDate ? new Date().toLocaleDateString() : time}
+                <span onClick={toggleTimePopup} className="cursor-pointer text-lg p-3 rounded-full bg-opacity-20 hover:bg-opacity-30 transition-all">
+                    {showDate ? <FaCalendarAlt size={24} /> : <FaRegClock size={24} />}
                 </span>
                 {showTimePopup && (
-                    <div className="popup">
+                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
                         <p>{showDate ? new Date().toLocaleDateString() : time}</p>
-                        <button onClick={toggleTimeDate}>Toggle Date/Time</button>
+                        <button onClick={toggleTimeDate} className="text-blue-500 hover:underline">Toggle Date/Time</button>
                     </div>
                 )}
             </div>
