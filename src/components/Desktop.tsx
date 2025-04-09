@@ -450,106 +450,78 @@ export default function Desktop() {
                 );
             })}
 
-            {/* context menu */}
+            {/* Context menu */}
             {contextMenu.visible && (
                 <div
                     ref={menuRef}
-                    className="absolute p-4 rounded-lg shadow-lg grid gap-4 main-menu z-40"
+                    className="absolute z-50 rounded-xl border border-white/20 bg-white/10 backdrop-blur-xl shadow-xl transition-opacity animate-fade-in"
                     style={{
                         top: contextMenu.y,
                         left: contextMenu.x,
-                        backgroundColor: "rgba(0, 0, 0, 0.5)",  // Acrylic/Mica Effect
-                        backdropFilter: "blur(10px)",  // Blur effect
-                        minWidth: "200px",
+                        minWidth: "220px",
                     }}
                 >
-                    {/* Open Button */}
-                    <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
-                        onClick={handleShowCreateModal}>
-                        <img src="/contextmenu/create.png" alt="" className="h-6 w-6"/>
-                        <span>Create a file</span>
-                    </button>
-
-                    {/* Rename Button */}
-                    <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
-                        onClick={() => renameFile(contextMenu.iconTitle!)}
-                    >
-                        <img src="/contextmenu/edit.png" alt="" className="h-6 w-6"/>
-                        <span>Rename</span>
-                    </button>
-
-                    {/* Upload File Button */}
-                    <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white"
-                        onClick={handleFileUpload}
-                    >
-                        <img src="/contextmenu/upload.png" alt="" className="h-6 w-6"/>
-                        <span>Upload File</span>
-                    </button>
-
-                    {/* Delete Button */}
-                    <button
-                        className="context-menu-item flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 hover:text-white text-red-500"
-                        onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
-                    >
-                        <img src="/contextmenu/delete.png" alt="" className="h-6 w-6"/>
-                        <span>Delete</span>
-                    </button>
-
-                    {/* More Options Button */}
-                    <div className="menu-item relative">
+                    <div className="flex flex-col py-2">
+                        {/* Menu Item */}
                         <button
-                            className="flex items-center rounded-lg hover:bg-gray-700 hover:text-white"
-                            onClick={toggleMoreOptions}
+                            className="flex items-center gap-3 px-4 py-2 text-sm text-white hover:bg-white/20 transition rounded-md"
+                            onClick={handleShowCreateModal}
                         >
-                            <img src="/contextmenu/more.png" alt="" className="h-6 w-6"/>
-                            <span>More</span>
+                            <img src="/contextmenu/create.png" alt="" className="h-5 w-5" />
+                            Create a file
                         </button>
 
-                        {/* Additional Options */}
-                        {contextMenu.showMoreOptions && (
-                            <div
-                                className="more-options flex flex-col absolute left-0 top-full p-2 bg-gray-800 rounded-lg">
-                                <button
-                                    className="p-2 text-white hover:bg-gray-700"
-                                    onClick={() => handleWallpaperChange("static")}
-                                >
-                                    Default
-                                </button>
-                                <button
-                                    className="p-2 text-white hover:bg-gray-700"
-                                    onClick={() => handleWallpaperChange("animated")}
-                                >
-                                    Simple
-                                </button>
-                                <button
-                                    className="p-2 text-white hover:bg-gray-700"
-                                    onClick={() => handleWallpaperChange("solar")}
-                                >
-                                    Solar system
-                                </button>
-                                <button
-                                    className="p-2 text-white hover:bg-gray-700"
-                                    onClick={() => handleWallpaperChange("blob")}
-                                >
-                                    Blob
-                                </button>
-                                <button
-                                    className="p-2 text-white hover:bg-gray-700"
-                                    onClick={() => handleWallpaperChange("particle")}
-                                >
-                                    Particle
-                                </button>
-                                <button
-                                    className="flex items-center rounded-lg hover:bg-gray-700 hover:text-white"
-                                    onClick={() => setWallpaperType("cluster")}
-                                >
-                                    Cluster
-                                </button>
-                            </div>
-                        )}
+                        <button
+                            className="flex items-center gap-3 px-4 py-2 text-sm text-white hover:bg-white/20 transition rounded-md"
+                            onClick={() => renameFile(contextMenu.iconTitle!)}
+                        >
+                            <img src="/contextmenu/edit.png" alt="" className="h-5 w-5" />
+                            Rename
+                        </button>
+
+                        <button
+                            className="flex items-center gap-3 px-4 py-2 text-sm text-white hover:bg-white/20 transition rounded-md"
+                            onClick={handleFileUpload}
+                        >
+                            <img src="/contextmenu/upload.png" alt="" className="h-5 w-5" />
+                            Upload File
+                        </button>
+
+                        <button
+                            className="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-white/20 transition rounded-md"
+                            onClick={() => contextMenu.iconTitle && deleteFile(contextMenu.iconTitle!)}
+                        >
+                            <img src="/contextmenu/delete.png" alt="" className="h-5 w-5" />
+                            Delete
+                        </button>
+
+                        {/* Divider */}
+                        <div className="h-px bg-white/10 my-2"></div>
+
+                        {/* More options */}
+                        <div className="relative">
+                            <button
+                                className="flex items-center gap-3 px-4 py-2 text-sm text-white hover:bg-white/20 transition rounded-md w-full"
+                                onClick={toggleMoreOptions}
+                            >
+                                <img src="/contextmenu/more.png" alt="" className="h-5 w-5" />
+                                More
+                            </button>
+
+                            {contextMenu.showMoreOptions && (
+                                <div className="absolute left-full top-0 ml-1 bg-white/10 border border-white/20 rounded-xl shadow-xl backdrop-blur-xl z-50 w-48 p-2">
+                                    {["Default", "Simple", "Solar system", "Blob", "Particle", "Cluster"].map((label) => (
+                                        <button
+                                            key={label}
+                                            className="text-white text-sm w-full text-left px-3 py-2 hover:bg-white/20 rounded-md transition"
+                                            onClick={() => handleWallpaperChange(label.toLowerCase())}
+                                        >
+                                            {label}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
