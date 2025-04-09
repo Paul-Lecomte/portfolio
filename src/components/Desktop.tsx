@@ -350,7 +350,10 @@ export default function Desktop() {
             })}
 
             {/* Taskbar */}
-            <div className="taskbar">
+            <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[100%] h-14
+                            bg-white/10 backdrop-blur-md border border-white/20
+                             shadow-xl flex items-center justify-between
+                             px-4 z-50">
                 {/* Start Button */}
                 <div className="relative">
                     <button
