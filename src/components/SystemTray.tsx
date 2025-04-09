@@ -12,9 +12,13 @@ const SystemTray = () => {
     const [showNetworkPopup, setShowNetworkPopup] = useState(false);
     const [showBatteryPopup, setShowBatteryPopup] = useState(false);
     const [showTimePopup, setShowTimePopup] = useState(false);
-    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+    const [windowHeight, setWindowHeight] = useState<number>(0);
 
     useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setWindowHeight(window.innerHeight); // Safely access window in useEffect
+        }
+
         const timeInterval = setInterval(() => {
             setTime(new Date().toLocaleTimeString());
         }, 1000);
