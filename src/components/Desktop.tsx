@@ -17,7 +17,7 @@ import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
 import ParticleEffect from "@/components/wallpaper/ParticlesWallpaper";
 import SublimeWallpaper from "@/components/wallpaper/SolarSystemWallpaper";
-import { FaFileAlt, FaLaptop, FaRegFileImage, FaVideo, FaChrome, FaMarkdown, FaCode, FaPaintBrush, FaWindows, FaTimes } from 'react-icons/fa';
+import { FaFileAlt, FaLaptop, FaRegFileImage, FaVideo, FaChrome, FaMarkdown, FaCode, FaPaintBrush, FaWindows, FaTimes, FaSearch } from 'react-icons/fa';
 
 
 // Default icons for the start menu (without showing on the desktop)
@@ -396,7 +396,7 @@ export default function Desktop() {
 
                             {/* Search Bar */}
                             <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl">
-                                <span className="text-white/50 text-lg">🔍</span>
+                                <FaSearch size={24} className="text-white" />
                                 <input
                                     type="text"
                                     placeholder="Type here to search"
