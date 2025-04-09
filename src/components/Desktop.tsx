@@ -17,7 +17,7 @@ import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
 import ParticleEffect from "@/components/wallpaper/ParticlesWallpaper";
 import SublimeWallpaper from "@/components/wallpaper/SolarSystemWallpaper";
-import { FaFileAlt, FaLaptop, FaRegFileImage, FaVideo, FaChrome, FaMarkdown, FaCode, FaPaintBrush } from 'react-icons/fa';
+import { FaFileAlt, FaLaptop, FaRegFileImage, FaVideo, FaChrome, FaMarkdown, FaCode, FaPaintBrush, FaWindows, FaTimes } from 'react-icons/fa';
 
 
 // Default icons for the start menu (without showing on the desktop)
@@ -361,7 +361,7 @@ export default function Desktop() {
                                    rounded-xl flex items-center justify-center
                                    hover:bg-white/20 transition"
                     >
-                        🏁
+                        <FaWindows size={24} className="text-white" />
                     </button>
 
                     {/* Start Menu */}
@@ -375,7 +375,7 @@ export default function Desktop() {
                                     onClick={() => setStartMenuOpen(false)}
                                     className="text-white/50 hover:text-white text-xl"
                                 >
-                                    ✖️
+                                    <FaTimes size={24} className="text-white" />
                                 </button>
                             </div>
 
