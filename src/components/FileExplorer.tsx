@@ -96,7 +96,7 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
                 <div className="text-xs font-mono text-white/60 mb-3 px-1">{currentPath}</div>
 
                 {/* File Grid */}
-                <div className="grid grid-cols-6 gap-4 overflow-auto flex-1 pb-4">
+                <div className="grid grid-cols-6 gap-4 overflow-auto pb-4">
                     {filteredFiles.length > 0 ? (
                         filteredFiles.map((file) => (
                             <div
