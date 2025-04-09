@@ -104,6 +104,21 @@ export default function Desktop() {
         </div>
     );
 
+    const getTaskbarIcon = (title: string) => {
+        const icons: Record<string, JSX.Element> = {
+            "File Explorer": <>📁</>,
+            "Terminal": <>💻</>,
+            "Notepad": <>📝</>,
+            "Image Viewer": <>🖼️</>,
+            "Media Player": <>🎥</>,
+            "Web Browser": <>🌐</>,
+            "Markdown Editor": <>📄</>,
+            "Code Editor": <>🖥️</>,
+            "Paint": <>🎨</>,
+        };
+        return icons[title] || <>💻</>;
+    };
+
     //------------------------------------------------------------------------------------------------------------------------------
 
     // Clear local storage on page reload
@@ -336,92 +351,78 @@ export default function Desktop() {
 
             {/* Taskbar */}
             <div className="taskbar">
-                {/* Start Menu Button */}
+                {/* Start Button */}
                 <div className="relative">
-                    <button onClick={() => setStartMenuOpen(!startMenuOpen)} className="start-button">
+                    <button
+                        onClick={() => setStartMenuOpen(!startMenuOpen)}
+                        className="w-10 h-10 bg-white/10 border border-white/20
+                                   rounded-xl flex items-center justify-center
+                                   hover:bg-white/20 transition"
+                    >
                         🏁
                     </button>
+
+                    {/* Start Menu */}
                     {startMenuOpen && (
-                        <div className="start-menu">
-                            <div className="start-menu-header">
-                                <p className="text-white text-lg font-semibold">Start</p>
-                                <button onClick={() => setStartMenuOpen(false)}
-                                        className="text-gray-400 hover:text-white">✖️
+                        <div className="absolute bottom-16 left-0 w-[480px] bg-white/10 backdrop-blur-xl
+                                        rounded-2xl border border-white/20 shadow-2xl p-6 z-50 animate-fade-in">
+                            {/* Header */}
+                            <div className="flex justify-between items-center mb-4">
+                                <p className="text-white text-xl font-semibold">Start</p>
+                                <button
+                                    onClick={() => setStartMenuOpen(false)}
+                                    className="text-white/50 hover:text-white text-xl"
+                                >
+                                    ✖️
                                 </button>
                             </div>
 
                             {/* Pinned Apps */}
-                            <div className="pinned-apps">
-                                {defaultIcons.map((icon) => (
-                                    <button key={icon.id} className="pinned-app" onClick={() => openWindow(icon.title)}>
-                                        {icon.icon}
-                                        <span className="app-title">{icon.title}</span>
+                            <div className="grid grid-cols-6 gap-4 mb-4">
+                                {defaultIcons.map((icon: any) => (
+                                    <button
+                                        key={icon.id}
+                                        className="flex flex-col items-center text-white/80 hover:text-white
+                                                   bg-white/5 hover:bg-white/10 p-2 rounded-xl transition"
+                                        onClick={() => openWindow(icon.title)}
+                                    >
+                                        <div className="text-2xl">{icon.icon}</div>
+                                        <span className="text-xs mt-1 text-center">{icon.title}</span>
                                     </button>
                                 ))}
                             </div>
 
                             {/* Search Bar */}
-                            <div className="search-bar">
-                                🔍 <input type="text" placeholder="Type here to search" className="search-input"/>
+                            <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl">
+                                <span className="text-white/50 text-lg">🔍</span>
+                                <input
+                                    type="text"
+                                    placeholder="Type here to search"
+                                    className="flex-1 bg-transparent outline-none text-white placeholder-white/50"
+                                />
                             </div>
 
-                            {/* User Profile Section (Optional) */}
-                            <div className="user-profile">
-                                <img src="/user.png" alt="User Avatar" className="user-avatar"/>
-                                <span className="user-name">Admin</span>
+                            {/* User Profile */}
+                            <div className="mt-4 flex items-center gap-3">
+                                <img src="/user.png" alt="User Avatar" className="h-8 w-8 rounded-full" />
+                                <span className="text-white font-medium">Admin</span>
                             </div>
                         </div>
                     )}
                 </div>
 
-                {/* Taskbar Icons */}
-                <div className="taskbar-icons">
-                    {openWindows.map((windowTitle) => (
-                        <div
+                {/* Centered Taskbar Icons */}
+                <div className="flex gap-4 items-center">
+                    {openWindows.map((windowTitle: string) => (
+                        <button
                             key={windowTitle}
-                            className="taskbar-icon"
                             onClick={() => openWindow(windowTitle)}
+                            className="flex items-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20
+                                       text-white rounded-xl transition text-sm"
                         >
-                            {windowTitle === "File Explorer" && (
-                                <>📁 {windowTitle}</>
-                            )}
-                            {windowTitle === "Terminal" && (
-                                <>💻 {windowTitle}</>
-                            )}
-                            {windowTitle === "Notepad" && (
-                                <>📝 {windowTitle}</>
-                            )}
-                            {windowTitle === "Image Viewer" && (
-                                <>🖼️ {windowTitle}</>
-                            )}
-                            {windowTitle === "Media Player" && (
-                                <>🎥 {windowTitle}</>
-                            )}
-                            {windowTitle === "Web Browser" && (
-                                <>🌐 {windowTitle}</>
-                            )}
-                            {windowTitle === "Markdown Editor" && (
-                                <>📄 {windowTitle}</>
-                            )}
-                            {windowTitle === "Code Editor" && (
-                                <>🖥️ {windowTitle}</>
-                            )}
-                            {windowTitle === "Paint" && (
-                                <>🎨 {windowTitle}</>
-                            )}
-                            {/* Default case */}
-                            {windowTitle !== "File Explorer" &&
-                                windowTitle !== "Terminal" &&
-                                windowTitle !== "Notepad" &&
-                                windowTitle !== "Image Viewer" &&
-                                windowTitle !== "Media Player" &&
-                                windowTitle !== "Web Browser" &&
-                                windowTitle !== "Markdown Editor" &&
-                                windowTitle !== "Code Editor" &&
-                                windowTitle !== "Paint" && (
-                                    <>💻 {windowTitle}</>
-                                )}
-                        </div>
+                            {getTaskbarIcon(windowTitle)}
+                            <span className="hidden md:inline">{windowTitle}</span>
+                        </button>
                     ))}
                 </div>
 
