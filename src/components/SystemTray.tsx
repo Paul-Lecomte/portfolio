@@ -12,6 +12,7 @@ const SystemTray = () => {
     const [showNetworkPopup, setShowNetworkPopup] = useState(false);
     const [showBatteryPopup, setShowBatteryPopup] = useState(false);
     const [showTimePopup, setShowTimePopup] = useState(false);
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
     useEffect(() => {
         const timeInterval = setInterval(() => {
@@ -24,6 +25,11 @@ const SystemTray = () => {
         window.addEventListener("online", handleNetworkChange);
         window.addEventListener("offline", handleNetworkChange);
 
+        const handleResize = () => {
+            setWindowHeight(window.innerHeight);
+        };
+        window.addEventListener("resize", handleResize);
+
         if (typeof navigator !== 'undefined' && navigator.getBattery) {
             const updateBatteryStatus = async () => {
                 const battery = await navigator.getBattery();
@@ -35,6 +41,7 @@ const SystemTray = () => {
         return () => {
             window.removeEventListener("online", handleNetworkChange);
             window.removeEventListener("offline", handleNetworkChange);
+            window.removeEventListener("resize", handleResize);
             clearInterval(timeInterval);
         };
     }, []);
@@ -47,18 +54,25 @@ const SystemTray = () => {
     const toggleBatteryPopup = () => setShowBatteryPopup(!showBatteryPopup);
     const toggleTimePopup = () => setShowTimePopup(!showTimePopup);
 
+    const popupPosition = (bottom = false) => {
+        if (bottom) {
+            return windowHeight < 500 ? 'bottom-24' : 'bottom-16'; // Adjust this value for better fitting
+        }
+        return 'top-16'; // Adjust top positioning if needed
+    };
+
     return (
         <div className="flex items-center space-x-6 text-white">
             {/* Network Status */}
             <div className="relative">
                 <span
                     onClick={toggleNetworkPopup}
-                    className={'cursor-pointer p-3 rounded-full bg-opacity-20 hover:bg-opacity-30 transition-all'}
+                    className="cursor-pointer p-3 rounded-full bg-opacity-20 hover:bg-opacity-30 transition-all"
                 >
                     {networkStatus === "online" ? <FaWifi size={24} /> : <FaWifi size={24} />}
                 </span>
                 {showNetworkPopup && (
-                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
+                    <div className={`absolute ${popupPosition(true)} left-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
                         <p>Status: {networkStatus}</p>
                         <button onClick={() => alert('Network settings clicked')} className="text-blue-500 hover:underline">Network Settings</button>
                     </div>
@@ -71,7 +85,7 @@ const SystemTray = () => {
                     {muted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
                 </button>
                 {showVolumePopup && (
-                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
+                    <div className={`absolute ${popupPosition(true)} left-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
                         <p>Volume: {volume}%</p>
                         <button onClick={toggleMute} className="block mb-2 text-blue-500 hover:underline">
                             {muted ? "Unmute" : "Mute"}
@@ -95,7 +109,7 @@ const SystemTray = () => {
                     {batteryLevel >= 20 ? <FaBatteryFull size={24} /> : <FaBatteryEmpty size={24} />}
                 </span>
                 {showBatteryPopup && (
-                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
+                    <div className={`absolute ${popupPosition(true)} right-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
                         <p>Battery: {batteryLevel}%</p>
                         <button onClick={() => alert('Battery settings clicked')} className="text-blue-500 hover:underline">Battery Settings</button>
                     </div>
@@ -108,7 +122,7 @@ const SystemTray = () => {
                     {showDate ? <FaCalendarAlt size={24} /> : <FaRegClock size={24} />}
                 </span>
                 {showTimePopup && (
-                    <div className="popup absolute bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white">
+                    <div className={`absolute ${popupPosition(true)} right-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
                         <p>{showDate ? new Date().toLocaleDateString() : time}</p>
                         <button onClick={toggleTimeDate} className="text-blue-500 hover:underline">Toggle Date/Time</button>
                     </div>
