@@ -17,19 +17,20 @@ import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
 import ParticleEffect from "@/components/wallpaper/ParticlesWallpaper";
 import SublimeWallpaper from "@/components/wallpaper/SolarSystemWallpaper";
+import { FaFileAlt, FaLaptop, FaRegFileImage, FaVideo, FaChrome, FaMarkdown, FaCode, FaPaintBrush } from 'react-icons/fa';
 
 
 // Default icons for the start menu (without showing on the desktop)
 const defaultIcons = [
-    { id: 1, title: "File Explorer", icon: "📁" },
-    { id: 2, title: "Terminal", icon: "💻" },
-    { id: 3, title: "Notepad", icon: "📝" },
-    { id: 4, title: "Image Viewer", icon: "🖼️" },
-    { id: 5, title: "Media Player", icon: "🎥" },
-    { id: 6, title: "Web Browser", icon: "🌐" },
-    { id: 7, title: "Markdown Editor", icon: "📄" },
-    { id: 8, title: "Code Editor", icon: "🖥️" },
-    { id: 9, title: "Paint", icon: "🎨" },
+    { id: 1, title: "File Explorer", icon: <FaFileAlt size={24} /> },
+    { id: 2, title: "Terminal", icon: <FaLaptop size={24} /> },
+    { id: 3, title: "Notepad", icon: <FaRegFileImage size={24} /> },
+    { id: 4, title: "Image Viewer", icon: <FaRegFileImage size={24} /> },
+    { id: 5, title: "Media Player", icon: <FaVideo size={24} /> },
+    { id: 6, title: "Web Browser", icon: <FaChrome size={24} /> },
+    { id: 7, title: "Markdown Editor", icon: <FaMarkdown size={24} /> },
+    { id: 8, title: "Code Editor", icon: <FaCode size={24} /> },
+    { id: 9, title: "Paint", icon: <FaPaintBrush size={24} /> },
 ];
 
 const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
@@ -104,17 +105,17 @@ export default function Desktop() {
 
     const getTaskbarIcon = (title: string) => {
         const icons: Record<string, JSX.Element> = {
-            "File Explorer": <>📁</>,
-            "Terminal": <>💻</>,
-            "Notepad": <>📝</>,
-            "Image Viewer": <>🖼️</>,
-            "Media Player": <>🎥</>,
-            "Web Browser": <>🌐</>,
-            "Markdown Editor": <>📄</>,
-            "Code Editor": <>🖥️</>,
-            "Paint": <>🎨</>,
+            "File Explorer": <FaFileAlt size={24} />,
+            "Terminal": <FaLaptop size={24} />,
+            "Notepad": <FaRegFileImage size={24} />,
+            "Image Viewer": <FaRegFileImage size={24} />,
+            "Media Player": <FaVideo size={24} />,
+            "Web Browser": <FaChrome size={24} />,
+            "Markdown Editor": <FaMarkdown size={24} />,
+            "Code Editor": <FaCode size={24} />,
+            "Paint": <FaPaintBrush size={24} />,
         };
-        return icons[title] || <>💻</>;
+        return icons[title] || <FaLaptop size={24} />;
     };
 
     //------------------------------------------------------------------------------------------------------------------------------
