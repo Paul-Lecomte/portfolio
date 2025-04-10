@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchFiles } from "../../utils/filesystem";
-import {
-    AiFillFolder, AiFillFile, AiOutlineDesktop, AiOutlineDownload, AiOutlineHome
-} from "react-icons/ai";
+import { AiFillFolder, AiFillFile, AiOutlineDesktop, AiOutlineDownload, AiOutlineHome } from "react-icons/ai";
 import { IoMdArrowBack } from "react-icons/io";
 
 type File = {
@@ -10,10 +8,11 @@ type File = {
     type: "file" | "folder";
     path: string;
     url: string;
+    app?: string;
 };
 
 interface FileExplorerProps {
-    onOpenFile: (fileName: string, filePath: string, fileUrl: string) => void;
+    onOpenFile: (fileName: string, filePath: string, fileUrl: string, app?: string) => void; // Include app in the callback
 }
 
 export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
@@ -37,7 +36,7 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
 
     const handleFileClick = (file: File) => {
         if (file.type === "file") {
-            onOpenFile(file.name, file.path, file.url);
+            onOpenFile(file.name, file.path, file.url, file.app);
         }
     };
 
