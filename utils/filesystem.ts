@@ -38,8 +38,13 @@ const mockFilesystem: Record<string, FileItem[]> = {
             url: `${baseUrl}/C/Users/admin/Pictures/image2.png`,
         },
     ],
+    "/C/Users/admin/Desktop": [
+        { name: "projects", type: "folder", path: "/C/Users/admin/Desktop/projects" },
+    ],
+    "/C/Users/admin/Desktop/projects": [
+        { name: "stocker", type: "file", path: "/C/Users/admin/Desktop/projects/stocker.html" },
+    ],
     "/C/Users/admin/Downloads": [],
-    "/C/Users/admin/Desktop": [],
     "/C/Program Files": [],
     "/C/Windows": [],
     "/C/System32": [],
