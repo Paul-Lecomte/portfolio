@@ -84,7 +84,6 @@ export default function Desktop() {
     const [wallpaperType, setWallpaperType] = useState<string>("static");
 
     //------------------------------------------------------------------------------------------------------------------------------
-    // WALLPAPER LOGIC
 
     // Change wallpaper based on type
     const handleWallpaperChange = (type: string) => {
@@ -167,27 +166,47 @@ export default function Desktop() {
         }
     };
 
-    const openWindow = (fileName: string) => {
+    const openWindow = (fileName: string, filePath: string, app: string | null = null) => {
+        console.log("Opening file:", fileName, "at path:", filePath, "with app:", app);
+
         const file = userFiles.find((f) => f.title === fileName);
 
+        if (app) {
+            console.log("Opening with specific app:", app);
+            setOpenWindows((prev) => (prev.includes(app) ? prev : [...prev, app]));
+            return;
+        }
+
+        // If no app is provided, fallback to default behavior based on file type
         if (file) {
+            console.log("File found:", file);
             if (file.title.endsWith(".txt")) {
+                console.log("Opening text file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Notepad") ? prev : [...prev, "Notepad"]));
             } else if (file.title.match(/\.(mp4|mkv|avi|mov)$/)) {
+                console.log("Opening video file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Media Player") ? prev : [...prev, "Media Player"]));
             } else if (file.title.match(/\.(jpg|jpeg|png|gif)$/)) {
+                console.log("Opening image file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Image Viewer") ? prev : [...prev, "Image Viewer"]));
             } else if (file.title.endsWith(".md")) {
+                console.log("Opening markdown file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Markdown Editor") ? prev : [...prev, "Markdown Editor"]));
             } else if (file.title.match(/\.(js|jsx|ts|tsx|py|html|css|json)$/)) {
-                setOpenWindows((prev) => (prev.includes("Code Editor") ? prev : [...prev, "Code Editor"]));
+                console.log("Opening code file:", filePath); // Log the file path
+                if (file.title.endsWith(".html")) {
+                    setOpenWindows((prev) => (prev.includes("Web Browser") ? prev : [...prev, "Web Browser"]));
+                } else {
+                    setOpenWindows((prev) => (prev.includes("Code Editor") ? prev : [...prev, "Code Editor"]));
+                }
             } else if (file.title.startsWith("http")) {
+                console.log("Opening URL:", filePath); // Log the URL being opened
                 setOpenWindows((prev) => (prev.includes("Web Browser") ? prev : [...prev, "Web Browser"]));
             } else {
-                // Open with a universal file viewer if no specific app is found
-                setOpenWindows((prev) => (prev.includes("UniversalFileViewer") ? prev : [...prev, "UniversalFileViewer"]));
+                console.log("No specific app found for the file:", file);
             }
         } else {
+            console.log("File not found:", fileName);
             setOpenWindows((prev) => (prev.includes(fileName) ? prev : [...prev, fileName]));
         }
     };
