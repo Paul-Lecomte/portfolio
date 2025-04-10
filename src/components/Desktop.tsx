@@ -169,20 +169,43 @@ export default function Desktop() {
     const openWindow = (fileName: string, fileUrl: string, app: string | null = null) => {
         console.log("Opening file:", fileName, "with url:", fileUrl, "and app:", app);
 
-        const file = userFiles.find((f) => f.title === fileName);
-
+        // If an app is provided, open with that app and fetch the content
         if (app) {
             console.log("Opening with specific app:", app);
-            setOpenWindows((prev) => (prev.includes(app) ? prev : [...prev, app]));
+
+            // Fetch the content of the file if needed
+            if (fileUrl) {
+                fetch(fileUrl)
+                    .then((response) => response.text()) // Fetch the file content as text
+                    .then((content) => {
+                        console.log("File content:", content); // Log the file content
+                        // Optionally, pass the content to the app to open it (e.g., Notepad, etc.)
+                        setOpenWindows((prev) => (prev.includes(app) ? prev : [...prev, app]));
+                    })
+                    .catch((error) => console.error("Error fetching file:", error));
+            } else {
+                setOpenWindows((prev) => (prev.includes(app) ? prev : [...prev, app]));
+            }
+
             return;
         }
 
         // If no app is provided, fallback to default behavior based on file type
+        const file = userFiles.find((f) => f.title === fileName);
         if (file) {
             console.log("File found:", file);
+            // Handle .txt files by fetching and displaying content
             if (file.title.endsWith(".txt")) {
-                setOpenWindows((prev) => (prev.includes("Notepad") ? prev : [...prev, "Notepad"]));
-            } else if (file.title.match(/\.(mp4|mkv|avi|mov)$/)) {
+                fetch(fileUrl)
+                    .then((response) => response.text()) // Fetch the file content as text
+                    .then((content) => {
+                        console.log("File content:", content); // Log the file content
+                        setOpenWindows((prev) => (prev.includes("Notepad") ? prev : [...prev, "Notepad"]));
+                    })
+                    .catch((error) => console.error("Error fetching file:", error));
+            }
+            // Handle other file types
+            else if (file.title.match(/\.(mp4|mkv|avi|mov)$/)) {
                 setOpenWindows((prev) => (prev.includes("Media Player") ? prev : [...prev, "Media Player"]));
             } else if (file.title.match(/\.(jpg|jpeg|png|gif)$/)) {
                 setOpenWindows((prev) => (prev.includes("Image Viewer") ? prev : [...prev, "Image Viewer"]));
