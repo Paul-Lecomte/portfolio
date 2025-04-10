@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () => void }) => {
     const [url, setUrl] = useState(initialUrl || "https://example.com");
@@ -19,6 +19,13 @@ const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () =
     const handleIframeError = () => {
         setIsBlocked(true);
     };
+
+    useEffect(() => {
+        // If the URL points to an HTML file, ensure the iframe is ready to load it.
+        if (url && !url.startsWith("http") && !url.endsWith(".html")) {
+            setIsBlocked(true);
+        }
+    }, [url]);
 
     return (
         <div className="w-full h-full bg-gray-900 text-white rounded-lg flex flex-col overflow-hidden">
