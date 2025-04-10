@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const SublimeWallpaper = () => {
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -36,6 +37,24 @@ const SublimeWallpaper = () => {
         });
         const backgroundSphere = new THREE.Mesh(bgGeometry, bgMaterial);
         scene.add(backgroundSphere);
+
+        // Load GLTF Model
+        const loader = new GLTFLoader();
+        console.log("GLTFLoader initialized:", loader);
+
+        loader.load(
+            '/models/scene.gltf',
+            (gltf) => {
+                console.log('GLTF model loaded:', gltf);
+                scene.add(gltf.scene);
+            },
+            (progress) => {
+                console.log('Loading progress:', progress);
+            },
+            (error) => {
+                console.error('Error loading GLTF model:', error);
+            }
+        );
 
         // Planets
         const planetsData = [
