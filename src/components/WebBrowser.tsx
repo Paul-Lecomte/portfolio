@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () => void }) => {
     const [url, setUrl] = useState(initialUrl || "https://example.com");
     const [input, setInput] = useState(initialUrl || "https://example.com");
+    const [isBlocked, setIsBlocked] = useState(false);
 
     const navigate = () => {
         if (!input.trim()) return;
@@ -12,6 +13,11 @@ const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () =
             formatted = "https://" + formatted;
         }
         setUrl(formatted);
+        setIsBlocked(false); // Reset block status on new navigation
+    };
+
+    const handleIframeError = () => {
+        setIsBlocked(true);
     };
 
     return (
@@ -40,14 +46,27 @@ const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () =
                 </button>
             </div>
 
-            {/* Iframe */}
-            {url ? (
+            {/* Iframe / Fallback */}
+            {url && !isBlocked ? (
                 <iframe
                     src={url}
                     title="Web Browser"
                     className="flex-1 w-full bg-white"
                     sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+                    onError={handleIframeError}
                 />
+            ) : isBlocked ? (
+                <div className="flex-1 flex flex-col items-center justify-center text-center p-4 gap-4">
+                    <p className="text-gray-300 text-lg">
+                        This site has blocked embedding in iframes.
+                    </p>
+                    <button
+                        onClick={() => window.open(url, "_blank")}
+                        className="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded text-white"
+                    >
+                        Open in New Tab
+                    </button>
+                </div>
             ) : (
                 <div className="flex-1 flex items-center justify-center text-gray-400">
                     No URL loaded.
