@@ -166,8 +166,8 @@ export default function Desktop() {
         }
     };
 
-    const openWindow = (fileName: string, filePath: string, app: string | null = null) => {
-        console.log("Opening file:", fileName, "at path:", filePath, "with app:", app);
+    const openWindow = (fileName: string, fileUrl: string, app: string | null = null) => {
+        console.log("Opening file:", fileName, "with url:", fileUrl, "and app:", app);
 
         const file = userFiles.find((f) => f.title === fileName);
 
@@ -181,26 +181,20 @@ export default function Desktop() {
         if (file) {
             console.log("File found:", file);
             if (file.title.endsWith(".txt")) {
-                console.log("Opening text file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Notepad") ? prev : [...prev, "Notepad"]));
             } else if (file.title.match(/\.(mp4|mkv|avi|mov)$/)) {
-                console.log("Opening video file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Media Player") ? prev : [...prev, "Media Player"]));
             } else if (file.title.match(/\.(jpg|jpeg|png|gif)$/)) {
-                console.log("Opening image file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Image Viewer") ? prev : [...prev, "Image Viewer"]));
             } else if (file.title.endsWith(".md")) {
-                console.log("Opening markdown file:", filePath); // Log the file path
                 setOpenWindows((prev) => (prev.includes("Markdown Editor") ? prev : [...prev, "Markdown Editor"]));
             } else if (file.title.match(/\.(js|jsx|ts|tsx|py|html|css|json)$/)) {
-                console.log("Opening code file:", filePath); // Log the file path
                 if (file.title.endsWith(".html")) {
                     setOpenWindows((prev) => (prev.includes("Web Browser") ? prev : [...prev, "Web Browser"]));
                 } else {
                     setOpenWindows((prev) => (prev.includes("Code Editor") ? prev : [...prev, "Code Editor"]));
                 }
             } else if (file.title.startsWith("http")) {
-                console.log("Opening URL:", filePath); // Log the URL being opened
                 setOpenWindows((prev) => (prev.includes("Web Browser") ? prev : [...prev, "Web Browser"]));
             } else {
                 console.log("No specific app found for the file:", file);
