@@ -46,7 +46,7 @@ const mockFilesystem: Record<string, FileItem[]> = {
     ],
     "/C/Users/admin/Desktop/projects": [
         {
-            name: "stocker",
+            name: "stocker.html",
             type: "file",
             path: "/C/Users/admin/Desktop/projects/stocker.html",
             url: `/C/Users/admin/Desktop/projects/stocker.html`,
