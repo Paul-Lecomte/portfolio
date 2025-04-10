@@ -4,6 +4,7 @@ export type FileItem = {
     type: "file" | "folder";
     path: string;
     url?: string;
+    app?: string;
 };
 
 const baseUrl = "/filesystem"; // Base URL for file retrieval
@@ -28,6 +29,7 @@ const mockFilesystem: Record<string, FileItem[]> = {
             type: "file",
             path: "/C/Users/admin/Documents/notes.txt",
             url: `${baseUrl}/C/Users/admin/Documents/notes.txt`,
+            app: "Notepad",
         },
     ],
     "/C/Users/admin/Pictures": [
@@ -36,13 +38,20 @@ const mockFilesystem: Record<string, FileItem[]> = {
             type: "file",
             path: "/C/Users/admin/Pictures/image2.png",
             url: `${baseUrl}/C/Users/admin/Pictures/image2.png`,
+            app: "Image Viewer",
         },
     ],
     "/C/Users/admin/Desktop": [
         { name: "projects", type: "folder", path: "/C/Users/admin/Desktop/projects" },
     ],
     "/C/Users/admin/Desktop/projects": [
-        { name: "stocker", type: "file", path: "/C/Users/admin/Desktop/projects/stocker.html" },
+        {
+            name: "stocker",
+            type: "file",
+            path: "/C/Users/admin/Desktop/projects/stocker.html",
+            url: `/C/Users/admin/Desktop/projects/stocker.html`,
+            app: "Web Browser",
+        },
     ],
     "/C/Users/admin/Downloads": [],
     "/C/Program Files": [],
