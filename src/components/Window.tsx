@@ -13,29 +13,36 @@ export default function Window({
 }) {
     const [isMaximized, setIsMaximized] = useState(false);
     const [windowSize, setWindowSize] = useState({ width: 400, height: 300 });
+    const [position, setPosition] = useState({ x: 100, y: 100 });
     const [isResizing, setIsResizing] = useState(false);
 
     const nodeRef = useRef<HTMLDivElement>(null);
+    const resizeRef = useRef<number>();
 
+    // Start resizing
     const startResizing = () => {
         setIsResizing(true);
         document.body.style.cursor = "se-resize";
     };
 
-    const handleResize = useCallback(
-        (e: MouseEvent) => {
-            if (!isResizing) return;
-            const newWidth = e.clientX - (nodeRef.current?.getBoundingClientRect().left || 0);
-            const newHeight = e.clientY - (nodeRef.current?.getBoundingClientRect().top || 0);
+    // Handle resizing
+    const handleMouseMove = (e: MouseEvent) => {
+        if (!isResizing || !nodeRef.current || isMaximized) return;
+
+        cancelAnimationFrame(resizeRef.current!);
+        resizeRef.current = requestAnimationFrame(() => {
+            const rect = nodeRef.current!.getBoundingClientRect();
+            const newWidth = e.clientX - rect.left;
+            const newHeight = e.clientY - rect.top;
 
             setWindowSize({
-                width: newWidth > 200 ? newWidth : 200,
-                height: newHeight > 150 ? newHeight : 150,
+                width: Math.max(200, newWidth),
+                height: Math.max(150, newHeight),
             });
-        },
-        [isResizing]
-    );
+        });
+    };
 
+    // Stop resizing
     const stopResizing = () => {
         setIsResizing(false);
         document.body.style.cursor = "default";
@@ -43,29 +50,55 @@ export default function Window({
 
     React.useEffect(() => {
         if (isResizing) {
-            document.addEventListener("mousemove", handleResize);
-            document.addEventListener("mouseup", stopResizing);
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", stopResizing);
         } else {
-            document.removeEventListener("mousemove", handleResize);
-            document.removeEventListener("mouseup", stopResizing);
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", stopResizing);
         }
         return () => {
-            document.removeEventListener("mousemove", handleResize);
-            document.removeEventListener("mouseup", stopResizing);
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", stopResizing);
         };
-    }, [isResizing, handleResize]);
+    }, [isResizing]);
+
+    // Handle dragging
+    const handleDrag = (_: any, data: any) => {
+        if (!isMaximized) {
+            setPosition({ x: data.x, y: data.y });
+        }
+    };
 
     return (
-        <Draggable nodeRef={nodeRef} handle=".window-header" defaultClassName="z-10">
+        <Draggable
+            nodeRef={nodeRef}
+            handle=".window-header"
+            disabled={isMaximized} // Disable dragging when maximized
+            position={isMaximized ? { x: 0, y: 0 } : position} // Keep position when maximized
+            onDrag={handleDrag}
+            bounds="parent" // Prevent dragging outside parent container
+            enableUserSelectHack={false} // Prevent text selection issues during drag
+        >
             <div
                 ref={nodeRef}
-                className={`absolute bg-opacity-70 backdrop-blur-lg border border-gray-300 rounded-lg shadow-lg overflow-hidden ${
-                    isMaximized ? "w-full h-full top-0 left-0" : ""
-                }`}
-                style={{
-                    width: windowSize.width,
-                    height: windowSize.height,
-                }}
+                className="fixed bg-opacity-70 backdrop-blur-lg border border-gray-300 rounded-lg shadow-lg overflow-hidden"
+                style={
+                    isMaximized
+                        ? {
+                            width: "90vw",
+                            height: "90vh",
+                            top: "5vh",
+                            left: "5vw",
+                            transform: "none", // Remove transform during maximization
+                        }
+                        : {
+                            width: windowSize.width,
+                            height: windowSize.height,
+                            top: position.y,
+                            left: position.x,
+                            transform: "none", // Remove transform during dragging and resizing
+                        }
+                }
             >
                 {/* Window Header */}
                 <div className="window-header flex justify-between items-center bg-opacity-70 bg-gray-800 p-3 cursor-move rounded-t-lg">
@@ -97,17 +130,19 @@ export default function Window({
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
-                        overflow: "auto", // Ensure content is scrollable if it exceeds the size of the window
+                        overflow: "auto",
                     }}
                 >
                     {children}
                 </div>
 
-                {/* Resizing Handle */}
-                <div
-                    className="resize-handle absolute right-0 bottom-0 w-8 h-8 bg-gray-600 cursor-se-resize rounded-br-lg"
-                    onMouseDown={startResizing}
-                />
+                {/* Resize Handle */}
+                {!isMaximized && (
+                    <div
+                        className="resize-handle absolute right-0 bottom-0 w-6 h-6 bg-gray-600 cursor-se-resize rounded-br-lg"
+                        onMouseDown={startResizing}
+                    />
+                )}
             </div>
         </Draggable>
     );
