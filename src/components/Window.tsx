@@ -81,7 +81,7 @@ export default function Window({
         >
             <div
                 ref={nodeRef}
-                className="fixed bg-opacity-70 backdrop-blur-lg border border-gray-300 rounded-lg shadow-lg overflow-hidden"
+                className="fixed z-40 bg-opacity-70 backdrop-blur-lg border border-gray-300 rounded-lg shadow-lg overflow-hidden"
                 style={
                     isMaximized
                         ? {
