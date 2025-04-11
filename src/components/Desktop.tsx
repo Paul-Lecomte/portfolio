@@ -54,7 +54,7 @@ const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
         <Draggable nodeRef={iconRef}>
             <div
                 ref={iconRef}
-                className="absolute w-16 h-16 flex flex-col items-center text-white cursor-pointer"
+                className="absolute z-10 w-16 h-16 flex flex-col items-center text-white cursor-pointer"
                 style={{ top: position.top, left: position.left }}
                 onDoubleClick={() => openWindow(icon.title)}
                 onContextMenu={(e) => {
