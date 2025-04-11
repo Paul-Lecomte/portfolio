@@ -62,10 +62,10 @@ const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
                     onContextMenu(e, icon.title);
                 }}
             >
-                <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded-lg text-xl">
+                <div className="w-12 h-12 flex items-center justify-center rounded-lg text-xl">
                     {icon.icon}
                 </div>
-                <span className="text-sm mt-1">{icon.title}</span>
+                <span className="text-sm text-center mt-1">{icon.title}</span>
             </div>
         </Draggable>
     );
