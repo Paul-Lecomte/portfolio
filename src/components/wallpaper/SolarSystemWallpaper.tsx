@@ -39,20 +39,35 @@ const SublimeWallpaper = () => {
         scene.add(backgroundSphere);
 
         // Load GLTF Model
+        // Load the space ship model
         const loader = new GLTFLoader();
-        console.log("GLTFLoader initialized:", loader);
-
         loader.load(
-            '/models/scene.gltf',
+            "/models/space_ship.glb", // path to your .glb file
             (gltf) => {
-                console.log('GLTF model loaded:', gltf);
-                scene.add(gltf.scene);
+                console.log("GLTF model loaded:", gltf);
+
+                const model = gltf.scene;
+                model.scale.set(10.0, 10.0, 10.0); // Scale it up for better visibility
+
+                // Position the spaceship based on Earth's distance (for example)
+                const earth = planetsData.find(planet => planet.name === "Earth");
+                if (earth) {
+                    // Position the spaceship based on Earth’s distance and set to its orbiting position
+                    model.position.set(earth.distance, 0, 0); // Adjust for better visibility
+                }
+
+                // Debug: Check bounding box
+                const box = new THREE.Box3().setFromObject(model);
+                console.log("Model Bounding Box:", box);
+
+                scene.add(model);
+                console.log("Model added to scene:", model);
             },
             (progress) => {
-                console.log('Loading progress:', progress);
+                console.log("Loading progress:", progress);
             },
             (error) => {
-                console.error('Error loading GLTF model:', error);
+                console.error("Error loading GLTF model:", error);
             }
         );
 
