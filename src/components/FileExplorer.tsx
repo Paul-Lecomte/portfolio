@@ -12,38 +12,43 @@ type File = {
 };
 
 interface FileExplorerProps {
-    onOpenFile: (fileName: string, filePath: string, fileUrl: string, app?: string) => void; // Include app in the callback
+    onOpenFile: (fileName: string, filePath: string, fileUrl: string, app?: string) => void;
+    initialPath: string;
 }
 
-export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
+export default function FileExplorer({ onOpenFile, initialPath }: FileExplorerProps) {
+    // Set initialPath to '/C' if it's undefined or empty
+    const initial = initialPath || "/C"; // Default to '/C' if initialPath is falsy
     const [files, setFiles] = useState<File[]>([]);
-    const [currentPath, setCurrentPath] = useState<string>("/C");
+    const [currentPath, setCurrentPath] = useState<string>(initial); // Initialize with the resolved initialPath
     const [searchQuery, setSearchQuery] = useState<string>("");
 
     useEffect(() => {
+        console.log("Current path received:", currentPath); // Log currentPath to verify it's being set correctly
+
         const loadFiles = async () => {
             const fetchedFiles = await fetchFiles(currentPath);
             setFiles(fetchedFiles);
         };
+
         loadFiles();
-    }, [currentPath]);
+    }, [currentPath]); // Will update whenever currentPath changes
 
     const handleFolderClick = (folder: File) => {
         if (folder.type === "folder") {
-            setCurrentPath(folder.path);
+            setCurrentPath(folder.path); // Update current path when a folder is clicked
         }
     };
 
     const handleFileClick = (file: File) => {
-        console.log("File clicked:", file); // Log the clicked file
         if (file.type === "file") {
-            onOpenFile(file.name, file.url, file.app); // Pass the file name, url, and app name
+            onOpenFile(file.name, file.url, file.path, file.app); // Pass the file data
         }
     };
 
     const handleBackClick = () => {
         const parentPath = currentPath.substring(0, currentPath.lastIndexOf("/")) || "/C";
-        setCurrentPath(parentPath);
+        setCurrentPath(parentPath); // Set to parent directory when back is clicked
     };
 
     const filteredFiles = files.filter(file =>
@@ -51,22 +56,24 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
     );
 
     return (
-        <div
-            className="flex h-full bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 shadow-xl overflow-hidden">
+        <div className="flex h-full bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 shadow-xl overflow-hidden">
             {/* Sidebar */}
             <div className="w-48 bg-white/5 border-r border-white/10 p-4 text-white">
                 <div className="text-sm font-semibold mb-4 text-white/70">Quick Access</div>
                 <ul className="space-y-2">
+                    <li
+                        className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer"
+                        onClick={() => setCurrentPath("/C/Users/admin/Desktop/projects")} // Handle the "Projects" shortcut
+                    >
+                        <AiOutlineDesktop className="text-lg" />
+                        Project Folder
+                    </li>
                     <li className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer">
-                        <AiOutlineHome className="text-lg"/>
+                        <AiOutlineHome className="text-lg" />
                         Home
                     </li>
                     <li className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer">
-                        <AiOutlineDesktop className="text-lg"/>
-                        Desktop
-                    </li>
-                    <li className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer">
-                        <AiOutlineDownload className="text-lg"/>
+                        <AiOutlineDownload className="text-lg" />
                         Downloads
                     </li>
                 </ul>
@@ -81,7 +88,7 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
                         className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition"
                         title="Go back"
                     >
-                        <IoMdArrowBack className="text-xl text-white"/>
+                        <IoMdArrowBack className="text-xl text-white" />
                     </button>
                     <input
                         type="text"
@@ -109,9 +116,9 @@ export default function FileExplorer({ onOpenFile }: FileExplorerProps) {
                             >
                                 {file.type === "folder" ? (
                                     <AiFillFolder
-                                        className="text-4xl text-yellow-400 group-hover:text-yellow-300 mb-2"/>
+                                        className="text-4xl text-yellow-400 group-hover:text-yellow-300 mb-2" />
                                 ) : (
-                                    <AiFillFile className="text-4xl text-blue-400 group-hover:text-blue-300 mb-2"/>
+                                    <AiFillFile className="text-4xl text-blue-400 group-hover:text-blue-300 mb-2" />
                                 )}
                                 <span className="text-sm text-white/90 break-all">{file.name}</span>
                             </div>
