@@ -17,7 +17,20 @@ import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
 import ParticleEffect from "@/components/wallpaper/ParticlesWallpaper";
 import SublimeWallpaper from "@/components/wallpaper/SolarSystemWallpaper";
-import { FaFileAlt, FaLaptop, FaRegFileImage, FaVideo, FaChrome, FaMarkdown, FaCode, FaPaintBrush, FaWindows, FaTimes, FaSearch } from 'react-icons/fa';
+import {
+    FaFileAlt,
+    FaLaptop,
+    FaRegFileImage,
+    FaVideo,
+    FaChrome,
+    FaMarkdown,
+    FaCode,
+    FaPaintBrush,
+    FaWindows,
+    FaTimes,
+    FaSearch,
+    FaFolder
+} from 'react-icons/fa';
 
 
 // Default icons for the start menu (without showing on the desktop)
@@ -31,6 +44,7 @@ const defaultIcons = [
     { id: 7, title: "Markdown Editor", icon: <FaMarkdown size={24} /> },
     { id: 8, title: "Code Editor", icon: <FaCode size={24} /> },
     { id: 9, title: "Paint", icon: <FaPaintBrush size={24} /> },
+    { id: 10, title: "Projects", icon: <FaFolder size={24} /> },
 ];
 
 const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
@@ -168,6 +182,13 @@ export default function Desktop() {
 
     const openWindow = (fileName: string, fileUrl: string, app: string | null = null) => {
         console.log("Opening file:", fileName, "with url:", fileUrl, "and app:", app);
+
+        // If it's the "File Explorer" app, pass the fileUrl as the initialPath
+        if (app === "File Explorer") {
+            console.log("Opening File Explorer with initial path:", fileUrl);  // fileUrl is the initialPath here
+            setOpenWindows((prev) => (prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]));
+            return;
+        }
 
         // If an app is provided, open with that app and fetch the content
         if (app) {
@@ -470,18 +491,31 @@ export default function Desktop() {
                 </div>
             </div>
 
-            {/* Desktop Icons */}
-            {[...userFiles].map((icon, index) => {
+            {[...userFiles, { id: 'project-folder', title: 'Project Folder', icon: <FaFolder size={24} /> }].map((icon, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
                 const spacing = 100;
+
+                const handleClick = () => {
+                    if (icon.id === 'project-folder') {
+                        // Handle opening the "File Explorer" with the specific path for the Projects folder
+                        setOpenWindows((prev) => (prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]));
+                        // Pass the correct path for the "Projects" folder
+                        openWindow('File Explorer', '/C/Users/admin/Desktop/projects');
+                        console.log("correctly opening to the desired path");
+                    } else {
+                        // Handle other icons (files, folders, etc.) with default behavior
+                        openWindow(icon.title);
+                        console.log("did not work"); // Log if the file isn't handled as expected
+                    }
+                };
 
                 return (
                     <DesktopIcon
                         key={icon.id}
                         icon={icon}
-                        position={{top: 50 + row * spacing, left: 50 + col * spacing}}
-                        openWindow={openWindow}
+                        position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
+                        openWindow={handleClick} // Use the custom click handler
                         onContextMenu={handleContextMenu}
                     />
                 );
