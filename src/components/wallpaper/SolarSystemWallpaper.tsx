@@ -6,6 +6,22 @@ const SublimeWallpaper = () => {
     const canvasRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Planets
+        const planetsData = [
+            { name: "Sun", texture: "2k_sun.jpg", size: 150, distance: 0, speed: 0 }, // Sun at the center
+            { name: "Mercury", texture: "2k_mercury.jpg", size: 25, distance: 400, speed: 0.01 },
+            { name: "Venus", texture: "2k_venus_surface.jpg", size: 40, distance: 600, speed: 0.008 },
+            { name: "Earth", texture: "2k_earth_daymap.jpg", size: 50, distance: 800, speed: 0.006 },
+            { name: "Mars", texture: "2k_mars.jpg", size: 35, distance: 1000, speed: 0.005 },
+            { name: "Jupiter", texture: "2k_jupiter.jpg", size: 110, distance: 1400, speed: 0.003 },
+            { name: "Saturn", texture: "2k_saturn.jpg", size: 95, distance: 1700, speed: 0.0025 },
+            { name: "Uranus", texture: "2k_uranus.jpg", size: 70, distance: 2000, speed: 0.002 },
+            { name: "Neptune", texture: "2k_neptune.jpg", size: 70, distance: 2300, speed: 0.0018 },
+            { name: "Pluto", texture: "2k_pluto.jpg", size: 20, distance: 2700, speed: 0.001 },
+            { name: "Ceres", texture: "2k_ceres.jpg", size: 15, distance: 1200, speed: 0.004 },
+            { name: "Moon", texture: "2k_moon.jpg", size: 12, distance: 100, speed: 0.02, orbiting: "Earth" },
+        ];
+
         if (!canvasRef.current) return;
 
         const canvas = document.createElement("canvas");
@@ -70,22 +86,6 @@ const SublimeWallpaper = () => {
                 console.error("Error loading GLTF model:", error);
             }
         );
-
-        // Planets
-        const planetsData = [
-            { name: "Sun", texture: "2k_sun.jpg", size: 150, distance: 0, speed: 0 }, // Sun at the center
-            { name: "Mercury", texture: "2k_mercury.jpg", size: 25, distance: 400, speed: 0.01 },
-            { name: "Venus", texture: "2k_venus_surface.jpg", size: 40, distance: 600, speed: 0.008 },
-            { name: "Earth", texture: "2k_earth_daymap.jpg", size: 50, distance: 800, speed: 0.006 },
-            { name: "Mars", texture: "2k_mars.jpg", size: 35, distance: 1000, speed: 0.005 },
-            { name: "Jupiter", texture: "2k_jupiter.jpg", size: 110, distance: 1400, speed: 0.003 },
-            { name: "Saturn", texture: "2k_saturn.jpg", size: 95, distance: 1700, speed: 0.0025 },
-            { name: "Uranus", texture: "2k_uranus.jpg", size: 70, distance: 2000, speed: 0.002 },
-            { name: "Neptune", texture: "2k_neptune.jpg", size: 70, distance: 2300, speed: 0.0018 },
-            { name: "Pluto", texture: "2k_pluto.jpg", size: 20, distance: 2700, speed: 0.001 },
-            { name: "Ceres", texture: "2k_ceres.jpg", size: 15, distance: 1200, speed: 0.004 },
-            { name: "Moon", texture: "2k_moon.jpg", size: 12, distance: 100, speed: 0.02, orbiting: "Earth" },
-        ];
 
         const planets: THREE.Mesh[] = [];
 
