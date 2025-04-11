@@ -185,7 +185,10 @@ export default function Desktop() {
 
         // If it's the "File Explorer" app, pass the fileUrl as the initialPath
         if (app === "File Explorer") {
-            console.log("Opening File Explorer with initial path:", fileUrl);  // fileUrl is the initialPath here
+            const initialPath = fileUrl || "/C/Users/admin/Desktop/projects/"; // Use fileUrl if provided, otherwise default to "/C"
+            console.log("Opening File Explorer with initial path:", initialPath);  // Debug log to check path
+
+            // Ensure the window opens with the correct initial path
             setOpenWindows((prev) => (prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]));
             return;
         }
@@ -500,7 +503,8 @@ export default function Desktop() {
                     if (icon.id === 'project-folder') {
                         // Handle opening the "File Explorer" with the specific path for the Projects folder
                         setOpenWindows((prev) => (prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]));
-                        // Pass the correct path for the "Projects" folder
+
+                        // Here, we pass the correct path directly to the `openWindow` function
                         openWindow('File Explorer', '/C/Users/admin/Desktop/projects');
                         console.log("correctly opening to the desired path");
                     } else {
