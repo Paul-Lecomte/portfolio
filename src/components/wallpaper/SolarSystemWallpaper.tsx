@@ -64,7 +64,7 @@ const SublimeWallpaper = () => {
                 console.log("GLTF model loaded:", gltf);
 
                 spaceship = gltf.scene; // Store the spaceship in the spaceship variable
-                spaceship.scale.set(10.0, 10.0, 10.0); // Scale it up for better visibility
+                spaceship.scale.set(20.0, 20.0, 20.0); // Scale it up for better visibility
                 spaceship.name = "spaceship"; // Set the name so we can access it later
 
                 // Position the spaceship relative to Earth (or any other planet)
@@ -237,15 +237,20 @@ const SublimeWallpaper = () => {
                 trail.geometry.attributes.position.needsUpdate = true;
             });
 
-            // Update spaceship position based on Earth (or any planet you choose)
+            // Update spaceship position based on selected planet (Earth)
             if (spaceship) {
                 const earth = planets.find((planet) => planet.name === "Earth");
                 if (earth) {
+                    // Calculate angle based on time for orbital motion
                     const angle = Date.now() * 0.0001; // Adjust speed as needed
-                    spaceship.position.x = Math.cos(angle) * earth.distance;
-                    spaceship.position.z = Math.sin(angle) * earth.distance;
+                    const distance = earth.distance; // Distance of Earth from the center
 
-                    spaceship.rotation.y += 0.01; // Rotate spaceship for some dynamic movement
+                    // Update spaceship position to follow Earth's orbit
+                    spaceship.position.x = Math.cos(angle) * distance;
+                    spaceship.position.z = Math.sin(angle) * distance;
+
+                    // Optional: Make spaceship face the direction of travel
+                    spaceship.rotation.y = angle + Math.PI / 2; // Rotate spaceship to face the direction
                 }
             }
 
