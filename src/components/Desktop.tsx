@@ -186,7 +186,7 @@ export default function Desktop() {
 
         // If it's the "File Explorer" app, pass the fileUrl as the initialPath
         if (app === "File Explorer") {
-            const initialPath = fileUrl || "/C/Users/admin/Desktop/projects/"; // Use fileUrl if provided, otherwise default to "/C"
+            const initialPath = fileUrl || "/C"; // Use fileUrl if provided, otherwise default to "/C"
             console.log("Opening File Explorer with initial path:", initialPath);  // Debug log to check path
 
             // Ensure the window opens with the correct initial path
