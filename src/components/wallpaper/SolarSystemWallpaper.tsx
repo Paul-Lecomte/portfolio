@@ -216,40 +216,19 @@ const SublimeWallpaper = () => {
                 planet.rotation.y += 0.002;
             });
 
-            // Update meteor positions (same as before)
-            meteors.forEach((meteor) => {
-                meteor.position.add(meteor.userData.velocity);
-            });
-
-            // Update comet positions and trails (same as before)
-            comets.forEach(({ core, trail, velocity }) => {
-                core.position.add(velocity);
-
-                const positions = trail.geometry.attributes.position.array as Float32Array;
-                for (let i = positions.length - 3; i >= 3; i--) {
-                    positions[i] = positions[i - 3];
-                }
-                positions[0] = core.position.x;
-                positions[1] = core.position.y;
-                positions[2] = core.position.z;
-                trail.geometry.attributes.position.needsUpdate = true;
-            });
-
-            // Update spaceship position based on selected planet (Earth)
+            // Update spaceship position (independent orbit around the Sun)
             if (spaceship) {
-                const earth = planets.find((planet) => planet.name === "Earth");
-                if (earth) {
-                    // Calculate angle based on time for orbital motion
-                    const angle = Date.now() * 0.0001; // Adjust speed as needed
-                    const distance = earth.distance; // Distance of Earth from the center
+                // Calculate angle based on time for orbital motion
+                const angle = Date.now() * 0.0001; // Adjust speed as needed
+                const distance = 1500; // Custom distance of spaceship from the center (Sun)
 
-                    // Update spaceship position to follow Earth's orbit
-                    spaceship.position.x = Math.cos(angle) * distance;
-                    spaceship.position.z = Math.sin(angle) * distance;
+                // Update spaceship position
+                spaceship.position.x = Math.cos(angle) * distance;
+                spaceship.position.z = Math.sin(angle) * distance;
 
-                    // Optional: Make spaceship face the direction of travel
-                    spaceship.rotation.y = angle + Math.PI / 2; // Rotate spaceship to face the direction
-                }
+                // Adjust spaceship's rotation to face the direction of travel (rotate to the right)
+                const rotationSpeed = 5000; // Slow down the speed by using a higher number
+                spaceship.rotation.y = -(angle / rotationSpeed) + Math.PI / 2; // Reverse the direction of rotation
             }
 
             // Rotate background sphere slowly
