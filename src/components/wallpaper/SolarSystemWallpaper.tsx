@@ -54,30 +54,28 @@ const SublimeWallpaper = () => {
         const backgroundSphere = new THREE.Mesh(bgGeometry, bgMaterial);
         scene.add(backgroundSphere);
 
-        // Load GLTF Model
-        // Load the space ship model
+
+        let spaceship = null;
+        // Load GLTF Model (Spaceship)
         const loader = new GLTFLoader();
         loader.load(
             "/models/space_ship.glb", // path to your .glb file
             (gltf) => {
                 console.log("GLTF model loaded:", gltf);
 
-                const model = gltf.scene;
-                model.scale.set(10.0, 10.0, 10.0); // Scale it up for better visibility
+                spaceship = gltf.scene; // Store the spaceship in the spaceship variable
+                spaceship.scale.set(10.0, 10.0, 10.0); // Scale it up for better visibility
+                spaceship.name = "spaceship"; // Set the name so we can access it later
 
-                // Position the spaceship based on Earth's distance (for example)
-                const earth = planetsData.find(planet => planet.name === "Earth");
+                // Position the spaceship relative to Earth (or any other planet)
+                const earth = planetsData.find((planet) => planet.name === "Earth");
                 if (earth) {
-                    // Position the spaceship based on Earth’s distance and set to its orbiting position
-                    model.position.set(earth.distance, 0, 0); // Adjust for better visibility
+                    spaceship.position.set(earth.distance, 0, 0); // Adjust for better visibility
                 }
 
-                // Debug: Check bounding box
-                const box = new THREE.Box3().setFromObject(model);
-                console.log("Model Bounding Box:", box);
-
-                scene.add(model);
-                console.log("Model added to scene:", model);
+                // Add spaceship to the scene
+                scene.add(spaceship);
+                console.log("Spaceship added to scene:", spaceship);
             },
             (progress) => {
                 console.log("Loading progress:", progress);
@@ -211,6 +209,7 @@ const SublimeWallpaper = () => {
         const animate = () => {
             requestAnimationFrame(animate);
 
+            // Update planets' positions (same as before)
             planets.forEach((planet) => {
                 planet.userData.angle += planet.userData.speed;
                 const radius = planet.userData.radius;
@@ -219,10 +218,12 @@ const SublimeWallpaper = () => {
                 planet.rotation.y += 0.002;
             });
 
+            // Update meteor positions (same as before)
             meteors.forEach((meteor) => {
                 meteor.position.add(meteor.userData.velocity);
             });
 
+            // Update comet positions and trails (same as before)
             comets.forEach(({ core, trail, velocity }) => {
                 core.position.add(velocity);
 
@@ -236,7 +237,22 @@ const SublimeWallpaper = () => {
                 trail.geometry.attributes.position.needsUpdate = true;
             });
 
+            // Update spaceship position based on Earth (or any planet you choose)
+            if (spaceship) {
+                const earth = planets.find((planet) => planet.name === "Earth");
+                if (earth) {
+                    const angle = Date.now() * 0.0001; // Adjust speed as needed
+                    spaceship.position.x = Math.cos(angle) * earth.distance;
+                    spaceship.position.z = Math.sin(angle) * earth.distance;
+
+                    spaceship.rotation.y += 0.01; // Rotate spaceship for some dynamic movement
+                }
+            }
+
+            // Rotate background sphere slowly
             backgroundSphere.rotation.y += 0.0001;
+
+            // Render the scene from the camera's perspective
             renderer.render(scene, camera);
         };
 
