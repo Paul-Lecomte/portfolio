@@ -17,38 +17,46 @@ interface FileExplorerProps {
 }
 
 export default function FileExplorer({ onOpenFile, initialPath }: FileExplorerProps) {
-    // Set initialPath to '/C' if it's undefined or empty
-    const initial = initialPath || "/C"; // Default to '/C' if initialPath is falsy
+    const initial = initialPath || "/C";  // Default to "/C" if initialPath is not provided
     const [files, setFiles] = useState<File[]>([]);
-    const [currentPath, setCurrentPath] = useState<string>(initial); // Initialize with the resolved initialPath
+    const [currentPath, setCurrentPath] = useState<string>(initial);  // Set currentPath based on initialPath
     const [searchQuery, setSearchQuery] = useState<string>("");
 
     useEffect(() => {
-        console.log("Current path received:", currentPath); // Log currentPath to verify it's being set correctly
+        // If initialPath is different from currentPath, update currentPath
+        if (initialPath && initialPath !== currentPath) {
+            console.log("Initial path received:", initialPath);
+            setCurrentPath(initialPath);  // Update currentPath when initialPath is passed
+        }
 
+        // Fetch files based on the current path
         const loadFiles = async () => {
+            console.log("Current path received:", currentPath);  // Debug log to ensure currentPath is correct
             const fetchedFiles = await fetchFiles(currentPath);
             setFiles(fetchedFiles);
         };
 
         loadFiles();
-    }, [currentPath]); // Will update whenever currentPath changes
+    }, [initialPath, currentPath]);  // Re-fetch files and update path when initialPath or currentPath changes
 
+    // Folder click handler
     const handleFolderClick = (folder: File) => {
         if (folder.type === "folder") {
-            setCurrentPath(folder.path); // Update current path when a folder is clicked
+            setCurrentPath(folder.path);  // Update current path when a folder is clicked
         }
     };
 
+    // File click handler
     const handleFileClick = (file: File) => {
         if (file.type === "file") {
-            onOpenFile(file.name, file.url, file.path, file.app); // Pass the file data
+            onOpenFile(file.name, file.url, file.path, file.app);  // Open the file
         }
     };
 
+    // Back button click handler
     const handleBackClick = () => {
         const parentPath = currentPath.substring(0, currentPath.lastIndexOf("/")) || "/C";
-        setCurrentPath(parentPath); // Set to parent directory when back is clicked
+        setCurrentPath(parentPath);  // Set to parent directory
     };
 
     const filteredFiles = files.filter(file =>
