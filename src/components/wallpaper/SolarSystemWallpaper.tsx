@@ -203,6 +203,12 @@ const SublimeWallpaper = () => {
             }, 500);
         }, 7000); // every 7s
 
+        //-------------------------------------------------------------------------------------
+        let spaceshipVelocity = 1;  // Slower movement speed
+        let directionChangeInterval = 60000;  // Time in milliseconds for direction change
+        let lastDirectionChangeTime = 0;  // To track the last time direction changed
+        let direction = new THREE.Vector2(1, 0);  // Initial direction (right along the X axis)
+
         // Animation loop
         const animate = () => {
             requestAnimationFrame(animate);
@@ -216,15 +222,21 @@ const SublimeWallpaper = () => {
                 planet.rotation.y += 0.002;
             });
 
-            // Update spaceship position (moving freely within boundaries)
+            // Update spaceship position (move around within the boundaries of the solar system)
             if (spaceship) {
-                // Calculate time-based movement for spaceship
-                const time = Date.now() * 0.00005; // Adjust speed of movement as needed
+                const time = Date.now();
 
-                // Move the spaceship in the X-Z plane with a fixed velocity vector
-                const velocity = 10; // Adjust the speed of movement
-                spaceship.position.x += Math.cos(time) * velocity; // Move along X-axis
-                spaceship.position.z += Math.sin(time) * velocity; // Move along Z-axis
+                // Randomly change direction every `directionChangeInterval` milliseconds (60 seconds)
+                if (time - lastDirectionChangeTime > directionChangeInterval) {
+                    // Change direction randomly (random vector in the X-Z plane)
+                    const randomAngle = Math.random() * Math.PI * 2;
+                    direction.set(Math.cos(randomAngle), Math.sin(randomAngle));
+                    lastDirectionChangeTime = time;
+                }
+
+                // Move the spaceship based on the direction vector and velocity
+                spaceship.position.x += direction.x * spaceshipVelocity;
+                spaceship.position.z += direction.y * spaceshipVelocity;
 
                 // Constrain spaceship within solar system boundaries
                 const maxDistance = 2500; // Maximum distance from the center (the Sun)
@@ -238,7 +250,7 @@ const SublimeWallpaper = () => {
                 }
 
                 // Adjust spaceship's rotation to always face the direction of travel
-                spaceship.rotation.y = time + Math.PI / 2; // Always rotate to face the movement direction
+                spaceship.rotation.y = Math.atan2(direction.y, direction.x) + Math.PI / 2;
             }
 
             // Rotate background sphere slowly
