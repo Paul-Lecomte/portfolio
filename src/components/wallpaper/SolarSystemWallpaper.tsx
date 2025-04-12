@@ -67,11 +67,9 @@ const SublimeWallpaper = () => {
                 spaceship.scale.set(20.0, 20.0, 20.0); // Scale it up for better visibility
                 spaceship.name = "spaceship"; // Set the name so we can access it later
 
-                // Position the spaceship relative to Earth (or any other planet)
-                const earth = planetsData.find((planet) => planet.name === "Earth");
-                if (earth) {
-                    spaceship.position.set(earth.distance, 0, 0); // Adjust for better visibility
-                }
+                // Position the spaceship on its own orbit around the Sun
+                const spaceshipData = { distance: 1500, speed: 0.004 }; // Custom orbit for spaceship
+                spaceship.position.set(spaceshipData.distance, 0, 0); // Adjust for better visibility
 
                 // Add spaceship to the scene
                 scene.add(spaceship);
