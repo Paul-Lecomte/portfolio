@@ -205,11 +205,12 @@ const SublimeWallpaper = () => {
 
         //-------------------------------------------------------------------------------------
         let spaceshipVelocity = 1;  // Slower movement speed
-        let directionChangeInterval = 60000;  // Time in milliseconds for direction change
+        let directionChangeInterval = 60000;  // Time in milliseconds for direction change (60 seconds)
         let lastDirectionChangeTime = 0;  // To track the last time direction changed
         let direction = new THREE.Vector2(1, 0);  // Initial direction (right along the X axis)
+        let targetDirection = new THREE.Vector2(1, 0);  // Target direction for smooth transition
+        let directionLerpSpeed = 0.05;  // Speed of direction transition (higher value = faster transition)
 
-        // Animation loop
         const animate = () => {
             requestAnimationFrame(animate);
 
@@ -230,9 +231,12 @@ const SublimeWallpaper = () => {
                 if (time - lastDirectionChangeTime > directionChangeInterval) {
                     // Change direction randomly (random vector in the X-Z plane)
                     const randomAngle = Math.random() * Math.PI * 2;
-                    direction.set(Math.cos(randomAngle), Math.sin(randomAngle));
+                    targetDirection.set(Math.cos(randomAngle), Math.sin(randomAngle));
                     lastDirectionChangeTime = time;
                 }
+
+                // Smoothly interpolate towards the target direction
+                direction.lerp(targetDirection, directionLerpSpeed);
 
                 // Move the spaceship based on the direction vector and velocity
                 spaceship.position.x += direction.x * spaceshipVelocity;
