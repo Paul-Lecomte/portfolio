@@ -64,7 +64,7 @@ const SublimeWallpaper = () => {
                 console.log("GLTF model loaded:", gltf);
 
                 spaceship = gltf.scene; // Store the spaceship in the spaceship variable
-                spaceship.scale.set(5.0, 5.0, 5.0); // Scale it up for better visibility
+                spaceship.scale.set(7.0, 7.0, 7.0); // Scale it up for better visibility
                 spaceship.name = "spaceship"; // Set the name so we can access it later
 
                 // Position the spaceship on its own orbit around the Sun
