@@ -216,19 +216,29 @@ const SublimeWallpaper = () => {
                 planet.rotation.y += 0.002;
             });
 
-            // Update spaceship position (independent orbit around the Sun)
+            // Update spaceship position (moving freely within boundaries)
             if (spaceship) {
-                // Calculate angle based on time for orbital motion
-                const angle = Date.now() * 0.0001; // Adjust speed as needed
-                const distance = 1500; // Custom distance of spaceship from the center (Sun)
+                // Calculate time-based movement for spaceship
+                const time = Date.now() * 0.00005; // Adjust speed of movement as needed
 
-                // Update spaceship position
-                spaceship.position.x = Math.cos(angle) * distance;
-                spaceship.position.z = Math.sin(angle) * distance;
+                // Move the spaceship in the X-Z plane with a fixed velocity vector
+                const velocity = 10; // Adjust the speed of movement
+                spaceship.position.x += Math.cos(time) * velocity; // Move along X-axis
+                spaceship.position.z += Math.sin(time) * velocity; // Move along Z-axis
 
-                // Adjust spaceship's rotation to face the direction of travel (rotate to the right)
-                const rotationSpeed = 5000; // Slow down the speed by using a higher number
-                spaceship.rotation.y = -(angle / rotationSpeed) + Math.PI / 2; // Reverse the direction of rotation
+                // Constrain spaceship within solar system boundaries
+                const maxDistance = 2500; // Maximum distance from the center (the Sun)
+                const distanceFromCenter = Math.sqrt(spaceship.position.x ** 2 + spaceship.position.z ** 2);
+
+                if (distanceFromCenter > maxDistance) {
+                    // If the spaceship exceeds the boundary, clamp its position to the max distance
+                    const clampFactor = maxDistance / distanceFromCenter;
+                    spaceship.position.x *= clampFactor;
+                    spaceship.position.z *= clampFactor;
+                }
+
+                // Adjust spaceship's rotation to always face the direction of travel
+                spaceship.rotation.y = time + Math.PI / 2; // Always rotate to face the movement direction
             }
 
             // Rotate background sphere slowly
