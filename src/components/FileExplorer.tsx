@@ -43,6 +43,7 @@ export default function FileExplorer({ onOpenFile, initialPath }: FileExplorerPr
     const handleFileClick = (file: File) => {
         if (file.type === "file") {
             onOpenFile(file.name, file.url, file.path, file.app); // Pass the file data
+            console.log(file.name, file.url, file.path, file.app)
         }
     };
 

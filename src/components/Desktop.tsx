@@ -179,9 +179,10 @@ export default function Desktop() {
             }));
         }
     };
+    //file.name, file.url, file.path, file.app
 
-    const openWindow = (fileName: string, fileUrl: string, app: string | null = null) => {
-        console.log("Opening file:", fileName, "with url:", fileUrl, "and app:", app);
+    const openWindow = (fileName: string, fileUrl: string, filePath: string, app: string | null = null) => {
+        console.log("Opening file:", fileName, "with url:", fileUrl, "file path:", filePath, "and app:", app);
 
         // If it's the "File Explorer" app, pass the fileUrl as the initialPath
         if (app === "File Explorer") {
