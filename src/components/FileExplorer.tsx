@@ -71,16 +71,20 @@ export default function FileExplorer({ onOpenFile, initialPath }: FileExplorerPr
                 <ul className="space-y-2">
                     <li
                         className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer"
-                        onClick={() => setCurrentPath("/C/Users/admin/Desktop/projects")} // Handle the "Projects" shortcut
+                        onClick={() => setCurrentPath("/C/Users/admin/Desktop/projects")}
                     >
                         <AiOutlineDesktop className="text-lg" />
                         Project Folder
                     </li>
-                    <li className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer">
+                    <li className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer"
+                        onClick={() => setCurrentPath("/C")}
+                    >
                         <AiOutlineHome className="text-lg" />
                         Home
                     </li>
-                    <li className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer">
+                    <li className="flex items-center gap-2 hover:bg-white/10 p-2 rounded cursor-pointer"
+                        onClick={() => setCurrentPath("/C/Users/admin/Downloads")}
+                    >
                         <AiOutlineDownload className="text-lg" />
                         Downloads
                     </li>
