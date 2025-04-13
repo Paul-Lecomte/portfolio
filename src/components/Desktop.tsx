@@ -179,7 +179,7 @@ export default function Desktop() {
             }));
         }
     };
-    //file.name, file.url, file.path, file.app
+    const [windowData, setWindowData] = useState<{ [key: string]: { fileName: string; fileContent: string } }>({}); // Store window-specific data
 
     const openWindow = (fileName: string, fileUrl: string, filePath: string, app: string | null = null) => {
         console.log("Opening file:", fileName, "with url:", fileUrl, "file path:", filePath, "and app:", app);
@@ -187,7 +187,7 @@ export default function Desktop() {
         // If it's the "File Explorer" app, pass the fileUrl as the initialPath
         if (app === "File Explorer") {
             const initialPath = fileUrl || "/C"; // Use fileUrl if provided, otherwise default to "/C"
-            console.log("Opening File Explorer with current path:", initialPath);  // Debug log to check path
+            console.log("Opening File Explorer with current path:", initialPath);
 
             // Ensure the window opens with the correct initial path
             setOpenWindows((prev) => (prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]));
@@ -198,38 +198,47 @@ export default function Desktop() {
         if (app) {
             console.log("Opening with specific app:", app);
 
-            // Fetch the content of the file if needed
             if (fileUrl) {
                 fetch(fileUrl)
                     .then((response) => response.text()) // Fetch the file content as text
                     .then((content) => {
-                        console.log("File content:", content); // Log the file content
-                        // Optionally, pass the content to the app to open it (e.g., Notepad, etc.)
+                        console.log("File content fetched:", content); // Log the fetched content
+
+                        // Set the window and content in windowData
                         setOpenWindows((prev) => (prev.includes(app) ? prev : [...prev, app]));
+                        setWindowData((prev) => ({
+                            ...prev,
+                            [app]: { fileName, fileContent: content }, // Store the content in windowData
+                        }));
+                        console.log("Updated windowData:", windowData); // Log windowData to see the update
                     })
                     .catch((error) => console.error("Error fetching file:", error));
-            } else {
-                setOpenWindows((prev) => (prev.includes(app) ? prev : [...prev, app]));
+                return;
             }
-
-            return;
         }
 
-        // If no app is provided, fallback to default behavior based on file type
+        // Handle fallback for no app (use default behavior)
         const file = userFiles.find((f) => f.title === fileName);
         if (file) {
             console.log("File found:", file);
+
             // Handle .txt files by fetching and displaying content
             if (file.title.endsWith(".txt")) {
                 fetch(fileUrl)
                     .then((response) => response.text()) // Fetch the file content as text
                     .then((content) => {
-                        console.log("File content:", content); // Log the file content
+                        console.log("File content fetched for .txt file:", content); // Log content for .txt
+
                         setOpenWindows((prev) => (prev.includes("Notepad") ? prev : [...prev, "Notepad"]));
+                        setWindowData((prev) => ({
+                            ...prev,
+                            "Notepad": { fileName, fileContent: content }, // Store the content in windowData
+                        }));
+                        console.log("Updated windowData for Notepad:", windowData); // Log windowData
                     })
                     .catch((error) => console.error("Error fetching file:", error));
             }
-            // Handle other file types
+            // Handle other file types (media, images, etc.)
             else if (file.title.match(/\.(mp4|mkv|avi|mov)$/)) {
                 setOpenWindows((prev) => (prev.includes("Media Player") ? prev : [...prev, "Media Player"]));
             } else if (file.title.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -244,8 +253,6 @@ export default function Desktop() {
                 }
             } else if (file.title.startsWith("http")) {
                 setOpenWindows((prev) => (prev.includes("Web Browser") ? prev : [...prev, "Web Browser"]));
-            } else {
-                console.log("No specific app found for the file:", file);
             }
         } else {
             console.log("File not found:", fileName);
