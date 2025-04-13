@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const Notepad = ({ onClose }: any) => {
-    const [content, setContent] = useState("");
+const Notepad = ({ fileContent, onClose }: { fileContent: string; onClose: () => void }) => {
+    const [content, setContent] = useState(fileContent || ""); // Initialize with fileContent prop
+
+    // Log the content whenever it changes
+    useEffect(() => {
+        console.log("Received content in Notepad:", fileContent); // Log fileContent
+        if (fileContent) {
+            setContent(fileContent);
+        }
+    }, [fileContent]); // Log whenever fileContent changes
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setContent(e.target.value);
@@ -18,7 +26,7 @@ const Notepad = ({ onClose }: any) => {
     return (
         <div className="w-full h-full bg-gray-800 rounded-lg">
             <textarea
-                className="w-full h-full bg-gray-700 text-white p-2 "
+                className="w-full h-full bg-gray-700 text-white p-2"
                 value={content}
                 onChange={handleChange}
                 placeholder="Start typing here..."
