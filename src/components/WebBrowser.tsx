@@ -1,10 +1,20 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () => void }) => {
-    const [url, setUrl] = useState(initialUrl || "https://example.com");
-    const [input, setInput] = useState(initialUrl || "https://example.com");
+const WebBrowser = ({ onClose }: { onClose: () => void }) => {
+    const [url, setUrl] = useState("https://example.com");
+    const [input, setInput] = useState("https://example.com");
     const [isBlocked, setIsBlocked] = useState(false);
+
+    useEffect(() => {
+        const savedFile = localStorage.getItem("currentFile");
+        if (savedFile) {
+            const { fileContent } = JSON.parse(savedFile);
+            console.log("Loaded fileContent for WebBrowser from localStorage:", fileContent);
+            setUrl(fileContent || "https://example.com");
+            setInput(fileContent || "https://example.com");
+        }
+    }, []);
 
     const navigate = () => {
         if (!input.trim()) return;
@@ -13,19 +23,24 @@ const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () =
             formatted = "https://" + formatted;
         }
         setUrl(formatted);
-        setIsBlocked(false); // Reset block status on new navigation
+        setIsBlocked(false);
+
+        // Update localStorage so other tabs or refreshes remember
+        const savedFile = localStorage.getItem("currentFile");
+        if (savedFile) {
+            const fileData = JSON.parse(savedFile);
+            localStorage.setItem("currentFile", JSON.stringify({ ...fileData, fileContent: formatted }));
+        }
     };
 
     const handleIframeError = () => {
         setIsBlocked(true);
     };
 
-    useEffect(() => {
-        // If the URL points to an HTML file, ensure the iframe is ready to load it.
-        if (url && !url.startsWith("http") && !url.endsWith(".html")) {
-            setIsBlocked(true);
-        }
-    }, [url]);
+    const handleClose = () => {
+        localStorage.removeItem("currentFile");
+        onClose();
+    };
 
     return (
         <div className="w-full h-full bg-gray-900 text-white rounded-lg flex flex-col overflow-hidden">
@@ -46,7 +61,7 @@ const WebBrowser = ({ initialUrl, onClose }: { initialUrl: string; onClose: () =
                     Go
                 </button>
                 <button
-                    onClick={onClose}
+                    onClick={handleClose}
                     className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded"
                 >
                     ✖
