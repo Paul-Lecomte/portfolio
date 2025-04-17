@@ -204,10 +204,11 @@ export default function Desktop() {
                     .then((content) => {
                         console.log("Fetched content:", content);
 
-                        // Save file info to localStorage
+                        // Save file info including the fileUrl to localStorage
                         localStorage.setItem("currentFile", JSON.stringify({
                             fileName,
                             fileContent: content,
+                            fileUrl,  // Save the fileUrl as well
                         }));
 
                         // Open the app
