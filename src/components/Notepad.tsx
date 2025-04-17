@@ -1,29 +1,40 @@
 import { useState, useEffect } from "react";
 
-const Notepad = ({ fileContent, onClose }: { fileContent: string; onClose: () => void }) => {
-    const [content, setContent] = useState<string | undefined>(undefined); // Start with undefined
+const Notepad = ({ onClose }: { onClose: () => void }) => {
+    const [content, setContent] = useState<string>("");
 
-    // Log the content whenever it changes
+    // Load from localStorage when the app mounts
     useEffect(() => {
-        console.log("Received content in Notepad:", fileContent); // Log fileContent
-        if (fileContent !== undefined) { // Check if fileContent is not undefined
+        const savedFile = localStorage.getItem("currentFile");
+        if (savedFile) {
+            const { fileContent } = JSON.parse(savedFile);
+            console.log("Loaded fileContent from localStorage:", fileContent);
             setContent(fileContent);
         }
-    }, [fileContent]); // Only run when fileContent changes
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setContent(e.target.value);
+        const updatedContent = e.target.value;
+        setContent(updatedContent);
+
+        // Update content in localStorage too (optional live sync)
+        const savedFile = localStorage.getItem("currentFile");
+        if (savedFile) {
+            const fileData = JSON.parse(savedFile);
+            localStorage.setItem(
+                "currentFile",
+                JSON.stringify({ ...fileData, fileContent: updatedContent })
+            );
+        }
     };
 
     const handleSave = () => {
-        if (content !== undefined) { // Check if content is defined before saving
-            const blob = new Blob([content], { type: "text/plain" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "notepad.txt";
-            link.click();
-        }
-    }
+        const blob = new Blob([content], { type: "text/plain" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "notepad.txt";
+        link.click();
+    };
 
     return (
         <div className="w-full h-full bg-gray-800 rounded-lg">
