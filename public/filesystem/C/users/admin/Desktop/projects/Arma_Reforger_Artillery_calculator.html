@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arma Reforger Artillery Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1c1c1c, #2f2f2f);
+      color: #f0f0f0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #1e1e1e;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background: #0072ff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    a.button:hover {
+      background: #005ed3;
+    }
+
+    .repo {
+      color: #00c6ff;
+      text-decoration: none;
+    }
+
+    .repo:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Arma Reforger Artillery Calculator</h1>
+  <p>
+    This is a web-based artillery calculator built for <strong>Arma Reforger</strong>. It allows users to select artillery type, shell type, origin point, and target point, then calculates elevation, charges, azimuth, and time of flight based on detailed range data.
+  </p>
+  <p>
+    Features include:
+  <ul>
+    <li>Support for US and RU artillery systems</li>
+    <li>Dynamic map interaction with custom maps</li>
+    <li>Ring-based firing data, multiple shell types, and interpolation</li>
+    <li>Visual range indicators and trajectory information</li>
+  </ul>
+  </p>
+  <p>
+    View the code on GitHub:
+    <a class="repo" href="https://github.com/Paul-Lecomte/Arma-Reforger-Artillery-Calculator" target="_blank">
+      github.com/Paul-Lecomte/Arma-Reforger-Artillery-Calculator
+    </a>
+  </p>
+  <a class="button" href="https://arma-reforger-artillery-calculator.vercel.app/" target="_blank">Launch the App</a>
+</div>
+</body>
+</html>

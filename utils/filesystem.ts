@@ -52,6 +52,13 @@ const mockFilesystem: Record<string, FileItem[]> = {
             url: `/filesystem/C/Users/admin/Desktop/projects/stocker.html`,
             app: "Web Browser",
         },
+        {
+            name: "Arma_Reforger_Artillery_calculator.html",
+            type: "file",
+            path: "/C/Users/admin/Desktop/projects/Arma_Reforger_Artillery_calculator.html",
+            url: `/filesystem/C/Users/admin/Desktop/projects/Arma_Reforger_Artillery_calculator.html`,
+            app: "Web Browser",
+        },
     ],
     "/C/Users/admin/Downloads": [],
     "/C/Program Files": [],
