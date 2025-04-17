@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef } from "react";
 import Draggable from "react-draggable";
 import { FaWindowMaximize, FaWindowRestore, FaTimes } from "react-icons/fa";
 
@@ -69,6 +69,13 @@ export default function Window({
         }
     };
 
+    // Modify onClose function to clear localStorage
+    const handleClose = () => {
+        // Clear local storage when the window is closed
+        localStorage.clear();
+        onClose();
+    };
+
     return (
         <Draggable
             nodeRef={nodeRef}
@@ -115,7 +122,7 @@ export default function Window({
                             )}
                         </button>
                         <button
-                            onClick={onClose}
+                            onClick={handleClose}
                             className="w-8 h-8 flex justify-center items-center bg-red-600 rounded-md hover:bg-red-500 transition-all"
                         >
                             <FaTimes size={16} className="text-white" />
