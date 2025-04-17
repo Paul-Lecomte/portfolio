@@ -23,11 +23,6 @@ const Notepad = ({ fileContent, onClose }: { fileContent: string; onClose: () =>
             link.download = "notepad.txt";
             link.click();
         }
-    };
-
-    // If content is undefined, render a loading message
-    if (content === undefined) {
-        return <div>Loading...</div>;
     }
 
     return (
