@@ -200,17 +200,20 @@ export default function Desktop() {
 
             if (fileUrl) {
                 fetch(fileUrl)
-                    .then((response) => response.text()) // Fetch the file content as text
+                    .then((response) => response.text())
                     .then((content) => {
-                        console.log("File content fetched:", content); // Log the fetched content
+                        console.log("Fetched content:", content);
 
-                        // Set the window and content in windowData
-                        setOpenWindows((prev) => (prev.includes(app) ? prev : [...prev, app]));
-                        setWindowData((prev) => ({
-                            ...prev,
-                            [app]: { fileName, fileContent: content }, // Store the content in windowData
+                        // Save file info to localStorage
+                        localStorage.setItem("currentFile", JSON.stringify({
+                            fileName,
+                            fileContent: content,
                         }));
-                        console.log("Updated windowData:", windowData); // Log windowData to see the update
+
+                        // Open the app
+                        setOpenWindows((prev) =>
+                            prev.includes(app) ? prev : [...prev, app]
+                        );
                     })
                     .catch((error) => console.error("Error fetching file:", error));
                 return;
