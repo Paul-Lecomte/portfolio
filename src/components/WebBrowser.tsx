@@ -9,27 +9,29 @@ const WebBrowser = ({ onClose }: { onClose: () => void }) => {
     useEffect(() => {
         const savedFile = localStorage.getItem("currentFile");
         if (savedFile) {
-            const { fileContent } = JSON.parse(savedFile);
-            console.log("Loaded fileContent for WebBrowser from localStorage:", fileContent);
-            setUrl(fileContent || "https://example.com");
-            setInput(fileContent || "https://example.com");
+            const { fileUrl } = JSON.parse(savedFile);
+
+            if (fileUrl) {
+                setUrl(fileUrl);
+                setInput(fileUrl);
+            }
         }
     }, []);
 
     const navigate = () => {
         if (!input.trim()) return;
         let formatted = input.trim();
-        if (!/^https?:\/\//i.test(formatted)) {
+        if (!/^https?:\/\//i.test(formatted) && !formatted.startsWith("/")) {
             formatted = "https://" + formatted;
         }
         setUrl(formatted);
         setIsBlocked(false);
 
-        // Update localStorage so other tabs or refreshes remember
+        // Optional: update localStorage
         const savedFile = localStorage.getItem("currentFile");
         if (savedFile) {
             const fileData = JSON.parse(savedFile);
-            localStorage.setItem("currentFile", JSON.stringify({ ...fileData, fileContent: formatted }));
+            localStorage.setItem("currentFile", JSON.stringify({ ...fileData, fileUrl: formatted }));
         }
     };
 
@@ -68,8 +70,8 @@ const WebBrowser = ({ onClose }: { onClose: () => void }) => {
                 </button>
             </div>
 
-            {/* Iframe / Fallback */}
-            {url && !isBlocked ? (
+            {/* Iframe to show the page */}
+            {!isBlocked ? (
                 <iframe
                     src={url}
                     title="Web Browser"
@@ -77,7 +79,7 @@ const WebBrowser = ({ onClose }: { onClose: () => void }) => {
                     sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
                     onError={handleIframeError}
                 />
-            ) : isBlocked ? (
+            ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-4 gap-4">
                     <p className="text-gray-300 text-lg">
                         This site has blocked embedding in iframes.
@@ -88,10 +90,6 @@ const WebBrowser = ({ onClose }: { onClose: () => void }) => {
                     >
                         Open in New Tab
                     </button>
-                </div>
-            ) : (
-                <div className="flex-1 flex items-center justify-center text-gray-400">
-                    No URL loaded.
                 </div>
             )}
         </div>
