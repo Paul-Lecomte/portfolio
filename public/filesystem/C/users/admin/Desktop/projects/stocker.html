@@ -172,6 +172,16 @@
 
     <h2>Live Demo</h2>
     <p>🚧 A live demo is coming soon! Stay tuned for an interactive version of Stocker.</p>
+
+    <h2>Database Schema Overview</h2>
+    <p>The database schema consists of the following main entities:</p>
+    <ul>
+        <li><strong>Users</strong> – stores user credentials, roles, and session tokens.</li>
+        <li><strong>Products</strong> – holds all item data like name, quantity, category, and SKU.</li>
+        <li><strong>Categories</strong> – links products to customizable categories.</li>
+        <li><strong>Inventory Logs</strong> – logs stock movements with timestamps and user references.</li>
+    </ul>
+    <p>The schema is normalized and designed using Sequelize ORM with PostgreSQL as the database.</p>
 </div>
 
 <footer>
