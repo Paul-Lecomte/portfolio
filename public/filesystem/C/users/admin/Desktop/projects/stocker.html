@@ -182,7 +182,7 @@
 <div class="container">
     <h2>About the Project</h2>
     <p>
-        <strong>Stocker</strong> is a full-stack inventory management system designed to simplify how warehouses, small businesses, or retailers manage their stock in real time. With a user-friendly interface and robust backend, it allows seamless product tracking, movement logging, and dynamic stock updates.
+        <strong>Stocker</strong> is a full-stack inventory management system designed to simplify how warehouses, small businesses, or retailers manage their stock in real time. With a user-friendly interface and a robust backend, Stocker allows seamless product tracking, movement logging, and dynamic stock updates. It’s built with a focus on providing a scalable solution to businesses, enabling them to keep track of their inventory effortlessly, ensuring they never run out of critical products, and streamlining their operations.
     </p>
 
     <h2>Key Features</h2>
@@ -190,9 +190,13 @@
         <li>✔️ User Authentication (JWT-based)</li>
         <li>✔️ Role-based Access for Admin and Users</li>
         <li>✔️ Add, Update, and Remove Inventory Items</li>
-        <li>✔️ Real-time Quantity Updates</li>
-        <li>✔️ Product Category Management</li>
-        <li>✔️ RESTful API Integration</li>
+        <li>✔️ Real-time Quantity Updates with automatic stock adjustments</li>
+        <li>✔️ Product Category Management for better organization</li>
+        <li>✔️ RESTful API Integration for third-party applications</li>
+        <li>✔️ Dashboard with visual data insights (e.g., stock levels, alerts)</li>
+        <li>✔️ Detailed Reporting (Stock Movement, History)</li>
+        <li>✔️ Barcode Scanning for quick stock updates</li>
+        <li>✔️ Notification system for stock alerts and low quantities</li>
     </ul>
 
     <h2>Technology Stack</h2>
@@ -207,6 +211,68 @@
         <div class="tech">REST API</div>
     </div>
 
+    <h2>Database Schema</h2>
+    <p>The database schema of Stocker is designed for scalability and flexibility, supporting features like real-time updates, role-based access control, and detailed product management. Below is a breakdown of the key tables:</p>
+
+    <h3>Users</h3>
+    <pre>
+    Table: users
+    Columns:
+        - id (primary key)
+        - username (unique)
+        - email (unique)
+        - password_hash
+        - role (admin/user)
+        - created_at
+        - updated_at
+    </pre>
+
+    <h3>Products</h3>
+    <pre>
+    Table: products
+    Columns:
+        - id (primary key)
+        - name
+        - description
+        - quantity
+        - price
+        - category_id (foreign key to categories)
+        - created_at
+        - updated_at
+    </pre>
+
+    <h3>Categories</h3>
+    <pre>
+    Table: categories
+    Columns:
+        - id (primary key)
+        - name
+        - description
+    </pre>
+
+    <h3>Stock Movements</h3>
+    <pre>
+    Table: stock_movements
+    Columns:
+        - id (primary key)
+        - product_id (foreign key to products)
+        - movement_type (addition/subtraction)
+        - quantity
+        - created_at
+        - updated_at
+    </pre>
+
+    <h3>Notifications</h3>
+    <pre>
+    Table: notifications
+    Columns:
+        - id (primary key)
+        - user_id (foreign key to users)
+        - message
+        - read_status (boolean)
+        - created_at
+    </pre>
+
     <h2>Repositories</h2>
     <div class="links">
         <a href="https://github.com/Paul-Lecomte/stocker-frontend" target="_blank">Frontend Repo</a>
@@ -215,7 +281,7 @@
 
     <h2>Why I Built It</h2>
     <p>
-        I wanted to create a practical application that solves a real-world business problem: managing inventory efficiently. Stocker was built to learn and demonstrate full-stack development capabilities — from building a secure REST API to crafting a responsive frontend with React.
+        I wanted to create a practical application that solves a real-world business problem: managing inventory efficiently. As a developer, I believe that real-world applications should have a tangible impact. Stocker was built to learn and demonstrate full-stack development capabilities, and its development allowed me to explore everything from building a secure REST API to crafting a responsive frontend with React. It’s been a valuable project to work on, as it combines the best of both worlds: a robust backend with a dynamic, user-friendly frontend.
     </p>
 </div>
 
