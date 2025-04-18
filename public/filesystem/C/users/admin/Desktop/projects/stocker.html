@@ -4,6 +4,129 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Stocker – Inventory Management App</title>
+    <style>
+        :root {
+            --primary: #00c6ff;
+            --secondary: #0072ff;
+            --text: #ffffff;
+            --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            --glass: rgba(255, 255, 255, 0.06);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 2rem;
+            background-color: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        h2 {
+            color: var(--primary);
+            border-left: 5px solid var(--secondary);
+            padding-left: 0.6rem;
+            margin-top: 2rem;
+        }
+
+        p {
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tech {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.6rem 1rem;
+            border-radius: 0.6rem;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .tech:hover {
+            transform: scale(1.05);
+            background-color: rgba(0, 198, 255, 0.2);
+        }
+
+        .links a {
+            display: inline-block;
+            margin-right: 1rem;
+            margin-top: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid var(--primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .links a:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #aaa;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .tech-stack {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -51,7 +174,7 @@
     <p>🚧 A live demo is coming soon! Stay tuned for an interactive version of Stocker.</p>
 </div>
 
-<footer style="text-align:center; padding: 2rem; color: #888;">
+<footer>
     <p>Made with ❤️ by Paul Lecomte</p>
     <p>📧 Contact: paul.lecomte.dev@gmail.com</p>
 </footer>
