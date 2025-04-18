@@ -1,82 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Arma Reforger Artillery Calculator</title>
   <style>
+    :root {
+      --primary: #00c6ff;
+      --secondary: #0072ff;
+      --text: #ffffff;
+      --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      --glass: rgba(255, 255, 255, 0.06);
+    }
+
     body {
       margin: 0;
-      padding: 2rem;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1c1c1c, #2f2f2f);
-      color: #f0f0f0;
-      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
     }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: #1e1e1e;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      background: linear-gradient(to right, #00c6ff, #0072ff);
+    header {
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    a.button {
-      display: inline-block;
+    header h1 {
+      font-size: 3rem;
+      margin: 0;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+      background-color: var(--glass);
+      backdrop-filter: blur(12px);
+      border-radius: 1rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 1s ease-out;
+    }
+
+    h2 {
+      color: var(--primary);
+      border-left: 5px solid var(--secondary);
+      padding-left: 0.6rem;
       margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      background: #0072ff;
-      color: white;
+    }
+
+    p {
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+      line-height: 1.8;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .tech {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 0.6rem 1rem;
+      border-radius: 0.6rem;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    .tech:hover {
+      transform: scale(1.05);
+      background-color: rgba(0, 198, 255, 0.2);
+    }
+
+    .links a {
+      display: inline-block;
+      margin-right: 1rem;
+      margin-top: 1rem;
+      color: var(--primary);
       text-decoration: none;
-      border-radius: 8px;
+      font-weight: bold;
+      border: 2px solid var(--primary);
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
       transition: background 0.3s ease;
     }
 
-    a.button:hover {
-      background: #005ed3;
+    .links a:hover {
+      background: var(--primary);
+      color: #000;
     }
 
-    .repo {
-      color: #00c6ff;
-      text-decoration: none;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .repo:hover {
-      text-decoration: underline;
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .tech-stack {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <h1>Arma Reforger Artillery Calculator</h1>
-  <p>
-    This is a web-based artillery calculator built for <strong>Arma Reforger</strong>. It allows users to select artillery type, shell type, origin point, and target point, then calculates elevation, charges, azimuth, and time of flight based on detailed range data.
-  </p>
-  <p>
-    Features include:
-  <ul>
-    <li>Support for US and RU artillery systems</li>
-    <li>Dynamic map interaction with custom maps</li>
-    <li>Ring-based firing data, multiple shell types, and interpolation</li>
-    <li>Visual range indicators and trajectory information</li>
-  </ul>
-  </p>
-  <p>
-    View the code on GitHub:
-    <a class="repo" href="https://github.com/Paul-Lecomte/Arma-Reforger-Artillery-Calculator" target="_blank">
-      github.com/Paul-Lecomte/Arma-Reforger-Artillery-Calculator
-    </a>
-  </p>
-  <a class="button" href="https://arma-reforger-artillery-calculator.vercel.app/" target="_blank">Launch the App</a>
-</div>
+
+  <header>
+    <h1>🎯 Arma Reforger Artillery Calculator</h1>
+  </header>
+
+  <div class="container">
+    <h2>About the Project</h2>
+    <p>
+      The <strong>Arma Reforger Artillery Calculator</strong> is a web-based tactical tool built to assist players and mission designers in Arma Reforger. It streamlines the process of calculating artillery firing solutions based on realistic physics, accurate firing tables, and custom user inputs.
+    </p>
+    <p>
+      The app supports selecting artillery and shell types, marking origin and target positions directly on a map, and outputs precise firing data such as charge, elevation, azimuth, and time of flight using real ballistic characteristics.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+      <li>🔄 Dynamic and interactive custom map UI</li>
+      <li>🇺🇸🇷🇺 Supports both US and Soviet-style artillery systems</li>
+      <li>💥 Multiple shell types: HE, Smoke, Illumination, and Practice</li>
+      <li>📏 Accurate interpolation between ring data points</li>
+      <li>🎯 Displays calculated azimuth, elevation, charge level, and impact timing</li>
+      <li>📡 Visual range indicators and distance overlays on the map</li>
+    </ul>
+
+    <h2>Technology Stack</h2>
+    <div class="tech-stack">
+      <div class="tech">React.js</div>
+      <div class="tech">Next.js</div>
+      <div class="tech">React-Leaflet</div>
+      <div class="tech">Custom Map Engine</div>
+      <div class="tech">Geospatial Calculations</div>
+      <div class="tech">CSS3 / Grid / Flexbox</div>
+      <div class="tech">LocalStorage for Persistence</div>
+    </div>
+
+    <h2>Live App & Code</h2>
+    <div class="links">
+      <a href="https://arma-reforger-artillery-calculator.vercel.app/" target="_blank">🚀 Launch the App</a>
+      <a href="https://github.com/Paul-Lecomte/Arma-Reforger-Artillery-Calculator" target="_blank">📦 GitHub Repo</a>
+    </div>
+
+    <h2>Why I Built It</h2>
+    <p>
+      I wanted to build a practical military simulation tool that enhances the tactical experience in Arma Reforger. This project gave me the opportunity to work on real-time map rendering, coordinate math, and performance-optimized UI rendering — all while providing a genuinely useful utility for the gaming community.
+    </p>
+  </div>
+
 </body>
 </html>
