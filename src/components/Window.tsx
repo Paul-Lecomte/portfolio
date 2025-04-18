@@ -12,8 +12,8 @@ export default function Window({
     onClose: () => void;
 }) {
     const [isMaximized, setIsMaximized] = useState(false);
-    const [windowSize, setWindowSize] = useState({ width: 400, height: 300 });
-    const [position, setPosition] = useState({ x: 100, y: 100 });
+    const [windowSize, setWindowSize] = useState({ width: 500, height: 500 });
+    const [position, setPosition] = useState({ x: 100, y: 50 });
     const [isResizing, setIsResizing] = useState(false);
 
     const nodeRef = useRef<HTMLDivElement>(null);

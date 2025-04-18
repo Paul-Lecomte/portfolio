@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Stocker is a full-stack inventory management app to track, manage, and organize your products with ease. Built with React, Node, PostgreSQL." />
+    <meta name="author" content="Paul Lecomte" />
+    <link rel="icon" type="image/png" href="favicon.png" />
     <title>Stocker – Inventory Management App</title>
     <style>
         :root {
@@ -13,12 +16,17 @@
             --glass: rgba(255, 255, 255, 0.06);
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg);
             color: var(--text);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         header {
@@ -54,13 +62,15 @@
         }
 
         p {
-            line-height: 1.8;
             font-size: 1rem;
         }
 
         ul {
             padding-left: 1.2rem;
-            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
         }
 
         .tech-stack {
@@ -109,6 +119,34 @@
             color: rgba(255, 255, 255, 0.6);
         }
 
+        footer a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            right: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            background-color: var(--primary);
+            color: black;
+            cursor: pointer;
+            padding: 12px 18px;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(0, 198, 255, 0.3);
+            transition: background 0.3s ease;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -127,6 +165,11 @@
             .tech-stack {
                 flex-direction: column;
             }
+
+            .links a {
+                display: block;
+                margin-bottom: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -138,7 +181,9 @@
 
 <div class="container">
     <h2>About the Project</h2>
-    <p><strong>Stocker</strong> is a full-stack inventory management system designed to simplify how warehouses, small businesses, or retailers manage their stock in real time. With a user-friendly interface and robust backend, it allows seamless product tracking, movement logging, and dynamic stock updates.</p>
+    <p>
+        <strong>Stocker</strong> is a full-stack inventory management system designed to simplify how warehouses, small businesses, or retailers manage their stock in real time. With a user-friendly interface and robust backend, it allows seamless product tracking, movement logging, and dynamic stock updates.
+    </p>
 
     <h2>Key Features</h2>
     <ul>
@@ -169,75 +214,33 @@
     </div>
 
     <h2>Why I Built It</h2>
-    <p>I wanted to create a practical application that solves a real-world business problem: managing inventory efficiently. Stocker was built to learn and demonstrate full-stack development capabilities — from building a secure REST API to crafting a responsive frontend with React.</p>
-
-    <h2>REST API Overview</h2>
-    <p>Stocker provides a secure RESTful API to manage users, products, categories, and inventory logs. Example endpoints include:</p>
-    <ul>
-        <li><code>POST /api/auth/login</code> – User login</li>
-        <li><code>GET /api/products</code> – Fetch all inventory items</li>
-        <li><code>POST /api/products</code> – Add new product</li>
-        <li><code>PUT /api/products/:id</code> – Update product</li>
-        <li><code>DELETE /api/products/:id</code> – Remove product</li>
-    </ul>
-    <p>All endpoints are protected using JWT-based authentication and role verification.</p>
-
-    <h2>Authentication & Authorization</h2>
-    <p>Authentication is handled using JSON Web Tokens (JWT), enabling secure session management. Each token includes a user ID and role.</p>
-    <p>Authorization logic restricts access to admin-only routes, like creating or deleting inventory items.</p>
-
-    <h2>Responsive Design</h2>
-    <p>Stocker’s frontend is fully responsive and adapts to mobile, tablet, and desktop devices using CSS Flexbox and media queries.</p>
-    <p>Mobile-first design ensures users can manage inventory even from smartphones.</p>
-
-    <h2>Error Handling</h2>
-    <p>All API responses follow a consistent error structure. Backend handles validation errors, auth issues, and database failures gracefully.</p>
-    <p>Frontend displays helpful error messages to guide users during interactions.</p>
-
-    <h2>Deployment</h2>
-    <p>The app is deployed on <strong>Render</strong> for both backend and frontend.</p>
-    <p>CI/CD pipelines are configured to auto-deploy from GitHub using webhooks and Docker containers.</p>
-
-    <h2>Environment Config</h2>
-    <p>Environment variables are used for secure credentials and connection strings:</p>
-    <ul>
-        <li><code>DATABASE_URL</code> – PostgreSQL DB string</li>
-        <li><code>JWT_SECRET</code> – Secret used for token encryption</li>
-        <li><code>PORT</code> – Backend listening port</li>
-    </ul>
-
-    <h2>Testing Strategy</h2>
-    <p>Jest is used for backend unit testing. API routes are tested with mocked requests.</p>
-    <p>Frontend uses React Testing Library to ensure components render and behave correctly.</p>
-
-    <h2>Code Quality</h2>
-    <p>Stocker uses ESLint with Airbnb rules and Prettier for consistent formatting.</p>
-    <p>Commits are linted automatically via Husky git hooks.</p>
-
-    <h2>Performance Optimizations</h2>
-    <p>Frontend is lazy-loaded where applicable. API endpoints are optimized with efficient DB queries and indexing.</p>
-    <p>Images and assets are compressed and cached using CDN strategies.</p>
-
-    <h2>Accessibility & UX</h2>
-    <p>All buttons and inputs follow accessibility guidelines (ARIA tags, focus states).</p>
-    <p>Color contrast and keyboard navigation are designed for inclusive usage.</p>
-
-    <h2>Roadmap</h2>
-    <ul>
-        <li>🗃️ Multi-warehouse support</li>
-        <li>📈 Advanced analytics dashboard</li>
-        <li>📦 Barcode scanner integration</li>
-        <li>📱 Native mobile app using React Native</li>
-    </ul>
-
-    <h2>Visual Demo</h2>
-    <p>Screenshots and GIFs showcasing the UI and flow will be added here soon.</p>
-    <img src="screenshot-placeholder.png" alt="UI Screenshot" style="max-width: 100%; border-radius: 1rem; margin-top: 1rem;">
+    <p>
+        I wanted to create a practical application that solves a real-world business problem: managing inventory efficiently. Stocker was built to learn and demonstrate full-stack development capabilities — from building a secure REST API to crafting a responsive frontend with React.
+    </p>
 </div>
 
 <footer>
-    Built with 💙 by Paul Lecomte • <a href="https://github.com/Paul-Lecomte" target="_blank" style="color: var(--primary); text-decoration: underline;">GitHub Profile</a>
+    Built with 💙 by Paul Lecomte •
+    <a href="https://github.com/Paul-Lecomte" target="_blank">GitHub Profile</a>
 </footer>
+
+<button id="scrollTopBtn" title="Go to top">⬆</button>
+
+<script>
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+    window.onscroll = function () {
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            scrollTopBtn.style.display = "block";
+        } else {
+            scrollTopBtn.style.display = "none";
+        }
+    };
+
+    scrollTopBtn.onclick = function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+</script>
 
 </body>
 </html>
