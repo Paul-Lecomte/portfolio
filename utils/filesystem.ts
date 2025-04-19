@@ -53,10 +53,10 @@ const mockFilesystem: Record<string, FileItem[]> = {
             path: "/C/Users/Paul/Desktop/projects",
         },
         {
-            name: "ReadMe.txt",
+            name: "README.md",
             type: "file",
-            path: "/C/Users/Paul/Desktop/ReadMe.txt",
-            url: `${baseUrl}/C/Users/Paul/Desktop/ReadMe.txt`,
+            path: "/C/Users/Paul/Desktop/README.md",
+            url: `${baseUrl}/C/Users/Paul/Desktop/README.md`,
             app: "Markdown Editor",
         },
     ],
