@@ -511,7 +511,7 @@ export default function Desktop() {
             {[
                 ...userFiles,
                 { id: 'project-folder', title: 'Project Folder', icon: <FaFolder size={24} /> },
-                { id: 'readme-file', title: 'README.md', icon: <FaFileAlt size={24} /> }, // Add the README icon
+                { id: 'readme-file', title: 'README.md', icon: <FaFileAlt size={24} />, path: '/C/Users/Paul/Desktop/README.md', app: 'Markdown Editor' }
             ].map((icon, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
@@ -522,11 +522,37 @@ export default function Desktop() {
                         setOpenWindows((prev) =>
                             prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]
                         );
-                        openWindow('File Explorer', '${baseUrl}/C/Users/Paul/Desktop/projects', null, 'File Explorer');
+                        openWindow('File Explorer', `filesystem/C/Users/Paul/Desktop/projects`, null, 'File Explorer');
                         console.log("correctly opening to the desired path");
                     } else if (icon.id === 'readme-file') {
-                        openWindow('Markdown Editor', '${baseUrl}/C/Users/Paul/Desktop/README.md');
-                        console.log("Opening README.md file");
+                        const fileUrl = 'filesystem' + icon.path; // You can make this dynamic
+                        const app = icon.app;
+
+                        console.log("Opening file:", icon.title, "with url:", fileUrl, "and app:", app);
+
+                        if (app && fileUrl) {
+                            fetch(fileUrl)
+                                .then((response) => response.text())
+                                .then((content) => {
+                                    console.log("Fetched content:", content);
+
+                                    // Save to localStorage
+                                    localStorage.setItem("currentFile", JSON.stringify({
+                                        fileName: icon.title,
+                                        fileContent: content,
+                                        fileUrl,
+                                    }));
+
+                                    // Launch the correct app
+                                    setOpenWindows((prev) =>
+                                        prev.includes(app) ? prev : [...prev, app]
+                                    );
+                                })
+                                .catch((err) => console.error("Error fetching file:", err));
+                        } else {
+                            openWindow(icon.title);
+                            console.log("Fallback: opening window with title only");
+                        }
                     } else {
                         openWindow(icon.title);
                         console.log("did not work");
