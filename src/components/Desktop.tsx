@@ -517,7 +517,7 @@ export default function Desktop() {
                         setOpenWindows((prev) => (prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]));
 
                         // Here, we pass the correct path directly to the `openWindow` function
-                        openWindow('File Explorer', '/C/Users/admin/Desktop/projects', null, 'File Explorer');
+                        openWindow('File Explorer', '/C/Users/Paul/Desktop/projects', null, 'File Explorer');
                         console.log("correctly opening to the desired path");
                     } else {
                         // Handle other icons (files, folders, etc.) with default behavior
