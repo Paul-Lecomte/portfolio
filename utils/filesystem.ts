@@ -16,14 +16,14 @@ const mockFilesystem: Record<string, FileItem[]> = {
         { name: "Windows", type: "folder", path: "/C/Windows" },
         { name: "System32", type: "folder", path: "/C/System32" },
     ],
-    "/C/Users": [{ name: "admin", type: "folder", path: "/C/Users/admin" }],
-    "/C/Users/admin": [
-        { name: "Documents", type: "folder", path: "/C/Users/admin/Documents" },
-        { name: "Pictures", type: "folder", path: "/C/Users/admin/Pictures" },
-        { name: "Downloads", type: "folder", path: "/C/Users/admin/Downloads" },
-        { name: "Desktop", type: "folder", path: "/C/Users/admin/Desktop" },
+    "/C/Users": [{ name: "Paul", type: "folder", path: "/C/Users/Paul" }],
+    "/C/Users/Paul": [
+        { name: "Documents", type: "folder", path: "/C/Users/Paul/Documents" },
+        { name: "Pictures", type: "folder", path: "/C/Users/Paul/Pictures" },
+        { name: "Downloads", type: "folder", path: "/C/Users/Paul/Downloads" },
+        { name: "Desktop", type: "folder", path: "/C/Users/Paul/Desktop" },
     ],
-    "/C/Users/admin/Documents": [
+    "/C/Users/Paul/Documents": [
         {
             name: "notes.txt",
             type: "file",
@@ -32,31 +32,31 @@ const mockFilesystem: Record<string, FileItem[]> = {
             app: "Notepad",
         },
     ],
-    "/C/Users/admin/Pictures": [
+    "/C/Users/Paul/Pictures": [
         {
             name: "image2.png",
             type: "file",
-            path: "/C/Users/admin/Pictures/image2.png",
-            url: `/filesystem/C/Users/admin/Pictures/image2.png`,
+            path: "/C/Users/Paul/Pictures/image2.png",
+            url: `/filesystem/C/Users/Paul/Pictures/image2.png`,
             app: "Image Viewer",
         },
     ],
-    "/C/Users/admin/Desktop": [
-        { name: "projects", type: "folder", path: "/C/Users/admin/Desktop/projects" },
+    "/C/Users/Paul/Desktop": [
+        { name: "projects", type: "folder", path: "/C/Users/Paul/Desktop/projects" },
     ],
-    "/C/Users/admin/Desktop/projects": [
+    "/C/Users/Paul/Desktop/projects": [
         {
             name: "stocker.html",
             type: "file",
-            path: "/C/Users/admin/Desktop/projects/stocker.html",
-            url: `/filesystem/C/Users/admin/Desktop/projects/stocker.html`,
+            path: "/C/Users/Paul/Desktop/projects/stocker.html",
+            url: `/filesystem/C/Users/Paul/Desktop/projects/stocker.html`,
             app: "Web Browser",
         },
         {
             name: "Arma_Reforger_Artillery_calculator.html",
             type: "file",
-            path: "/C/Users/admin/Desktop/projects/Arma_Reforger_Artillery_calculator.html",
-            url: `/filesystem/C/Users/admin/Desktop/projects/Arma_Reforger_Artillery_calculator.html`,
+            path: "/C/Users/Paul/Desktop/projects/Arma_Reforger_Artillery_calculator.html",
+            url: `/filesystem/C/Users/Paul/Desktop/projects/Arma_Reforger_Artillery_calculator.html`,
             app: "Web Browser",
         },
     ],
