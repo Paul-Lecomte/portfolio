@@ -506,23 +506,30 @@ export default function Desktop() {
                 </div>
             </div>
 
-            {[...userFiles, { id: 'project-folder', title: 'Project Folder', icon: <FaFolder size={24} /> }].map((icon, index) => {
+            import { FaFolder, FaFileAlt } from 'react-icons/fa';
+
+            {[
+                ...userFiles,
+                { id: 'project-folder', title: 'Project Folder', icon: <FaFolder size={24} /> },
+                { id: 'readme-file', title: 'README.md', icon: <FaFileAlt size={24} /> }, // Add the README icon
+            ].map((icon, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
                 const spacing = 100;
 
                 const handleClick = () => {
                     if (icon.id === 'project-folder') {
-                        // Handle opening the "File Explorer" with the specific path for the Projects folder
-                        setOpenWindows((prev) => (prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]));
-
-                        // Here, we pass the correct path directly to the `openWindow` function
-                        openWindow('File Explorer', '/C/Users/Paul/Desktop/projects', null, 'File Explorer');
+                        setOpenWindows((prev) =>
+                            prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]
+                        );
+                        openWindow('File Explorer', '${baseUrl}/C/Users/Paul/Desktop/projects', null, 'File Explorer');
                         console.log("correctly opening to the desired path");
+                    } else if (icon.id === 'readme-file') {
+                        openWindow('Markdown Editor', '${baseUrl}/C/Users/Paul/Desktop/README.md');
+                        console.log("Opening README.md file");
                     } else {
-                        // Handle other icons (files, folders, etc.) with default behavior
                         openWindow(icon.title);
-                        console.log("did not work"); // Log if the file isn't handled as expected
+                        console.log("did not work");
                     }
                 };
 
@@ -531,7 +538,7 @@ export default function Desktop() {
                         key={icon.id}
                         icon={icon}
                         position={{ top: 50 + row * spacing, left: 50 + col * spacing }}
-                        openWindow={handleClick} // Use the custom click handler
+                        openWindow={handleClick}
                         onContextMenu={handleContextMenu}
                     />
                 );
