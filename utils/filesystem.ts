@@ -57,7 +57,7 @@ const mockFilesystem: Record<string, FileItem[]> = {
             type: "file",
             path: "/C/Users/Paul/Desktop/ReadMe.txt",
             url: `${baseUrl}/C/Users/Paul/Desktop/ReadMe.txt`,
-            app: "Notepad",
+            app: "Markdown Editor",
         },
     ],
     "/C/Users/Paul/Desktop/projects": [
