@@ -1,33 +1,58 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import dynamic from 'next/dynamic';
-const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false });
-import '../../public/simplemde.min.css';
+import dynamic from "next/dynamic";
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
+import "../../public/simplemde.min.css";
 
 interface FileEditorProps {
-    file: any; // The file to be edited
-    onClose: () => void; // Function to close the editor window
-    onSave: (fileId: number, content: string) => void; // Function to save the content of the file
+    file: any;
+    onClose: () => void;
+    onSave: (fileId: number, content: string) => void;
 }
 
 const FileEditor: React.FC<FileEditorProps> = ({ file, onClose, onSave }) => {
-    const [content, setContent] = useState(file.content);
+    const [content, setContent] = useState("");
 
     useEffect(() => {
-        setContent(file.content); // Initialize with the file's content
+        const savedFile = localStorage.getItem("currentFile");
+        if (savedFile) {
+            const { fileUrl } = JSON.parse(savedFile);
+            if (fileUrl) {
+                fetch(fileUrl)
+                    .then((res) => res.text())
+                    .then((text) => setContent(text))
+                    .catch((err) => {
+                        console.error("Error loading file content:", err);
+                        setContent(file.content || "");
+                    });
+            } else {
+                setContent(file.content || "");
+            }
+        } else {
+            setContent(file.content || "");
+        }
     }, [file]);
 
     const handleSave = () => {
-        onSave(file.id, content); // Save the content when the user clicks save
-        onClose(); // Close the editor after saving
+        onSave(file.id, content);
+        onClose();
     };
 
     return (
-        <div className="p-5 bg-gray-800 text-white">
-            <div className="flex justify-between items-center">
-                <h2 className="text-xl">{file.title}</h2>
-                <button onClick={handleSave} className="bg-blue-500 p-2 rounded">Save</button>
+        <div className="p-5 bg-gray-800 text-white h-full flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">{file.title}</h2>
+                <button
+                    onClick={handleSave}
+                    className="bg-blue-500 hover:bg-blue-400 px-4 py-2 rounded"
+                >
+                    Save
+                </button>
             </div>
-            <SimpleMDE value={content} onChange={setContent} />
+            <div className="flex-1 overflow-auto">
+                <SimpleMDE value={content} onChange={setContent} />
+            </div>
         </div>
     );
 };
