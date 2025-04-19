@@ -66,7 +66,7 @@ const FileEditor: React.FC<FileEditorProps> = ({ file, onClose, onSave }) => {
             </div>
             <div className="flex-1 overflow-auto rounded">
                 {isPreview ? (
-                    <div className="markdown-body p-4 bg-white text-black rounded overflow-auto max-h-[80%]">
+                    <div className="markdown-body p-4 bg-white text-black rounded overflow-auto max-h-[90%]">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {content}
                         </ReactMarkdown>
