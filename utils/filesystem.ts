@@ -34,21 +34,7 @@ const mockFilesystem: Record<string, FileItem[]> = {
             path: "/C/Users/Paul/Documents/notes.txt",
             url: `${baseUrl}/C/Users/Paul/Documents/notes.txt`,
             app: "Notepad",
-        },
-        {
-            name: "resume.docx",
-            type: "file",
-            path: "/C/Users/Paul/Documents/resume.docx",
-            url: `${baseUrl}/C/Users/Paul/Documents/resume.docx`,
-            app: "Word",
-        },
-        {
-            name: "budget.xlsx",
-            type: "file",
-            path: "/C/Users/Paul/Documents/budget.xlsx",
-            url: `${baseUrl}/C/Users/Paul/Documents/budget.xlsx`,
-            app: "Excel",
-        },
+        }
     ],
     "/C/Users/Paul/Pictures": [
         {
@@ -57,38 +43,9 @@ const mockFilesystem: Record<string, FileItem[]> = {
             path: "/C/Users/Paul/Pictures/image2.png",
             url: `${baseUrl}/C/Users/Paul/Pictures/image2.png`,
             app: "Image Viewer",
-        },
-        {
-            name: "vacation.jpg",
-            type: "file",
-            path: "/C/Users/Paul/Pictures/vacation.jpg",
-            url: `${baseUrl}/C/Users/Paul/Pictures/vacation.jpg`,
-            app: "Image Viewer",
-        },
-        {
-            name: "profile_pic.jpeg",
-            type: "file",
-            path: "/C/Users/Paul/Pictures/profile_pic.jpeg",
-            url: `${baseUrl}/C/Users/Paul/Pictures/profile_pic.jpeg`,
-            app: "Image Viewer",
-        },
+        }
     ],
-    "/C/Users/Paul/Downloads": [
-        {
-            name: "stocker-report.pdf",
-            type: "file",
-            path: "/C/Users/Paul/Downloads/stocker-report.pdf",
-            url: `${baseUrl}/C/Users/Paul/Downloads/stocker-report.pdf`,
-            app: "PDF Viewer",
-        },
-        {
-            name: "ArmaCalcManual.pdf",
-            type: "file",
-            path: "/C/Users/Paul/Downloads/ArmaCalcManual.pdf",
-            url: `${baseUrl}/C/Users/Paul/Downloads/ArmaCalcManual.pdf`,
-            app: "PDF Viewer",
-        },
-    ],
+    "/C/Users/Paul/Downloads": [],
     "/C/Users/Paul/Desktop": [
         {
             name: "projects",
@@ -117,56 +74,11 @@ const mockFilesystem: Record<string, FileItem[]> = {
             path: "/C/Users/Paul/Desktop/projects/Arma_Reforger_Artillery_calculator.html",
             url: `${baseUrl}/C/Users/Paul/Desktop/projects/Arma_Reforger_Artillery_calculator.html`,
             app: "Web Browser",
-        },
-        {
-            name: "index.js",
-            type: "file",
-            path: "/C/Users/Paul/Desktop/projects/index.js",
-            url: `${baseUrl}/C/Users/Paul/Desktop/projects/index.js`,
-            app: "Code Editor",
-        },
+        }
     ],
-    "/C/Users/Paul/Music": [
-        {
-            name: "lo-fi.mp3",
-            type: "file",
-            path: "/C/Users/Paul/Music/lo-fi.mp3",
-            url: `${baseUrl}/C/Users/Paul/Music/lo-fi.mp3`,
-            app: "Music Player",
-        },
-        {
-            name: "theme.wav",
-            type: "file",
-            path: "/C/Users/Paul/Music/theme.wav",
-            url: `${baseUrl}/C/Users/Paul/Music/theme.wav`,
-            app: "Music Player",
-        },
-    ],
-    "/C/Users/Paul/Videos": [
-        {
-            name: "demo.mp4",
-            type: "file",
-            path: "/C/Users/Paul/Videos/demo.mp4",
-            url: `${baseUrl}/C/Users/Paul/Videos/demo.mp4`,
-            app: "Video Player",
-        },
-        {
-            name: "tutorial.mov",
-            type: "file",
-            path: "/C/Users/Paul/Videos/tutorial.mov",
-            url: `${baseUrl}/C/Users/Paul/Videos/tutorial.mov`,
-            app: "Video Player",
-        },
-    ],
-    "/C/Users/Public": [
-        {
-            name: "family-photo.jpg",
-            type: "file",
-            path: "/C/Users/Public/family-photo.jpg",
-            url: `${baseUrl}/C/Users/Public/family-photo.jpg`,
-            app: "Image Viewer",
-        },
-    ],
+    "/C/Users/Paul/Music": [],
+    "/C/Users/Paul/Videos": [],
+    "/C/Users/Public": [],
     "/C/Program Files": [
         {
             name: "Common Files",
@@ -200,15 +112,7 @@ const mockFilesystem: Record<string, FileItem[]> = {
             path: "/C/Windows/Logs",
         },
     ],
-    "/C/Windows/Fonts": [
-        {
-            name: "arial.ttf",
-            type: "file",
-            path: "/C/Windows/Fonts/arial.ttf",
-            url: `${baseUrl}/C/Windows/Fonts/arial.ttf`,
-            app: "Font Viewer",
-        },
-    ],
+    "/C/Windows/Fonts": [],
     "/C/Windows/Logs": [
         {
             name: "system.log",
@@ -225,15 +129,7 @@ const mockFilesystem: Record<string, FileItem[]> = {
             path: "/C/System32/drivers",
         },
     ],
-    "/C/System32/drivers": [
-        {
-            name: "audio.sys",
-            type: "file",
-            path: "/C/System32/drivers/audio.sys",
-            url: `${baseUrl}/C/System32/drivers/audio.sys`,
-            app: "System",
-        },
-    ],
+    "/C/System32/drivers": [],
 };
 
 export async function fetchFiles(path: string): Promise<FileItem[]> {
