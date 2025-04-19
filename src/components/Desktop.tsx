@@ -479,7 +479,7 @@ export default function Desktop() {
                             {/* User Profile */}
                             <div className="mt-4 flex items-center gap-3">
                                 <img src="/user.png" alt="User Avatar" className="h-8 w-8 rounded-full" />
-                                <span className="text-white font-medium">Admin</span>
+                                <span className="text-white font-medium">Paul</span>
                             </div>
                         </div>
                     )}
