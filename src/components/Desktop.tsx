@@ -506,8 +506,6 @@ export default function Desktop() {
                 </div>
             </div>
 
-            import { FaFolder, FaFileAlt } from 'react-icons/fa';
-
             {[
                 ...userFiles,
                 { id: 'project-folder', title: 'Project Folder', icon: <FaFolder size={24} /> },
