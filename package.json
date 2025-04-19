@@ -12,8 +12,9 @@
     "@monaco-editor/react": "^4.7.0",
     "autoprefixer": "^10.4.21",
     "canvas": "^3.1.0",
+    "github-markdown-css": "^5.8.1",
     "konva": "^9.3.20",
-    "next": "15.2.3",
+    "next": "^15.3.1",
     "postprocessing": "^6.37.2",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
@@ -21,8 +22,10 @@
     "react-draggable": "^4.4.6",
     "react-icons": "^5.5.0",
     "react-konva": "^19.0.3",
+    "react-markdown": "^10.1.0",
     "react-p5": "^1.4.1",
     "react-simplemde-editor": "^5.2.0",
+    "remark-gfm": "^4.0.1",
     "three": "^0.175.0"
   },
   "devDependencies": {
