@@ -9,7 +9,7 @@ const StarNestWallpaper = () => {
 
         // Create a new scene, camera, and renderer
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(10, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 2;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
