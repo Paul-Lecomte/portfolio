@@ -17,6 +17,7 @@ import AnimatedWallpaper from "@/components/wallpaper/TestWallpaper";
 import ClusterWallpaper from "@/components/wallpaper/ClusterWallpaper";
 import MatrixWallpaper from "@/components/wallpaper/MatrixWallpaper";
 import SublimeWallpaper from "@/components/wallpaper/SolarSystemWallpaper";
+import PaintingWallpaper from "@/components/wallpaper/PaintingWallpaper";
 import {
     FaFileAlt,
     FaLaptop,
@@ -386,6 +387,8 @@ export default function Desktop() {
                     <SublimeWallpaper />
                 ) : wallpaperType === "matrix" ? (
                     <MatrixWallpaper />
+                ) : wallpaperType === "painting" ? (
+                    <PaintingWallpaper />
                 ) : wallpaperType === "cluster" ? (
                     <ClusterWallpaper />
                 ) : (
@@ -628,7 +631,7 @@ export default function Desktop() {
 
                             {contextMenu.showMoreOptions && (
                                 <div className="absolute left-full top-0 ml-1 bg-white/10 border border-white/20 rounded-xl shadow-xl backdrop-blur-xl z-50 w-48 p-2">
-                                    {["Default", "Solar system", "Matrix", "Cluster"].map((label) => (
+                                    {["Default", "Solar system", "Matrix", "Cluster", "Painting"].map((label) => (
                                         <button
                                             key={label}
                                             className="text-white text-sm w-full text-left px-3 py-2 hover:bg-white/20 rounded-md transition"
