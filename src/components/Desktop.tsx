@@ -603,13 +603,13 @@ export default function Desktop() {
                             Rename
                         </button>
 
-                        <button
-                            className="flex items-center gap-3 px-4 py-2 text-sm text-white hover:bg-white/20 transition rounded-md"
-                            onClick={handleFileUpload}
-                        >
-                            <img src="/contextmenu/upload.png" alt="" className="h-5 w-5" />
-                            Upload File
-                        </button>
+                        {/*<button*/}
+                        {/*    className="flex items-center gap-3 px-4 py-2 text-sm text-white hover:bg-white/20 transition rounded-md"*/}
+                        {/*    onClick={handleFileUpload}*/}
+                        {/*>*/}
+                        {/*    <img src="/contextmenu/upload.png" alt="" className="h-5 w-5" />*/}
+                        {/*    Upload File*/}
+                        {/*</button>*/}
 
                         <button
                             className="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-white/20 transition rounded-md"
