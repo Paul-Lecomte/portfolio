@@ -515,7 +515,7 @@ export default function Desktop() {
             {[
                 ...userFiles,
                 { id: 'project-folder', title: 'Project Folder', icon: <FaFolder size={24} /> },
-                { id: 'readme-file', title: 'README.md', icon: <FaFileAlt size={24} />, path: '/C/Users/Paul/Desktop/README.md', app: 'Markdown Editor' }
+                { id: 'readme-file', title: 'README.md', icon: <FaFileAlt size={24} />, path: '/filesystem/C/Users/Paul/Desktop/README.md', app: 'Markdown Editor' }
             ].map((icon, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
@@ -529,7 +529,7 @@ export default function Desktop() {
                         openWindow('File Explorer', `filesystem/C/Users/Paul/Desktop/projects`, null, 'File Explorer');
                         console.log("correctly opening to the desired path");
                     } else if (icon.id === 'readme-file') {
-                        const fileUrl = 'filesystem' + icon.path; // You can make this dynamic
+                        const fileUrl = icon.path; // You can make this dynamic
                         const app = icon.app;
 
                         console.log("Opening file:", icon.title, "with url:", fileUrl, "and app:", app);
