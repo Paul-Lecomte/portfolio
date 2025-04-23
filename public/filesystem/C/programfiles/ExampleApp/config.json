@@ -1,0 +1,9 @@
+{
+  "version": "1.3.7",
+  "developer": "Paul Lecomte",
+  "funFact": "This app was written during a caffeine-fueled weekend. Productivity was at 9000.",
+  "easterEgg": {
+    "trigger": "Ctrl+Alt+Win+E",
+    "message": "You found the secret dev room. There's a rubber duck here... it stares into your soul."
+  }
+}
