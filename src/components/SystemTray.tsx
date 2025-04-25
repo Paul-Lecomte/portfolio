@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaVolumeUp, FaVolumeMute, FaWifi, FaBatteryFull, FaBatteryEmpty, FaRegClock, FaCalendarAlt } from 'react-icons/fa';
+import Calendar from 'react-calendar'; // Import the calendar
 
 const SystemTray = () => {
     const [volume, setVolume] = useState(50);
@@ -167,7 +168,11 @@ const SystemTray = () => {
                 </span>
                 {showTimePopup && (
                     <div className={`absolute ${popupPosition(true)} right-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
-                        <p>{showDate ? new Date().toLocaleDateString() : time}</p>
+                        {showDate ? (
+                            <Calendar /> // Display the calendar
+                        ) : (
+                            <p>{time}</p>
+                        )}
                         <button onClick={toggleTimeDate} className="text-blue-500 hover:underline">Toggle Date/Time</button>
                     </div>
                 )}
