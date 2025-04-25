@@ -5,6 +5,7 @@ const SystemTray = () => {
     const [volume, setVolume] = useState(50);
     const [muted, setMuted] = useState(false);
     const [networkStatus, setNetworkStatus] = useState("online");
+    const [currentNetwork, setCurrentNetwork] = useState<string | null>(null);
     const [batteryLevel, setBatteryLevel] = useState(100);
     const [time, setTime] = useState("");
     const [showDate, setShowDate] = useState(false);
@@ -13,6 +14,14 @@ const SystemTray = () => {
     const [showBatteryPopup, setShowBatteryPopup] = useState(false);
     const [showTimePopup, setShowTimePopup] = useState(false);
     const [windowHeight, setWindowHeight] = useState<number>(0);
+
+    // Fake Wi-Fi networks
+    const networks = [
+        { name: "Home Network", signalStrength: 80 },
+        { name: "Coffee Shop Wi-Fi", signalStrength: 60 },
+        { name: "Public Wi-Fi", signalStrength: 40 },
+        { name: "Guest Network", signalStrength: 20 },
+    ];
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -65,6 +74,11 @@ const SystemTray = () => {
         return 'top-16'; // Adjust top positioning if needed
     };
 
+    const connectToNetwork = (networkName: string) => {
+        setCurrentNetwork(networkName);
+        alert(`Connected to ${networkName}`);
+    };
+
     return (
         <div className="flex items-center space-x-6 text-white">
             {/* Network Status */}
@@ -78,6 +92,15 @@ const SystemTray = () => {
                 {showNetworkPopup && (
                     <div className={`absolute ${popupPosition(true)} left-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
                         <p>Status: {networkStatus}</p>
+                        <p>Connected to: {currentNetwork || "No network"}</p>
+                        <ul>
+                            {networks.map((network, index) => (
+                                <li key={index} className="flex justify-between items-center p-2 hover:bg-white/20 cursor-pointer" onClick={() => connectToNetwork(network.name)}>
+                                    <span>{network.name}</span>
+                                    <span>{network.signalStrength}%</span>
+                                </li>
+                            ))}
+                        </ul>
                         <button onClick={() => alert('Network settings clicked')} className="text-blue-500 hover:underline">Network Settings</button>
                     </div>
                 )}
