@@ -603,6 +603,7 @@ export default function Desktop() {
                             Rename
                         </button>
 
+                        {/*Commenting this for now i will work on it later on*/}
                         {/*<button*/}
                         {/*    className="flex items-center gap-3 px-4 py-2 text-sm text-white hover:bg-white/20 transition rounded-md"*/}
                         {/*    onClick={handleFileUpload}*/}
