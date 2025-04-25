@@ -169,7 +169,16 @@ const SystemTray = () => {
                 {showTimePopup && (
                     <div className={`absolute ${popupPosition(true)} right-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
                         {showDate ? (
-                            <Calendar /> // Display the calendar
+                            <div className="p-4 bg-gray-900 rounded-lg shadow-lg">
+                                <Calendar
+                                    className="react-calendar"
+                                    tileClassName="text-white bg-gray-800 hover:bg-blue-600 hover:text-white rounded-md"
+                                    prev2Label={null}
+                                    next2Label={null}
+                                    view="month"
+                                    tileContent={({ date }) => <span className="text-sm">{date.getDate()}</span>}
+                                />
+                            </div>
                         ) : (
                             <p>{time}</p>
                         )}
