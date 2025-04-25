@@ -325,6 +325,8 @@ export default function Desktop() {
         );
     };
 
+    /*Comment file upload not used or working for now*/
+    /*
     const handleFileUpload = () => {
         const input = document.createElement("input");
         input.type = "file";
@@ -376,8 +378,7 @@ export default function Desktop() {
             }
         };
     };
-
-
+    */
     return (
         <div className="w-full h-screen relative desktop-body" onContextMenu={(e) => handleContextMenu(e, "")}>
             {/* Render the selected wallpaper */}
