@@ -14,8 +14,36 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Windows 11 Portfolio",
-    description: "A portfolio designed like an operating system",
+    title: "Custom OS Portfolio",
+    description: "A creative portfolio designed to resemble an interactive operating system interface.",
+    keywords: ["portfolio", "operating system", "design", "interactive", "UI", "UX", "web design", "react", "next.js"],
+    author: "Paul Lecomte",
+    openGraph: {
+        title: "Custom OS Portfolio",
+        description: "A portfolio designed like an operating system, showcasing creative UI and web development skills.",
+        type: "website",
+        url: "https://your-portfolio-url.com", // Replace with the actual URL
+        siteName: "Custom OS Portfolio",
+        images: [
+            {
+                url: "/images/og-image.png", // Replace with the actual image path for a preview
+                width: 1200,
+                height: 630,
+                alt: "Portfolio Thumbnail",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        site: "@yourtwitterhandle", // Replace with your Twitter handle
+        creator: "@yourtwitterhandle", // Replace with your Twitter handle
+        title: "Custom OS Portfolio",
+        description: "A portfolio designed like an operating system, showcasing creative UI and web development skills.",
+        image: "/images/og-image.png", // Replace with the actual image path for a preview
+    },
+    robots: "index, follow",
+    viewport: "width=device-width, initial-scale=1.0",
+    themeColor: "#000000", // Set a theme color for the browser header
 };
 
 export default function RootLayout({
@@ -27,8 +55,8 @@ export default function RootLayout({
         <html lang="en">
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            {/* Desktop (Main Area) */}
-            <Desktop />
+        {/* Desktop (Main Area) */}
+        <Desktop />
         </body>
         </html>
     );
