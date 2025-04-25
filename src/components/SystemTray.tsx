@@ -7,6 +7,8 @@ const SystemTray = () => {
     const [networkStatus, setNetworkStatus] = useState("online");
     const [currentNetwork, setCurrentNetwork] = useState<string | null>(null);
     const [batteryLevel, setBatteryLevel] = useState(100);
+    const [charging, setCharging] = useState(false);
+    const [batteryHealth, setBatteryHealth] = useState("Good");
     const [time, setTime] = useState("");
     const [showDate, setShowDate] = useState(false);
     const [showVolumePopup, setShowVolumePopup] = useState(false);
@@ -47,6 +49,8 @@ const SystemTray = () => {
             const updateBatteryStatus = async () => {
                 const battery = await navigator.getBattery();
                 setBatteryLevel(Math.round(battery.level * 100));
+                setCharging(battery.charging);
+                setBatteryHealth(battery.level < 0.2 ? "Poor" : "Good");
             };
             updateBatteryStatus();
         }
@@ -77,6 +81,15 @@ const SystemTray = () => {
     const connectToNetwork = (networkName: string) => {
         setCurrentNetwork(networkName);
         alert(`Connected to ${networkName}`);
+    };
+
+    const simulateBatteryChange = () => {
+        // Simulate charging or discharging the battery
+        if (charging) {
+            setBatteryLevel((prev) => Math.min(100, prev + 5)); // Increase level while charging
+        } else {
+            setBatteryLevel((prev) => Math.max(0, prev - 5)); // Decrease level while discharging
+        }
     };
 
     return (
@@ -123,7 +136,7 @@ const SystemTray = () => {
                             max="100"
                             value={muted ? 0 : volume}
                             onChange={handleVolumeChange}
-                            className="w-full h-2 bg-white/20 rounded-md cursor-pointer"
+                            className="w-full"
                             disabled={muted}
                         />
                     </div>
@@ -138,6 +151,10 @@ const SystemTray = () => {
                 {showBatteryPopup && (
                     <div className={`absolute ${popupPosition(true)} right-0 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg text-white max-w-xs w-auto opacity-100 transform scale-100 transition-all duration-300 ease-in-out`}>
                         <p>Battery: {batteryLevel}%</p>
+                        <p>Health: {batteryHealth}</p>
+                        <button onClick={simulateBatteryChange} className="text-blue-500 hover:underline">
+                            Simulate {charging ? "Discharge" : "Charge"}
+                        </button>
                         <button onClick={() => alert('Battery settings clicked')} className="text-blue-500 hover:underline">Battery Settings</button>
                     </div>
                 )}
