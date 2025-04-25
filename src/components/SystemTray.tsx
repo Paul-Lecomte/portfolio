@@ -123,7 +123,7 @@ const SystemTray = () => {
                             max="100"
                             value={muted ? 0 : volume}
                             onChange={handleVolumeChange}
-                            className="w-full"
+                            className="w-full h-2 bg-white/20 rounded-md cursor-pointer"
                             disabled={muted}
                         />
                     </div>
