@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useRef } from "react";
 import Draggable from "react-draggable";
 import { FaWindowMaximize, FaWindowRestore, FaTimes } from "react-icons/fa";
@@ -15,36 +17,76 @@ export default function Window({
     const [windowSize, setWindowSize] = useState({ width: 500, height: 500 });
     const [position, setPosition] = useState({ x: 100, y: 50 });
     const [isResizing, setIsResizing] = useState(false);
+    const [resizeDirection, setResizeDirection] = useState<null | string>(null);
 
     const nodeRef = useRef<HTMLDivElement>(null);
     const resizeRef = useRef<number>();
 
-    // Start resizing
-    const startResizing = () => {
+    const startResizing = (direction: string) => {
         setIsResizing(true);
-        document.body.style.cursor = "se-resize";
+        setResizeDirection(direction);
+        document.body.style.cursor = getCursorForDirection(direction);
     };
 
-    // Handle resizing
+    const getCursorForDirection = (direction: string) => {
+        switch (direction) {
+            case "right":
+            case "left":
+                return "ew-resize";
+            case "bottom":
+            case "top":
+                return "ns-resize";
+            case "bottom-right":
+                return "se-resize";
+            case "bottom-left":
+                return "sw-resize";
+            case "top-right":
+                return "ne-resize";
+            case "top-left":
+                return "nw-resize";
+            default:
+                return "default";
+        }
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
         if (!isResizing || !nodeRef.current || isMaximized) return;
 
         cancelAnimationFrame(resizeRef.current!);
         resizeRef.current = requestAnimationFrame(() => {
             const rect = nodeRef.current!.getBoundingClientRect();
-            const newWidth = e.clientX - rect.left;
-            const newHeight = e.clientY - rect.top;
+            const minWidth = 200;
+            const minHeight = 150;
+            let newWidth = windowSize.width;
+            let newHeight = windowSize.height;
+            let newX = position.x;
+            let newY = position.y;
 
-            setWindowSize({
-                width: Math.max(200, newWidth),
-                height: Math.max(150, newHeight),
-            });
+            if (resizeDirection?.includes("right")) {
+                newWidth = Math.max(minWidth, e.clientX - rect.left);
+            }
+            if (resizeDirection?.includes("left")) {
+                const diff = rect.right - e.clientX;
+                newWidth = Math.max(minWidth, diff);
+                newX = e.clientX;
+            }
+            if (resizeDirection?.includes("bottom")) {
+                newHeight = Math.max(minHeight, e.clientY - rect.top);
+            }
+            if (resizeDirection?.includes("top")) {
+                const diff = rect.bottom - e.clientY;
+                newHeight = Math.max(minHeight, diff);
+                newY = e.clientY;
+            }
+
+            setWindowSize({ width: newWidth, height: newHeight });
+            setPosition({ x: newX, y: newY });
         });
     };
 
-    // Stop resizing
     const stopResizing = () => {
         setIsResizing(false);
+        setResizeDirection(null);
         document.body.style.cursor = "default";
     };
 
@@ -62,16 +104,13 @@ export default function Window({
         };
     }, [isResizing]);
 
-    // Handle dragging
     const handleDrag = (_: any, data: any) => {
         if (!isMaximized) {
             setPosition({ x: data.x, y: data.y });
         }
     };
 
-    // Modify onClose function to clear localStorage
     const handleClose = () => {
-        // Clear local storage when the window is closed
         localStorage.clear();
         onClose();
     };
@@ -80,11 +119,11 @@ export default function Window({
         <Draggable
             nodeRef={nodeRef}
             handle=".window-header"
-            disabled={isMaximized} // Disable dragging when maximized
-            position={isMaximized ? { x: 0, y: 0 } : position} // Keep position when maximized
+            disabled={isMaximized}
+            position={isMaximized ? { x: 0, y: 0 } : position}
             onDrag={handleDrag}
-            bounds="parent" // Prevent dragging outside parent container
-            enableUserSelectHack={false} // Prevent text selection issues during drag
+            bounds="parent"
+            enableUserSelectHack={false}
         >
             <div
                 ref={nodeRef}
@@ -96,14 +135,14 @@ export default function Window({
                             height: "90vh",
                             top: "5vh",
                             left: "5vw",
-                            transform: "none", // Remove transform during maximization
+                            transform: "none",
                         }
                         : {
                             width: windowSize.width,
                             height: windowSize.height,
                             top: position.y,
                             left: position.x,
-                            transform: "none", // Remove transform during dragging and resizing
+                            transform: "none",
                         }
                 }
             >
@@ -143,12 +182,45 @@ export default function Window({
                     {children}
                 </div>
 
-                {/* Resize Handle */}
+                {/* Resize Handles */}
                 {!isMaximized && (
-                    <div
-                        className="resize-handle absolute right-0 bottom-0 w-6 h-6 bg-gray-600 cursor-se-resize rounded-br-lg"
-                        onMouseDown={startResizing}
-                    />
+                    <>
+                        {/* Sides */}
+                        <div
+                            className="absolute top-0 left-0 w-full h-1 cursor-ns-resize"
+                            onMouseDown={() => startResizing("top")}
+                        />
+                        <div
+                            className="absolute bottom-0 left-0 w-full h-1 cursor-ns-resize"
+                            onMouseDown={() => startResizing("bottom")}
+                        />
+                        <div
+                            className="absolute top-0 left-0 h-full w-1 cursor-ew-resize"
+                            onMouseDown={() => startResizing("left")}
+                        />
+                        <div
+                            className="absolute top-0 right-0 h-full w-1 cursor-ew-resize"
+                            onMouseDown={() => startResizing("right")}
+                        />
+
+                        {/* Corners (optional) */}
+                        <div
+                            className="absolute bottom-0 right-0 w-3 h-3 cursor-se-resize"
+                            onMouseDown={() => startResizing("bottom-right")}
+                        />
+                        <div
+                            className="absolute bottom-0 left-0 w-3 h-3 cursor-sw-resize"
+                            onMouseDown={() => startResizing("bottom-left")}
+                        />
+                        <div
+                            className="absolute top-0 right-0 w-3 h-3 cursor-ne-resize"
+                            onMouseDown={() => startResizing("top-right")}
+                        />
+                        <div
+                            className="absolute top-0 left-0 w-3 h-3 cursor-nw-resize"
+                            onMouseDown={() => startResizing("top-left")}
+                        />
+                    </>
                 )}
             </div>
         </Draggable>
