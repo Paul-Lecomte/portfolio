@@ -3,6 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import { fetchFiles, FileItem } from "../../utils/filesystem";
 
+const COLORS = [
+    "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white",
+    "gray", "brightred", "brightgreen", "brightyellow", "brightblue", "brightmagenta", "brightcyan", "brightwhite"
+];
+
 export default function Terminal() {
     const [input, setInput] = useState<string>("");
     const [output, setOutput] = useState<string[]>([]);
@@ -10,6 +15,8 @@ export default function Terminal() {
     const [historyIndex, setHistoryIndex] = useState<number | null>(null);
     const [currentPath, setCurrentPath] = useState<string>("/C");
     const [currentFiles, setCurrentFiles] = useState<FileItem[]>([]);
+    const [foregroundColor, setForegroundColor] = useState<string>("white");
+    const [backgroundColor, setBackgroundColor] = useState<string>("black");
     const terminalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -101,7 +108,7 @@ export default function Terminal() {
 
             // New Commands
             case "help":
-                result = "Available commands: ls, cd, pwd, cat, echo, clear, help, whoami, date, fortune, matrix, neofetch, sudo";
+                result = "Available commands: ls, cd, pwd, cat, echo, clear, help, whoami, date, fortune, matrix, neofetch, sudo, ping, color";
                 break;
 
             case "whoami":
@@ -168,6 +175,25 @@ export default function Terminal() {
                 result = "You found the secret Easter Egg! 🎉";
                 break;
 
+            // New Commands
+            case "ping":
+                if (args[1]) {
+                    result = simulatePing(args[1]);
+                } else {
+                    result = "Usage: ping <host>";
+                }
+                break;
+
+            case "color":
+                if (args[1] && COLORS.includes(args[1]) && args[2] && COLORS.includes(args[2])) {
+                    setForegroundColor(args[1]);
+                    setBackgroundColor(args[2]);
+                    result = `Color changed: ${args[1]} (foreground), ${args[2]} (background)`;
+                } else {
+                    result = "Usage: color <foreground> <background> (valid colors: black, red, green, yellow, blue, magenta, cyan, white, gray, brightred, brightgreen, brightyellow, brightblue, brightmagenta, brightcyan, brightwhite)";
+                }
+                break;
+
             default:
                 result = `Command not found: ${command}`;
                 break;
@@ -176,8 +202,19 @@ export default function Terminal() {
         setOutput((prev) => [...prev, `~$ ${command}`, result]);
     };
 
+    const simulatePing = (host: string) => {
+        const time = Math.floor(Math.random() * 100) + 1;
+        return `Pinging ${host} with 32 bytes of data:\nReply from ${host}: bytes=32 time=${time}ms\nReply from ${host}: bytes=32 time=${time}ms\nReply from ${host}: bytes=32 time=${time}ms\nReply from ${host}: bytes=32 time=${time}ms\n\nPing statistics for ${host}: 4 packets transmitted, 4 received, 0% packet loss, time ${time * 4}ms`;
+    };
+
     return (
-        <div className="w-full h-full bg-black text-white p-4 font-mono">
+        <div
+            className="w-full h-full p-4 font-mono"
+            style={{
+                backgroundColor: backgroundColor,
+                color: foregroundColor,
+            }}
+        >
             <div ref={terminalRef} className="overflow-auto max-h-[90%]">
                 {output.map((line, index) => (
                     <div key={index}>{line}</div>
