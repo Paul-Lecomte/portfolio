@@ -96,7 +96,7 @@ const mockFilesystem: Record<string, FileItem[]> = {
             name: "config.json",
             type: "file",
             path: "/C/Program Files/ExampleApp/config.json",
-            url: `${baseUrl}/C/Program Files/ExampleApp/config.json`,
+            url: `${baseUrl}/C/programfiles/ExampleApp/config.json`,
             app: "Code Editor",
         },
     ],
