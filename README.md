@@ -36,6 +36,7 @@ To get started with this project locally, follow the steps below:
    npm install
    ```
 
+
 3. **Run the Development Server**:
    Start the Next.js development server and open the app in your browser:
    ```bash
