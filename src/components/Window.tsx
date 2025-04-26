@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Draggable from "react-draggable";
 import { FaWindowMaximize, FaWindowRestore, FaTimes } from "react-icons/fa";
 
@@ -26,6 +26,12 @@ export default function Window({
         setIsResizing(true);
         setResizeDirection(direction);
         document.body.style.cursor = getCursorForDirection(direction);
+    };
+
+    const stopResizing = () => {
+        setIsResizing(false);
+        setResizeDirection(null);
+        document.body.style.cursor = "default";
     };
 
     const getCursorForDirection = (direction: string) => {
@@ -84,13 +90,18 @@ export default function Window({
         });
     };
 
-    const stopResizing = () => {
-        setIsResizing(false);
-        setResizeDirection(null);
-        document.body.style.cursor = "default";
+    const handleDrag = (_: any, data: any) => {
+        if (!isMaximized) {
+            setPosition({ x: data.x, y: data.y });
+        }
     };
 
-    React.useEffect(() => {
+    const handleClose = () => {
+        localStorage.clear();
+        onClose();
+    };
+
+    useEffect(() => {
         if (isResizing) {
             window.addEventListener("mousemove", handleMouseMove);
             window.addEventListener("mouseup", stopResizing);
@@ -103,17 +114,6 @@ export default function Window({
             window.removeEventListener("mouseup", stopResizing);
         };
     }, [isResizing]);
-
-    const handleDrag = (_: any, data: any) => {
-        if (!isMaximized) {
-            setPosition({ x: data.x, y: data.y });
-        }
-    };
-
-    const handleClose = () => {
-        localStorage.clear();
-        onClose();
-    };
 
     return (
         <Draggable
@@ -170,15 +170,7 @@ export default function Window({
                 </div>
 
                 {/* Window Content */}
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "auto",
-                    }}
-                >
+                <div className="flex flex-col w-full h-full overflow-auto">
                     {children}
                 </div>
 
@@ -187,38 +179,38 @@ export default function Window({
                     <>
                         {/* Sides */}
                         <div
-                            className="absolute top-0 left-0 w-full h-1 cursor-ns-resize"
+                            className="absolute top-0 left-2 right-2 h-2 cursor-ns-resize"
                             onMouseDown={() => startResizing("top")}
                         />
                         <div
-                            className="absolute bottom-0 left-0 w-full h-1 cursor-ns-resize"
+                            className="absolute bottom-0 left-2 right-2 h-2 cursor-ns-resize"
                             onMouseDown={() => startResizing("bottom")}
                         />
                         <div
-                            className="absolute top-0 left-0 h-full w-1 cursor-ew-resize"
+                            className="absolute top-2 bottom-2 left-0 w-2 cursor-ew-resize"
                             onMouseDown={() => startResizing("left")}
                         />
                         <div
-                            className="absolute top-0 right-0 h-full w-1 cursor-ew-resize"
+                            className="absolute top-2 bottom-2 right-0 w-2 cursor-ew-resize"
                             onMouseDown={() => startResizing("right")}
                         />
 
-                        {/* Corners (optional) */}
+                        {/* Corners */}
                         <div
-                            className="absolute bottom-0 right-0 w-3 h-3 cursor-se-resize"
-                            onMouseDown={() => startResizing("bottom-right")}
+                            className="absolute top-0 left-0 w-4 h-4 cursor-nw-resize"
+                            onMouseDown={() => startResizing("top-left")}
                         />
                         <div
-                            className="absolute bottom-0 left-0 w-3 h-3 cursor-sw-resize"
-                            onMouseDown={() => startResizing("bottom-left")}
-                        />
-                        <div
-                            className="absolute top-0 right-0 w-3 h-3 cursor-ne-resize"
+                            className="absolute top-0 right-0 w-4 h-4 cursor-ne-resize"
                             onMouseDown={() => startResizing("top-right")}
                         />
                         <div
-                            className="absolute top-0 left-0 w-3 h-3 cursor-nw-resize"
-                            onMouseDown={() => startResizing("top-left")}
+                            className="absolute bottom-0 left-0 w-4 h-4 cursor-sw-resize"
+                            onMouseDown={() => startResizing("bottom-left")}
+                        />
+                        <div
+                            className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize"
+                            onMouseDown={() => startResizing("bottom-right")}
                         />
                     </>
                 )}
