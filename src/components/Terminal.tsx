@@ -99,6 +99,75 @@ export default function Terminal() {
                 setOutput([]);
                 return;
 
+            // New Commands
+            case "help":
+                result = "Available commands: ls, cd, pwd, cat, echo, clear, help, whoami, date, fortune, matrix, neofetch, sudo";
+                break;
+
+            case "whoami":
+                result = "guest";
+                break;
+
+            case "date":
+                result = new Date().toLocaleString();
+                break;
+
+            case "fortune":
+                const fortunes = [
+                    "You will find a bug today.",
+                    "Code is like humor. When you have to explain it, it’s bad.",
+                    "There is no cloud. It's just someone else's computer."
+                ];
+                result = fortunes[Math.floor(Math.random() * fortunes.length)];
+                break;
+
+            case "sudo":
+                result = "You have no power here.";
+                break;
+
+            case "neofetch":
+                result = `
+                    OS: MyCoolOS 1.0
+                    Host: Virtual Terminal
+                    Uptime: 42 days
+                    Memory: 8GB / 16GB
+                    Shell: SpleetShell v0.1
+                `;
+                break;
+
+            case "matrix":
+                const matrixLines = Array.from({ length: 20 }, () =>
+                    Array.from({ length: 40 }, () => (Math.random() > 0.5 ? "1" : "0")).join("")
+                );
+                setOutput((prev) => [...prev, `~$ ${command}`, ...matrixLines]);
+                return;
+
+            // Easter Eggs
+            case "sudo make me a sandwich":
+                result = "Okay. 🥪";
+                break;
+
+            case "cow":
+                result = `
+                   ____
+                  < Moo >
+                   ----
+                         \   ^__^
+                          \  (oo)\_______
+                             (__)\       )\\/\\
+                                 ||----w |
+                                 ||     ||
+                `;
+                break;
+
+            case "rickroll":
+                result = "Never gonna give you up, never gonna let you down, never gonna run around and desert you...";
+                break;
+
+            case "easteregg.txt":
+                result = "You found the secret Easter Egg! 🎉";
+                break;
+
             default:
                 result = `Command not found: ${command}`;
                 break;
