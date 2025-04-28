@@ -78,5 +78,4 @@ const FileEditor: React.FC<FileEditorProps> = ({ file, onClose, onSave }) => {
         </div>
     );
 };
-
 export default FileEditor;
