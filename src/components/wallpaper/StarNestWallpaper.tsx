@@ -94,6 +94,7 @@ const StarNestWallpaper = () => {
             side: THREE.DoubleSide
         });
 
+
         // Fullscreen plane geometry
         const geometry = new THREE.PlaneGeometry(2, 2); // This plane will cover the entire screen
         const plane = new THREE.Mesh(geometry, material);
