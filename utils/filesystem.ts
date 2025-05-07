@@ -1,3 +1,4 @@
+//basically this file is made to have the paths to the real ffiles and also to show the said path to be a certain way
 export type FileItem = {
     name: string;
     type: "file" | "folder";
