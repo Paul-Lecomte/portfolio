@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     },
     robots: "index, follow",
     viewport: "width=device-width, initial-scale=1.0",
-    themeColor: "#000000", // Set a theme color for the browser header
+    themeColor: "#00116a", // Set a theme color for the browser header
 };
 
 export default function RootLayout({
