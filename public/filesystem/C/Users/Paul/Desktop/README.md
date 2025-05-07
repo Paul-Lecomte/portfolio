@@ -98,6 +98,8 @@ Here’s a roadmap of planned features and improvements for the Portfolio projec
 - **Customizable Desktop Themes:** Allow users to customize their desktop theme, wallpaper, and taskbar color scheme.
 - **Portfolio Analytics:** Implement analytics features for visitors to track interactions with the portfolio.
 
+### Personal note:
+
 ---
 
 ## 📝 License
