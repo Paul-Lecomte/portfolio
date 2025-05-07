@@ -99,7 +99,7 @@ Here’s a roadmap of planned features and improvements for the Portfolio projec
 - **Portfolio Analytics:** Implement analytics features for visitors to track interactions with the portfolio.
 
 ### Personal note:
-
+ - This project has been super fun to do but also a challenge it made me learn a lot of things and i'm quite happy about it :)
 ---
 
 ## 📝 License
