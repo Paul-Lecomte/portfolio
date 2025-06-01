@@ -1,4 +1,4 @@
-//Biggest file since it's where everything will happen
+//Biggest file since it's where everything will happen and where all the components will be rendered
 "use client";
 
 import { useState, useEffect, useRef } from "react";
