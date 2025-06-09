@@ -1,21 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Stage, Layer, Line, Rect, Ellipse } from 'react-konva';
 
+// Types pour les points et les formes
+type Point = {
+    x: number;
+    y: number;
+    color: string;
+    width: number;
+};
+
+type Shape =
+    | { type: 'rect'; x: number; y: number; width: number; height: number; color: string; strokeWidth: number }
+    | { type: 'ellipse'; x: number; y: number; radiusX: number; radiusY: number; color: string; strokeWidth: number }
+    | { type: 'line'; points: number[]; color: string; strokeWidth: number };
+
 export default function Paint() {
-    const [lines, setLines] = useState<any[]>([]);
-    const [currentLine, setCurrentLine] = useState<any[]>([]);
+    const [lines, setLines] = useState<Point[][]>([]);
+    const [currentLine, setCurrentLine] = useState<Point[]>([]);
     const [brushColor, setBrushColor] = useState("#000000");
     const [brushWidth, setBrushWidth] = useState(5);
-    const [activeTool, setActiveTool] = useState("pen");
+    const [activeTool, setActiveTool] = useState<"pen" | "rectangle" | "ellipse" | "line">("pen");
     const [isDrawing, setIsDrawing] = useState(false);
-    const [shapes, setShapes] = useState<any[]>([]);
+    const [shapes, setShapes] = useState<Shape[]>([]);
     const stageRef = useRef<any>(null);
     const layerRef = useRef<any>(null);
 
     const handleMouseDown = (e: any) => {
         const pos = e.target.getStage().getPointerPosition();
+        if (!pos) return;
+
         if (activeTool === "pen") {
-            // Start drawing a new line with the current color and width
             setCurrentLine([{ x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
             setIsDrawing(true);
         } else if (activeTool === "rectangle") {
@@ -28,20 +42,22 @@ export default function Paint() {
     };
 
     const handleMouseMove = (e: any) => {
-        if (isDrawing) {
-            const pos = e.target.getStage().getPointerPosition();
-            setCurrentLine((prevLine: any[]) => [...prevLine, { x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
-        } else if (activeTool === "rectangle" || activeTool === "ellipse" || activeTool === "line") {
-            const pos = e.target.getStage().getPointerPosition();
-            const lastShape = shapes[shapes.length - 1];
+        const pos = e.target.getStage().getPointerPosition();
+        if (!pos) return;
 
-            if (activeTool === "rectangle") {
+        if (isDrawing && activeTool === "pen") {
+            setCurrentLine((prevLine) => [...prevLine, { x: pos.x, y: pos.y, color: brushColor, width: brushWidth }]);
+        } else if (activeTool === "rectangle" || activeTool === "ellipse" || activeTool === "line") {
+            const lastShape = shapes[shapes.length - 1];
+            if (!lastShape) return;
+
+            if (activeTool === "rectangle" && lastShape.type === "rect") {
                 const updatedRect = { ...lastShape, width: pos.x - lastShape.x, height: pos.y - lastShape.y };
                 setShapes([...shapes.slice(0, -1), updatedRect]);
-            } else if (activeTool === "ellipse") {
+            } else if (activeTool === "ellipse" && lastShape.type === "ellipse") {
                 const updatedEllipse = { ...lastShape, radiusX: Math.abs(pos.x - lastShape.x), radiusY: Math.abs(pos.y - lastShape.y) };
                 setShapes([...shapes.slice(0, -1), updatedEllipse]);
-            } else if (activeTool === "line") {
+            } else if (activeTool === "line" && lastShape.type === "line") {
                 const updatedLine = { ...lastShape, points: [lastShape.points[0], lastShape.points[1], pos.x, pos.y] };
                 setShapes([...shapes.slice(0, -1), updatedLine]);
             }
@@ -56,7 +72,7 @@ export default function Paint() {
         }
     };
 
-    const changeTool = (tool: string) => {
+    const changeTool = (tool: "pen" | "rectangle" | "ellipse" | "line") => {
         setActiveTool(tool);
     };
 
@@ -97,7 +113,7 @@ export default function Paint() {
                     <input type="color" value={brushColor} onChange={(e) => changeColor(e.target.value)} className="w-10 h-10 border-none rounded-full" />
                 </div>
                 <div className="flex gap-4">
-                    <input type="range" min="1" max="50" value={brushWidth} onChange={(e) => changeBrushWidth(Number(e.target.value))} className="w-40" />
+                    <input type="range" min={1} max={50} value={brushWidth} onChange={(e) => changeBrushWidth(Number(e.target.value))} className="w-40" />
                     <button onClick={undo} className="px-4 py-2 bg-[#f0f0f0] text-black rounded-lg">Undo</button>
                     <button onClick={clearCanvas} className="px-4 py-2 bg-[#ff0000] text-white rounded-lg">Clear</button>
                 </div>
@@ -126,6 +142,7 @@ export default function Paint() {
                                 lineJoin="round"
                             />
                         ))}
+
                         {/* Draw Shapes */}
                         {shapes.map((shape, index) => {
                             if (shape.type === "rect") {
@@ -163,8 +180,9 @@ export default function Paint() {
                                 );
                             }
                         })}
+
                         {/* Draw the current line while it's being drawn */}
-                        {isDrawing && (
+                        {isDrawing && currentLine.length > 0 && (
                             <Line
                                 points={currentLine.flatMap((p) => [p.x, p.y])}
                                 stroke={currentLine[0].color}
