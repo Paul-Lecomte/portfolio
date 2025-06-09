@@ -429,8 +429,10 @@ export default function Desktop() {
                             <FileEditor file={""} onClose={() => closeWindow(windowTitle)} onSave={() => {
                             }}/>
                         }
-                        {windowTitle === "Code Editor" && <CodeEditor onClose={() => closeWindow(windowTitle)}/>}
-                        {windowTitle === "Paint" && <Paint onClose={() => closeWindow(windowTitle)}/>}
+                        {windowTitle === "Code Editor" && <CodeEditor onSave={function(id: number, content: string): void {
+                            throw new Error('Function not implemented.');
+                        } } />}
+                        {windowTitle === "Paint" && <Paint />}
                     </Window>
                 );
             })}
