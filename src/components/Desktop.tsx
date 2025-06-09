@@ -51,7 +51,7 @@ const defaultIcons = [
 ];
 
 const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
-    const iconRef = useRef(null);
+    const iconRef = useRef<HTMLDivElement>(null);
 
     return (
         <Draggable nodeRef={iconRef}>
