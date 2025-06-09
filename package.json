@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "@vercel/analytics": "^1.5.0",
     "autoprefixer": "^10.4.21",
     "canvas": "^3.1.0",
     "github-markdown-css": "^5.8.1",
