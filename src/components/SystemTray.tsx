@@ -46,9 +46,9 @@ const SystemTray = () => {
         };
         window.addEventListener("resize", handleResize);
 
-        if (typeof navigator !== 'undefined' && navigator.getBattery) {
+        if (typeof navigator !== 'undefined' && (navigator as any).getBattery) {
             const updateBatteryStatus = async () => {
-                const battery = await navigator.getBattery();
+                const battery = await (navigator as any).getBattery();
                 setBatteryLevel(Math.round(battery.level * 100));
                 setCharging(battery.charging);
                 setBatteryHealth(battery.level < 0.2 ? "Poor" : "Good");
