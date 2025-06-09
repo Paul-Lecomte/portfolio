@@ -27,10 +27,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-        <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* Desktop (Main Area) */}
         <Desktop />
+
+        {/* Page Content */}
+        {children}
+
         {/* Analytics */}
         <Analytics />
         </body>
