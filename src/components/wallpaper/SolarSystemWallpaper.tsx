@@ -55,7 +55,7 @@ const SublimeWallpaper = () => {
         scene.add(backgroundSphere);
 
 
-        let spaceship = null;
+        let spaceship: THREE.Group | null = null;
         // Load GLTF Model (Spaceship)
         const loader = new GLTFLoader();
         loader.load(
