@@ -117,7 +117,7 @@ export default function Window({
 
     return (
         <Draggable
-            nodeRef={nodeRef}
+            nodeRef={nodeRef as React.RefObject<HTMLElement>}
             handle=".window-header"
             disabled={isMaximized}
             position={isMaximized ? { x: 0, y: 0 } : position}
