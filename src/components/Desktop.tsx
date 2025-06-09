@@ -414,12 +414,11 @@ export default function Desktop() {
                         {windowTitle === "File Explorer" && (
                             <FileExplorer
                                 onOpenFile={openWindow}
-                                initialPath="/C/Users/Paul/Desktop/projects" // ou autre chemin par défaut
                             />
                         )}
                         {windowTitle === "Terminal" && <Terminal/>}
                         {/* Add new apps */}
-                        {windowTitle === "Notepad" && <Notepad file={file} onClose={() => closeWindow(windowTitle)}/>}
+                        {windowTitle === "Notepad" && <Notepad onClose={() => closeWindow(windowTitle)}/>}
                         {windowTitle === "Image Viewer" &&
                             <ImageViewer file={file} onClose={() => closeWindow(windowTitle)}/>}
                         {windowTitle === "Media Player" &&
