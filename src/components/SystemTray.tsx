@@ -64,7 +64,7 @@ const SystemTray = () => {
         };
     }, []);
 
-    const handleVolumeChange = (e) => setVolume(e.target.value);
+    const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => setVolume(Number(e.target.value));
     const toggleMute = () => setMuted(!muted);
     const toggleTimeDate = () => setShowDate(!showDate);
     const toggleVolumePopup = () => setShowVolumePopup(!showVolumePopup);
