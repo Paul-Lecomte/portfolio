@@ -3,10 +3,11 @@ import { useEffect } from "react";
 
 const BlobWallpaper = () => {
     useEffect(() => {
-        const paths = document.querySelectorAll("#blob path");
+        const paths = document.querySelectorAll<SVGPathElement>("#blob path");
 
         const animate = () => {
             paths.forEach((path) => {
+                // path is now typed as SVGPathElement, so this works
                 const length = path.getTotalLength();
                 path.style.strokeDasharray = `${length}`;
                 path.style.strokeDashoffset = `${length}`;
