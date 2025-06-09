@@ -40,7 +40,6 @@ export const metadata: Metadata = {
         creator: "@yourtwitterhandle", // Replace with your Twitter handle
         title: "Custom OS Portfolio",
         description: "A portfolio designed like an operating system, showcasing creative UI and web development skills.",
-        image: "/images/og-image.png", // Replace with the actual image path for a preview
     },
     robots: "index, follow",
     viewport: "width=device-width, initial-scale=1.0",
