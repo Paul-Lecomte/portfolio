@@ -32,8 +32,13 @@ const ImageViewer = ({ onClose }: any) => {
                 const url = URL.createObjectURL(blob);
                 setImageSrc(url);
             } catch (error) {
-                setError(`Error fetching image: ${error.message}`);
-                console.error("Error fetching image:", error);
+                if (error instanceof Error) {
+                    setError(`Error fetching image: ${error.message}`);
+                    console.error("Error fetching image:", error);
+                } else {
+                    setError("An unknown error occurred while fetching the image.");
+                    console.error("Unknown error:", error);
+                }
             }
         };
 
