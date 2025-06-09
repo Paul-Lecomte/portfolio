@@ -475,7 +475,7 @@ export default function Desktop() {
                                         key={icon.id}
                                         className="flex flex-col items-center text-white/80 hover:text-white
                                                    bg-white/5 hover:bg-white/10 p-2 rounded-xl transition"
-                                        onClick={() => openWindow(icon.title)}
+                                        onClick={() => openWindow(icon.title, "", "")}
                                     >
                                         <div className="text-2xl">{icon.icon}</div>
                                         <span className="text-xs mt-1 text-center">{icon.title}</span>
@@ -507,7 +507,7 @@ export default function Desktop() {
                     {openWindows.map((windowTitle: string) => (
                         <button
                             key={windowTitle}
-                            onClick={() => openWindow(windowTitle)}
+                            onClick={() => openWindow(windowTitle, "", "")}
                             className="flex items-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20
                                        text-white rounded-xl transition text-sm"
                         >
@@ -565,11 +565,11 @@ export default function Desktop() {
                                 })
                                 .catch((err) => console.error("Error fetching file:", err));
                         } else {
-                            openWindow(icon.title);
+                            openWindow(icon.title, "", "");
                             console.log("Fallback: opening window with title only");
                         }
                     } else {
-                        openWindow(icon.title);
+                        openWindow(icon.title, "", "");
                         console.log("did not work");
                     }
                 };
