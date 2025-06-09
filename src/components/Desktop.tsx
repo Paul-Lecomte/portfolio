@@ -54,7 +54,7 @@ const DesktopIcon = ({ icon, position, openWindow, onContextMenu }: any) => {
     const iconRef = useRef<HTMLDivElement>(null);
 
     return (
-        <Draggable nodeRef={iconRef}>
+        <Draggable nodeRef={iconRef as React.RefObject<HTMLElement>}>
             <div
                 ref={iconRef}
                 className="absolute z-10 w-16 h-16 flex flex-col items-center text-white cursor-pointer"
