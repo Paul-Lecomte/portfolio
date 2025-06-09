@@ -20,7 +20,7 @@ export default function Window({
     const [resizeDirection, setResizeDirection] = useState<null | string>(null);
 
     const nodeRef = useRef<HTMLDivElement>(null);
-    const resizeRef = useRef<number>();
+    const resizeRef = useRef<number | null>(null);
 
     const startResizing = (direction: string) => {
         setIsResizing(true);
