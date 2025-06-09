@@ -13,7 +13,7 @@ type File = {
 
 interface FileExplorerProps {
     onOpenFile: (fileName: string, filePath: string, fileUrl: string, app?: string) => void;
-    initialPath: string;
+    initialPath? : string;
 }
 
 export default function FileExplorer({ onOpenFile, initialPath }: FileExplorerProps) {
