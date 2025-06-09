@@ -537,7 +537,7 @@ export default function Desktop() {
                         setOpenWindows((prev) =>
                             prev.includes("File Explorer") ? prev : [...prev, "File Explorer"]
                         );
-                        openWindow('File Explorer', `filesystem/C/Users/Paul/Desktop/projects`, null, 'File Explorer');
+                        openWindow('File Explorer', `filesystem/C/Users/Paul/Desktop/projects`, '', 'File Explorer');
                         console.log("correctly opening to the desired path");
                     } else if (icon.id === 'readme-file') {
                         const fileUrl = icon.path; // You can make this dynamic
