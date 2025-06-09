@@ -81,13 +81,15 @@ export default function Desktop() {
         y: number;
         visible: boolean;
         iconTitle: string | null;
-        showMoreOptions: boolean;  // Added flag for "More Options"
+        showMoreOptions: boolean;
+        fileExtension?: string;
     }>({
         x: 0,
         y: 0,
         visible: false,
         iconTitle: null,
-        showMoreOptions: false,  // Initially set to false
+        showMoreOptions: false,
+        fileExtension: undefined,
     });
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const [time, setTime] = useState<string>("");
