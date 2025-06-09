@@ -1,6 +1,7 @@
 //Biggest file since it's where everything will happen and where all the components will be rendered
 "use client";
 
+import type { ReactElement } from 'react';
 import { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import Window from "@/components/Window";
@@ -120,7 +121,7 @@ export default function Desktop() {
     );
 
     const getTaskbarIcon = (title: string) => {
-        const icons: Record<string, JSX.Element> = {
+        const icons: Record<string, ReactElement> = {
             "File Explorer": <FaFileAlt size={24} />,
             "Terminal": <FaLaptop size={24} />,
             "Notepad": <FaRegFileImage size={24} />,
