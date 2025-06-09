@@ -411,7 +411,12 @@ export default function Desktop() {
                         {file && file.title.endsWith(".md") && (
                             <FileEditor file={file} onClose={() => closeWindow(windowTitle)} onSave={saveFileContent}/>
                         )}
-                        {windowTitle === "File Explorer" && <FileExplorer onOpenFile={openWindow}/>}
+                        {windowTitle === "File Explorer" && (
+                            <FileExplorer
+                                onOpenFile={openWindow}
+                                initialPath="/C/Users/Paul/Desktop/projects" // ou autre chemin par défaut
+                            />
+                        )}
                         {windowTitle === "Terminal" && <Terminal/>}
                         {/* Add new apps */}
                         {windowTitle === "Notepad" && <Notepad file={file} onClose={() => closeWindow(windowTitle)}/>}
