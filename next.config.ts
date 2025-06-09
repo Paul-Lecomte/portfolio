@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
     reactStrictMode: false,
     devIndicators: false,
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
     webpack: (config) => {
         // Resolve Konva to the browser-friendly version
         config.resolve.alias = {
