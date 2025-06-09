@@ -31,9 +31,16 @@ export default function FileExplorer({ onOpenFile, initialPath }: FileExplorerPr
 
         // Fetch files based on the current path
         const loadFiles = async () => {
-            console.log("Current path received:", currentPath);  // Debug log to ensure currentPath is correct
+            console.log("Current path received:", currentPath);
             const fetchedFiles = await fetchFiles(currentPath);
-            setFiles(fetchedFiles);
+
+            // Solution : forcer `url` à une string si elle est undefined
+            const sanitizedFiles: File[] = fetchedFiles.map((file: any) => ({
+                ...file,
+                url: file.url ?? "", // <- fallback
+            }));
+
+            setFiles(sanitizedFiles);
         };
 
         loadFiles();
