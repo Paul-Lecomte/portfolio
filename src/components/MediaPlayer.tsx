@@ -10,7 +10,7 @@ interface MediaPlayerProps {
 const MediaPlayer: React.FC<MediaPlayerProps> = ({ mediaUrl, onClose }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [url, setUrl] = useState<string | null>(null);
-    const mediaRef = useRef<HTMLMediaElement | null>(null);
+    const mediaRef = useRef<HTMLVideoElement | null>(null);
 
     useEffect(() => {
         let loadedUrl = mediaUrl;
