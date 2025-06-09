@@ -23,7 +23,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ mediaUrl, onClose }) => {
             }
         }
 
-        setUrl(loadedUrl);
+        setUrl(loadedUrl ?? null);
     }, [mediaUrl]);
 
     const handlePlayPause = () => {
